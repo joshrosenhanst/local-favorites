@@ -2,7 +2,8 @@
     <header class="app-header">
         <h1>Local Reviews</h1>
         <h2>So you can always remember the good {{ current_type }} {{ current_place }}</h2>
-        <h2>Review your favorite local places so you can always remember which is the good pizza place</h2>
+        <input type="text" placeholder="Search by type">
+        <input type="text" placeholder="Search by location">
     </header>
 </template>
 
