@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <AppHeader></AppHeader>
+    <MapDisplay></MapDisplay>
     <ResultsList
       v-bind:results="resultsList" 
       v-bind:reviews="savedReviews"
@@ -13,13 +14,15 @@
 import HelloWorld from './components/HelloWorld.vue'
 import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
+import MapDisplay from './components/MapDisplay.vue'
 
 export default {
   name: 'app',
   components: {
     HelloWorld,
     AppHeader,
-    ResultsList
+    ResultsList,
+    MapDisplay
   },
   data: function () {
     return {
@@ -48,6 +51,9 @@ export default {
         this.savedReviews.push(starredReview);
       }
       //update the Results array?
+    },
+    setMaps: function (type,location) {
+      
     }
   },
   created: function () {
