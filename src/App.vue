@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <AppHeader></AppHeader>
-    <MapDisplay></MapDisplay>
+    <!--<MapDisplay></MapDisplay>-->
     <ResultsList
       v-bind:results="resultsList" 
       v-bind:reviews="savedReviews"
@@ -33,8 +33,6 @@ export default {
         { id: 2, name: 'Barnios', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/' },
       ],
       savedReviews: [
-        { id: 0, stars: '4', notes: 'This is a good thai food place, a little too spicy!' },
-        { id: 1, stars: '1', notes: 'Got food poisoning - no thanks :(' }
       ]
     }
   },
@@ -51,6 +49,8 @@ export default {
         this.savedReviews.push(starredReview);
       }
       //update the Results array?
+      //update localStorage
+      localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
     },
     setMaps: function (type,location) {
       
@@ -58,14 +58,17 @@ export default {
   },
   created: function () {
     // get localstorage data
+    this.savedReviews = (JSON.parse(localStorage.getItem('local-reviews-savedReviews')) || []);
 
     // loop through savedReviews array and replace matching (by id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
-    this.savedReviews.forEach(review => {
-      let matchedResultIndex = _.findIndex(this.resultsList, { id:review.id });
-      if (matchedResultIndex >= 0) {
-        this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
-      }
-    })
+    if(this.savedReviews.length){
+      this.savedReviews.forEach(review => {
+        let matchedResultIndex = _.findIndex(this.resultsList, { id:review.id });
+        if (matchedResultIndex >= 0) {
+          this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
+        }
+      })
+    }
   }
 }
 </script>
