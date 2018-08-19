@@ -47,6 +47,7 @@ export default {
         // else add the review to the array
         this.savedReviews.push(starredReview);
       }
+      //update the Results array?
     }
   },
   created: function () {

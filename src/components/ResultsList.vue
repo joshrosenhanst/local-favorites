@@ -7,7 +7,7 @@
             {{ index }} - {{ result.name }}
             <select
                 v-model="result.stars"
-                v-on:change="$emit('set-review', result.id, $event.target.value)"
+                v-on:change="$emit('set-review', result.id, $event.target.value, result.notes)"
                 >
                 <option value="1">1 Star</option>
                 <option value="2">2 Stars</option>
@@ -15,7 +15,10 @@
                 <option value="4">4 Stars</option>
                 <option value="5">5 Stars</option>
             </select>
-            {{ result.notes }}
+            <input type="text"
+                v-bind:value="result.notes"
+                v-on:input="$emit('set-review',result.id, result.stars, $event.target.value)"
+                >
         </li>
     </ol>
 </template>
@@ -31,8 +34,13 @@ export default {
   },
   data: function () {
     return {
-        reviewedResults: {}
+        
     }
+  },
+  methods: {
+    debounceSetReview: _.debounce((id,stars,notes) => {
+        this.$emit('set-review',id,stars,notes);
+    }, 500)
   },
   created: function () {
   }
