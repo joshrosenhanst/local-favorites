@@ -38,8 +38,8 @@ export default {
     }
   },
   methods: {
-    debounceSetReview: _.debounce((id,stars,notes) => {
-        this.$emit('set-review',id,stars,notes);
+    debounceSetReview: _.debounce((id, stars, notes) => {
+      this.$emit('set-review', id, stars, notes)
     }, 500)
   },
   created: function () {
