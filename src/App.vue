@@ -1,7 +1,11 @@
 <template>
   <div id="app">
     <AppHeader></AppHeader>
-    <ResultsList v-bind:results="resultsList" v-bind:reviews="savedReviews"></ResultsList>
+    <ResultsList
+      v-bind:results="resultsList" 
+      v-bind:reviews="savedReviews"
+      v-on:set-review="setReview"
+    ></ResultsList>
   </div>
 </template>
 
@@ -31,16 +35,30 @@ export default {
       ]
     }
   },
+  methods: {
+    setReview: function (id,stars,notes) {
+      // look up id in savedReviews
+      let matchedReviewIndex = _.findIndex(this.savedReviews, { id:id });
+      let starredReview = { id:id, stars:stars, notes:notes };
+      if (matchedReviewIndex >= 0) {
+        // if it exists, set the review
+        this.savedReviews.splice(matchedReviewIndex,1,starredReview);
+      }else{
+        // else add the review to the array
+        this.savedReviews.push(starredReview);
+      }
+    }
+  },
   created: function () {
     // get localstorage data
 
     // loop through savedReviews array and replace matching (by id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
     this.savedReviews.forEach(review => {
       let matchedResultIndex = _.findIndex(this.resultsList, { id:review.id });
-      if(matchedResultIndex >= 0){
-          this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes });
+      if (matchedResultIndex >= 0) {
+        this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
       }
-    });
+    })
   }
 }
 </script>

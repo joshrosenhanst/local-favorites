@@ -5,7 +5,10 @@
             v-bind:key="result.id"
         >
             {{ index }} - {{ result.name }}
-            <select v-model="result.stars">
+            <select
+                v-model="result.stars"
+                v-on:change="$emit('set-review', result.id, $event.target.value)"
+                >
                 <option value="1">1 Star</option>
                 <option value="2">2 Stars</option>
                 <option value="3">3 Stars</option>
