@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <AppHeader></AppHeader>
+    <app-header></app-header>
     <!--<MapDisplay></MapDisplay>-->
-    <ResultsList
+    <results-list
       v-bind:results="resultsList" 
       v-bind:reviews="savedReviews"
       v-on:set-review="setReview"
-    ></ResultsList>
+    ></results-list>
   </div>
 </template>
 
@@ -28,9 +28,9 @@ export default {
     return {
       // dummy data
       resultsList: [
-        { id: 0, name: 'Good Thai Food', address: '400 Fake Lane', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/' },
-        { id: 1, name: 'Mangiannos', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/' },
-        { id: 2, name: 'Barnios', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/' },
+        { id: 0, name: 'Good Thai Food', address: '400 Fake Lane', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/', type: 'Thai' },
+        { id: 1, name: 'Mangiannos', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/', type: 'Italian' },
+        { id: 2, name: 'Barnios', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: '', type: 'Bar' },
       ],
       savedReviews: [
       ]

@@ -1,6 +1,6 @@
 <template>
     <header class="app-header">
-      <section class="hero is-medium">
+      <section class="hero">
         <div class="hero-body">
           <div class="container">
             <h1 class="title">Local Reviews</h1>
@@ -8,8 +8,6 @@
           </div>
         </div>
       </section>
-        <input type="text" placeholder="Search by type">
-        <input type="text" placeholder="Search by location">
     </header>
 </template>
 

@@ -1,23 +1,24 @@
 <template>
-    <ol id="results-list">
+  <section class="section">
+    <div class="container">
+      <ul id="results-list">
         <li
-            v-for="(result,index) in results"
+            v-for="(result) in results"
             v-bind:key="result.id"
+            class="result-display box"
         >
-            {{ index }} - {{ result.name }}
-            <div v-if="result.stars || result.notes">
-              <StarRating
-                v-bind:stars="result.stars"
-                v-on:set-stars="result.stars = $event.value; $emit('set-review', { id: result.id, stars: $event.value, notes: result.notes })"
-              ></StarRating>
-              <textarea
-                v-bind:value="result.notes"
-                v-on:input="result.notes = $event.target.value; debouncedSetNotes({ id: result.id, stars: result.stars, notes: $event.target.value })"
-              ></textarea>
-            </div>
+            <h3 class="result-name">{{ result.name }}</h3>
+            <p class="result-info">{{ result.type }} - {{ result.address }}, {{ result.city }}<a class="result-map" href="" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a><a class="result-link" v-if="result.url" v-bind:href="result.url" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
+            <StarRating
+              v-bind:stars="result.stars"
+              v-on:set-stars="result.stars = $event.value; $emit('set-review', { id: result.id, stars: $event.value, notes: result.notes })"
+            ></StarRating>
+            <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
             <button v-else>Leave a Rating</button>
         </li>
-    </ol>
+      </ul>
+    </div>
+  </section>
 </template>
 
 <script>
@@ -53,4 +54,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.result-name{
+  font-size: 1.5rem;
+  color: #4a4a4a;
+  font-weight: 400;
+  line-height: 1.25;
+}
+.result-map{
+  margin-left:10px;
+}
+.result-link{
+  margin-left:10px;
+}
 </style>
