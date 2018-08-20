@@ -37,10 +37,10 @@ export default {
     }
   },
   methods: {
-    setReview: function (id,stars,notes) {
+    setReview: function (event) {
       // look up id in savedReviews
-      let matchedReviewIndex = _.findIndex(this.savedReviews, { id:id });
-      let starredReview = { id:id, stars:stars, notes:notes };
+      let matchedReviewIndex = _.findIndex(this.savedReviews, { id:event.id });
+      let starredReview = { id:event.id, stars:event.stars, notes:event.notes };
       if (matchedReviewIndex >= 0) {
         // if it exists, set the review
         this.savedReviews.splice(matchedReviewIndex,1,starredReview);
@@ -57,7 +57,7 @@ export default {
     }
   },
   created: function () {
-    // get localstorage data
+    // get localstorage review data
     this.savedReviews = (JSON.parse(localStorage.getItem('local-reviews-savedReviews')) || []);
 
     // loop through savedReviews array and replace matching (by id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
