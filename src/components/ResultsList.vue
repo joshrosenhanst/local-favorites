@@ -14,7 +14,10 @@
               v-on:set-stars="result.stars = $event.value; $emit('set-review', { id: result.id, stars: $event.value, notes: result.notes })"
             ></StarRating>
             <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-            <button v-else>Leave a Rating</button>
+            <button class="button" v-else>
+              <span class="icon is-small"><font-awesome-icon icon="comment-alt"></font-awesome-icon></span>
+              <span>Leave a Review</span>
+            </button>
         </li>
       </ul>
     </div>
