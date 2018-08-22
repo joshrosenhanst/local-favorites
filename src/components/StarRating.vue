@@ -7,7 +7,7 @@
             v-on:click="setStars(n)"
             v-on:mouseenter="currentHover = n"
             v-on:mouseleave="currentHover = 0"
-            v-bind:title="'Rate '+n+' stars'"
+            v-bind:title="readonly? (n+' stars'):(`Rate ${n} stars`)"
         >
             <font-awesome-icon icon="star" class="star-icon"></font-awesome-icon>
         </span>
