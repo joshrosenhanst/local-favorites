@@ -45,6 +45,7 @@ export default {
 
 <style lang="scss" scoped>
     .star{
+        font-size:1.25rem;
         &.empty>.star-icon {
             color:grey;
         }
@@ -62,6 +63,7 @@ export default {
             color:red;
         }
         &.is-editable{
+            font-size:1.5rem;
             cursor: pointer;
         }
     }
