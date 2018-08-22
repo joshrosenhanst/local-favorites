@@ -9,15 +9,28 @@
         >
             <h3 class="result-name">{{ result.name }}</h3>
             <p class="result-info">{{ result.type }} - {{ result.address }}, {{ result.city }}<a class="result-map" href="" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a><a class="result-link" v-if="result.url" v-bind:href="result.url" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
-            <StarRating
-              v-bind:stars="result.stars"
-              v-on:set-stars="result.stars = $event.value; $emit('set-review', { id: result.id, stars: $event.value, notes: result.notes })"
-            ></StarRating>
-            <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-            <button class="button" v-else>
-              <span class="icon is-small"><font-awesome-icon icon="comment-alt"></font-awesome-icon></span>
-              <span>Leave a Review</span>
-            </button>
+
+            <template v-if="result.notes || result.stars">
+              <star-rating
+                v-bind:stars="result.stars"
+                v-bind:readonly="true"
+              ></star-rating>
+              <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
+              <review-form
+                v-bind:result="result"
+                v-on:submit-review="submitReview(result,$event)"
+              >
+                <span slot="buttonText">Edit Review</span>
+              </review-form>
+            </template>
+            <template v-else>
+              <review-form
+                v-bind:result="result"
+                v-on:submit-review="submitReview(result,$event)"
+              >
+                <span slot="buttonText">Write a Review</span>
+              </review-form>
+            </template>
         </li>
       </ul>
     </div>
@@ -27,11 +40,13 @@
 <script>
 import _ from 'lodash'
 import StarRating from './StarRating.vue'
+import ReviewForm from './ReviewForm.vue'
 
 export default {
   name: 'ResultsList',
   components: {
-    StarRating
+    StarRating,
+    ReviewForm
   },
   props: {
     results: Array,
@@ -49,7 +64,10 @@ export default {
     debouncedSetNotes: _.debounce(function (event) {
       console.log("debounced");
       this.$emit('set-review', {id: event.id, stars: event.stars, notes:event.notes });
-    }, 350)
+    }, 350),
+    submitReview: function (result,event) {
+      this.$emit('set-review', { id: result.id, stars: event.stars, notes: event.notes })
+    }
   },
   created: function () {
   }
@@ -69,4 +87,5 @@ export default {
 .result-link{
   margin-left:10px;
 }
+
 </style>

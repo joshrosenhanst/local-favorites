@@ -48,7 +48,12 @@ export default {
         // else add the review to the array
         this.savedReviews.push(starredReview);
       }
-      //update the Results array?
+      //update the Results array
+      let matchedResultIndex = _.findIndex(this.resultsList, { id:event.id });
+      let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes };
+      if (matchedResultIndex >= 0) {
+        this.resultsList.splice(matchedResultIndex,1,updatedResult);
+      }
       //update localStorage
       localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
     },
