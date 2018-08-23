@@ -2,6 +2,7 @@
   <div id="app">
     <app-header></app-header>
     <!--<MapDisplay></MapDisplay>-->
+    <google-map></google-map>
     <results-list
       v-bind:results="resultsList" 
       v-bind:reviews="savedReviews"
@@ -15,6 +16,7 @@ import HelloWorld from './components/HelloWorld.vue'
 import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
 import MapDisplay from './components/MapDisplay.vue'
+import GoogleMap from './components/GoogleMap.vue'
 
 export default {
   name: 'app',
@@ -22,7 +24,8 @@ export default {
     HelloWorld,
     AppHeader,
     ResultsList,
-    MapDisplay
+    MapDisplay,
+    GoogleMap
   },
   data: function () {
     return {
