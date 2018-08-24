@@ -1,16 +1,13 @@
 <template>
   <div id="google-map-container">
-    <h2>Search places</h2>
     <b-field id="map-search-field">
       <div class="control is-expanded">
-        <gmap-autocomplete
+        <!--<gmap-autocomplete
           v-on:place_changed="setPlace"
           class="input"
         >
-        </gmap-autocomplete>
-      </div>
-      <div class="control">
-        <button class="button" v-on:click="addMarker">Add</button>
+        </gmap-autocomplete>-->
+        <gmap-search-box class="input"  placeholder="Searchbox;.."></gmap-search-box>
       </div>
     </b-field>
     <button class="button" v-on:click="idleMapUpdate">Get Local Places</button>
@@ -34,8 +31,13 @@
 </template>
 
 <script>
+import GmapSearchBox from './GmapSearchBox.vue'
+
 export default {
     name: 'GoogleMap',
+    components: {
+      GmapSearchBox
+    },
     data: function () {
       return {
         center: {lat:40.415932, lng:-74.25753},
