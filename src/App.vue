@@ -31,9 +31,7 @@ export default {
     return {
       // dummy data
       resultsList: [
-        { id: 0, name: 'Good Thai Food', address: '400 Fake Lane', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/', type: 'Thai' },
-        { id: 1, name: 'Mangiannos', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: 'https://google.com/', type: 'Italian' },
-        { id: 2, name: 'Barnios', address: '360 Fake Ave', city: 'Aberdeen', state: 'NJ', zip: '07747', url: '', type: 'Bar' },
+        { place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },
       ],
       savedReviews: [
       ]
@@ -41,9 +39,9 @@ export default {
   },
   methods: {
     setReview: function (event) {
-      // look up id in savedReviews
-      let matchedReviewIndex = _.findIndex(this.savedReviews, { id:event.id });
-      let starredReview = { id:event.id, stars:event.stars, notes:event.notes };
+      // look up place_id in savedReviews
+      let matchedReviewIndex = _.findIndex(this.savedReviews, { place_id:event.place_id });
+      let starredReview = { place_id:event.place_id, stars:event.stars, notes:event.notes };
       if (matchedReviewIndex >= 0) {
         // if it exists, set the review
         this.savedReviews.splice(matchedReviewIndex,1,starredReview);
@@ -52,7 +50,7 @@ export default {
         this.savedReviews.push(starredReview);
       }
       //update the Results array
-      let matchedResultIndex = _.findIndex(this.resultsList, { id:event.id });
+      let matchedResultIndex = _.findIndex(this.resultsList, { place_id:event.place_id });
       let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes };
       if (matchedResultIndex >= 0) {
         this.resultsList.splice(matchedResultIndex,1,updatedResult);
@@ -68,10 +66,10 @@ export default {
     // get localstorage review data
     this.savedReviews = (JSON.parse(localStorage.getItem('local-reviews-savedReviews')) || []);
 
-    // loop through savedReviews array and replace matching (by id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
+    // loop through savedReviews array and replace matching (by place_id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
     if(this.savedReviews.length){
       this.savedReviews.forEach(review => {
-        let matchedResultIndex = _.findIndex(this.resultsList, { id:review.id });
+        let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
         if (matchedResultIndex >= 0) {
           this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
         }

@@ -4,11 +4,13 @@
       <ul id="results-list">
         <li
             v-for="(result) in results"
-            v-bind:key="result.id"
+            v-bind:key="result.place_id"
             class="result-display box"
         >
             <h3 class="result-name">{{ result.name }}</h3>
-            <p class="result-info">{{ result.type }} - {{ result.address }}, {{ result.city }}<a class="result-map" href="" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a><a class="result-link" v-if="result.url" v-bind:href="result.url" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
+            <p class="result-info">{{ result.vicinity }}
+              <a class="result-map"  v-if="result.url" href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+              <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
 
             <template v-if="result.notes || result.stars">
               <star-rating
@@ -63,10 +65,10 @@ export default {
     },
     debouncedSetNotes: _.debounce(function (event) {
       console.log("debounced");
-      this.$emit('set-review', {id: event.id, stars: event.stars, notes:event.notes });
+      this.$emit('set-review', {place_id: event.place_id, stars: event.stars, notes:event.notes });
     }, 350),
     submitReview: function (result,event) {
-      this.$emit('set-review', { id: result.id, stars: event.stars, notes: event.notes })
+      this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
     }
   },
   created: function () {
