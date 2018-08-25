@@ -97,10 +97,16 @@ export default {
         if(center){
           let service = new google.maps.places.PlacesService(this.$refs.mapRef.$mapObject);
           service.nearbySearch({
-            location: center,
-            radius: 500,
-            type: ['store']
-          }, this.addLocalPlacesMarkers);
+            /*location: center,
+            radius: 500,*/
+            bounds: this.$refs.mapRef.$mapObject.getBounds(),
+            type: ['point_of_interest']
+          }, this.emitLocalPlaces);
+        }
+      },
+      emitLocalPlaces: function (results,status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+          this.$emit('get-local-places', { results: results });
         }
       },
       addLocalPlacesMarkers: function (results,status) {

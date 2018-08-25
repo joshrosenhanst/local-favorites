@@ -2,7 +2,9 @@
   <div id="app">
     <app-header></app-header>
     <!--<MapDisplay></MapDisplay>-->
-    <google-map></google-map>
+    <google-map
+      v-on:get-local-places="updateResultsList"
+    ></google-map>
     <results-list
       v-bind:results="resultsList" 
       v-bind:reviews="savedReviews"
@@ -49,7 +51,7 @@ export default {
         // else add the review to the array
         this.savedReviews.push(starredReview);
       }
-      //update the Results array
+      //update the Results array with the new review
       let matchedResultIndex = _.findIndex(this.resultsList, { place_id:event.place_id });
       let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes };
       if (matchedResultIndex >= 0) {
@@ -58,8 +60,16 @@ export default {
       //update localStorage
       localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
     },
-    setMaps: function (type,location) {
-      
+    updateResultsList: function (event) {
+      this.resultsList = event.results;
+      if(this.savedReviews.length){
+        this.savedReviews.forEach(review => {
+          let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
+          if (matchedResultIndex >= 0) {
+            this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
+          }
+        })
+      }
     }
   },
   created: function () {
