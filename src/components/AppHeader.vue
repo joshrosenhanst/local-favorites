@@ -17,7 +17,7 @@ export default {
   data: function () {
     return {
       predicates: [
-        'find the good pizza place.', 'remember which sub show uses too much mayo.', 'stop at the right barber shop.', 'find the really spicy thai restaurant again.', 'get to the cheap burger stop.', 'remember which theater has the comfy seats.', 'remember the name of that one BBQ place (something about happy pigs...)', 'avoid that bar with re-heated hot pockets.', 'find that dive bar that had the PokeStop outside it.'
+        'find the good pizza place.', 'remember which sub shop uses too much mayo.', 'stop at the good barber shop for your haircut.', 'find the really spicy thai restaurant again.', 'get to that cheap burger place.', 'remember which theater has the comfy seats.', 'remember the name of that one BBQ place (something about happy pigs...)', 'find that dive bar that had the PokeStop outside it.'
       ],
       random_predicate: 'find the good pizza place.'
     }
