@@ -7,7 +7,7 @@
         v-on:get-local-places="updateResultsList"
         class="column"
       ></google-map>
-      <results-list class="column is-one-third"
+      <results-list class="column is-two-fifths"
         v-bind:results="resultsList" 
         v-bind:reviews="savedReviews"
         v-on:set-review="setReview"

@@ -45,7 +45,7 @@ export default {
 
 <style lang="scss" scoped>
     .star{
-        font-size:1.25rem;
+        font-size:1rem;
         &.empty>.star-icon {
             color:grey;
         }
