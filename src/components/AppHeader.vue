@@ -4,7 +4,7 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">Local Notes</h1>
-            <h2 class="subtitle">Leave a note, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
+            <h2 class="subtitle">Save custom notes for local stores, so you can <span id="random-predicate" class="has-text-primary" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
           </div>
         </div>
       </section>
@@ -43,11 +43,18 @@ export default {
 
 <style lang="scss" scoped>
 header.app-header {
-  //text-align:center;
+  text-align:center;
 }
 #random-predicate {
   background-color:#f5f5f5;
   padding:.25em .5em .25em;
   font-size:0.875em;
+  font-weight:500;
+}
+.title{
+  font-size:2.5rem;
+}
+.hero-body{
+  padding:1.5rem;
 }
 </style>

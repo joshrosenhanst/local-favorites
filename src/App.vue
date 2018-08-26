@@ -2,16 +2,21 @@
   <div id="app">
     <app-header></app-header>
     <!--<MapDisplay></MapDisplay>-->
-    <div class="columns">
+    <div class="columns is-gapless">
       <google-map
         v-on:get-local-places="updateResultsList"
         class="column"
       ></google-map>
-      <results-list class="column is-two-fifths"
-        v-bind:results="resultsList" 
-        v-bind:reviews="savedReviews"
-        v-on:set-review="setReview"
-      ></results-list>
+      <aside class="column is-one-third">
+        <div id="searchbox-container" class="has-background-primary">
+          <gmap-search-box class="input" placeholder="Search locations by name, address, or type..."></gmap-search-box>
+        </div>
+        <results-list
+          v-bind:results="resultsList" 
+          v-bind:reviews="savedReviews"
+          v-on:set-review="setReview"
+        ></results-list>
+      </aside>
     </div>
   </div>
 </template>
@@ -22,6 +27,7 @@ import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
 import MapDisplay from './components/MapDisplay.vue'
 import GoogleMap from './components/GoogleMap.vue'
+import GmapSearchBox from './components/GmapSearchBox.vue'
 
 export default {
   name: 'app',
@@ -30,7 +36,8 @@ export default {
     AppHeader,
     ResultsList,
     MapDisplay,
-    GoogleMap
+    GoogleMap,
+    GmapSearchBox
   },
   data: function () {
     return {
@@ -94,5 +101,8 @@ export default {
 
 <style lang='scss'>
 #app {
+}
+#searchbox-container{
+  padding:15px 10px;
 }
 </style>

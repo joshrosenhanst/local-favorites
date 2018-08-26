@@ -1,40 +1,38 @@
 <template>
-  <aside id="results-list-aside">
-    <ul id="results-list">
-      <li
-          v-for="(result) in results"
-          v-bind:key="result.place_id"
-          class="result-display"
-      >
-          <h3 class="result-name">{{ result.name }}</h3>
-          <p class="result-info">{{ result.vicinity }}
-            <a class="result-map"  v-if="result.url" href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
-            <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
+  <ul id="results-list">
+    <li
+        v-for="(result) in results"
+        v-bind:key="result.place_id"
+        class="result-display"
+    >
+        <h3 class="result-name">{{ result.name }}</h3>
+        <p class="result-info">{{ result.vicinity }}
+          <a class="result-map"  v-if="result.url" href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+          <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
 
-          <template v-if="result.notes || result.stars">
-            <star-rating
-              v-bind:stars="result.stars"
-              v-bind:readonly="true"
-            ></star-rating>
-            <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-            <add-note-form
-              v-bind:result="result"
-              v-on:submit-note="submitReview(result,$event)"
-            >
-              <span slot="buttonText">Edit Note</span>
-            </add-note-form>
-          </template>
-          <template v-else>
-            <add-note-form
-              v-bind:result="result"
-              v-on:submit-note="submitReview(result,$event)"
-            >
-              <span slot="buttonText">Add a Note</span>
-            </add-note-form>
-          </template>
-      </li>
-    </ul>
-  </aside>
+        <template v-if="result.notes || result.stars">
+          <star-rating
+            v-bind:stars="result.stars"
+            v-bind:readonly="true"
+          ></star-rating>
+          <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
+          <add-note-form
+            v-bind:result="result"
+            v-on:submit-note="submitReview(result,$event)"
+          >
+            <span slot="buttonText">Edit Note</span>
+          </add-note-form>
+        </template>
+        <template v-else>
+          <add-note-form
+            v-bind:result="result"
+            v-on:submit-note="submitReview(result,$event)"
+          >
+            <span slot="buttonText">Add a Note</span>
+          </add-note-form>
+        </template>
+    </li>
+  </ul>
 </template>
 
 <script>
