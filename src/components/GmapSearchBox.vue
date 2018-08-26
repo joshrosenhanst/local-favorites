@@ -14,7 +14,8 @@ export default {
   name: 'GmapSearchBox',
   props: {
     value: String,
-    placeholder: String
+    placeholder: String,
+    map: Object
   },
   mounted: function () {
     // utilizes vue2-google-maps $gmapApiPromiseLazy functionality to only access the api once it is fully loaded. Otherwise new google.maps.places will throw an error
@@ -25,15 +26,20 @@ export default {
   methods: {
     initSearchbox: function () {
       let searchBox = new google.maps.places.SearchBox(this.$refs.gsearchbox);
-      console.log("searchbox places_changed");
+
       searchBox.addListener('places_changed', function () {
+        console.log("searchbox places_changed");
         let places = searchBox.getPlaces();
         console.log(places);
         if (places.length == 0) {
           return;
         }
 
-      })
+      });
+
+      searchBox.addListener('bounds_changed', function () {
+        searchBox.setBounds(this.map.getBounds);
+      });
     }
   }
 }
