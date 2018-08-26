@@ -2,14 +2,17 @@
   <div id="app">
     <app-header></app-header>
     <!--<MapDisplay></MapDisplay>-->
-    <google-map
-      v-on:get-local-places="updateResultsList"
-    ></google-map>
-    <results-list
-      v-bind:results="resultsList" 
-      v-bind:reviews="savedReviews"
-      v-on:set-review="setReview"
-    ></results-list>
+    <div class="columns">
+      <google-map
+        v-on:get-local-places="updateResultsList"
+        class="column"
+      ></google-map>
+      <results-list class="column is-one-third"
+        v-bind:results="resultsList" 
+        v-bind:reviews="savedReviews"
+        v-on:set-review="setReview"
+      ></results-list>
+    </div>
   </div>
 </template>
 

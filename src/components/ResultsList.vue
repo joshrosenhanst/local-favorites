@@ -20,7 +20,7 @@
               <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
               <add-note-form
                 v-bind:result="result"
-                v-on:submit-review="submitReview(result,$event)"
+                v-on:submit-note="submitReview(result,$event)"
               >
                 <span slot="buttonText">Edit Note</span>
               </add-note-form>
@@ -28,7 +28,7 @@
             <template v-else>
               <add-note-form
                 v-bind:result="result"
-                v-on:submit-review="submitReview(result,$event)"
+                v-on:submit-note="submitReview(result,$event)"
               >
                 <span slot="buttonText">Add a Note</span>
               </add-note-form>
