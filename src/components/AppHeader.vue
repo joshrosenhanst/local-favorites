@@ -3,8 +3,8 @@
       <section class="hero">
         <div class="hero-body">
           <div class="container">
-            <h1 class="title">Local Reviews</h1>
-            <h2 class="subtitle">Your neighborhood, your reviews. So you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
+            <h1 class="title">Local Notes</h1>
+            <h2 class="subtitle">Leave a note, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
           </div>
         </div>
       </section>
