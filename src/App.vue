@@ -4,16 +4,21 @@
     <!--<MapDisplay></MapDisplay>-->
     <div class="columns is-gapless">
       <google-map
+        v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
         class="column"
       ></google-map>
       <aside class="column is-one-third">
         <div id="searchbox-container" class="has-background-primary">
-          <gmap-search-box class="input" placeholder="Search locations by name, address, or type..."></gmap-search-box>
+          <gmap-search-box
+            v-on:start-search="isLoading = true"
+            v-on:get-local-search="updateResultsList"
+          ></gmap-search-box>
         </div>
         <results-list
           v-bind:results="resultsList" 
           v-bind:reviews="savedReviews"
+          v-bind:is-loading="isLoading"
           v-on:set-review="setReview"
         ></results-list>
       </aside>
@@ -41,6 +46,7 @@ export default {
   },
   data: function () {
     return {
+      isLoading: false,
       // dummy data
       resultsList: [
         { place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },
@@ -80,6 +86,8 @@ export default {
           }
         })
       }
+      this.isLoading = false;
+
     }
   },
   created: function () {
@@ -95,6 +103,7 @@ export default {
         }
       })
     }
+    this.isLoading = false;
   }
 }
 </script>

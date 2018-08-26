@@ -78,6 +78,7 @@ export default {
       },
       getLocalPlaces: function (center) {
         console.log("get local")
+        this.$emit('start-nearby-search');
         if(center){
           let service = new google.maps.places.PlacesService(this.$refs.mapRef.$mapObject);
           service.nearbySearch({

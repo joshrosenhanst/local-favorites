@@ -1,4 +1,5 @@
 <template>
+<div id="results-list-container">
   <ul id="results-list">
     <li
         v-for="(result) in results"
@@ -33,6 +34,8 @@
         </template>
     </li>
   </ul>
+  <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
+</div>
 </template>
 
 <script>
@@ -48,11 +51,12 @@ export default {
   },
   props: {
     results: Array,
-    reviews: Array
+    reviews: Array,
+    isLoading: Boolean
   },
   data: function () {
     return {
-        
+      
     }
   },
   methods: {
@@ -73,6 +77,11 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+#results-list-container {
+  position:relative;
+  max-height:500px;
+  overflow-y:scroll;
+}
 .result-display{
   border-bottom: 1px solid #dbdbdb;
   border-left: 1px solid #dbdbdb;
