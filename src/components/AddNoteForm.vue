@@ -1,13 +1,13 @@
 <template>
-<section class="review-form">
+<section class="add-note-form">
     <button class="button" v-on:click="isOpen = !isOpen" v-bind:class="[ isOpen ? 'is-active' : '' ]">
         <span class="icon is-small"><font-awesome-icon icon="comment-alt"></font-awesome-icon></span>
         <slot name="buttonText"></slot>
     </button>
     <b-collapse v-bind:open.sync="isOpen">
-        <div class="box review-box">
-            <h4 class="title is-6">Rate and review this location</h4>
-            <h5 class="subtitle">Your star ratings and reviews are only visible to you.</h5>
+        <div class="box note-box">
+            <h4 class="title is-6">Add a Note and a Star Rating for this location</h4>
+            <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
             <b-field>
                 <StarRating
                     v-bind:stars="reviewStars"
@@ -15,7 +15,7 @@
                 ></StarRating>
             </b-field>
             <b-field message="">
-                <b-input type="textarea" placeholder="Leave a review..." 
+                <b-input type="textarea" placeholder="Add a note..." 
                     v-model="reviewNotes"
                 ></b-input>
             </b-field>
@@ -25,7 +25,7 @@
                     v-on:click="submitReview"
                 >
                     <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
-                    <span>Save Review</span>
+                    <span>Save Note</span>
                 </button>
                 </div>
                 <div class="control">
@@ -45,7 +45,7 @@
 <script>
 import StarRating from './StarRating.vue'
 export default {
-    name: 'ReviewForm',
+    name: 'AddNoteForm',
     props: {
         result: Object
     },
@@ -65,7 +65,7 @@ export default {
     },
     methods: {
         submitReview: function () {
-            this.$emit('submit-review', { stars: this.reviewStars, notes: this.reviewNotes });
+            this.$emit('submit-note', { stars: this.reviewStars, notes: this.reviewNotes });
             this.isOpen = false;
         },
         cancelReview: function () {
@@ -78,7 +78,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.review-box{
+.note-box{
   text-align:center;
   margin:0 auto;
   .title{

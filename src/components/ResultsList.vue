@@ -18,20 +18,20 @@
                 v-bind:readonly="true"
               ></star-rating>
               <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-              <review-form
+              <add-note-form
                 v-bind:result="result"
                 v-on:submit-review="submitReview(result,$event)"
               >
-                <span slot="buttonText">Edit Review</span>
-              </review-form>
+                <span slot="buttonText">Edit Note</span>
+              </add-note-form>
             </template>
             <template v-else>
-              <review-form
+              <add-note-form
                 v-bind:result="result"
                 v-on:submit-review="submitReview(result,$event)"
               >
-                <span slot="buttonText">Write a Review</span>
-              </review-form>
+                <span slot="buttonText">Add a Note</span>
+              </add-note-form>
             </template>
         </li>
       </ul>
@@ -42,13 +42,13 @@
 <script>
 import _ from 'lodash'
 import StarRating from './StarRating.vue'
-import ReviewForm from './ReviewForm.vue'
+import AddNoteForm from './AddNoteForm.vue'
 
 export default {
   name: 'ResultsList',
   components: {
     StarRating,
-    ReviewForm
+    AddNoteForm
   },
   props: {
     results: Array,
