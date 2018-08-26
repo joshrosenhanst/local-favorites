@@ -1,7 +1,7 @@
 <template>
 <section class="add-note-form">
     <button class="button" v-on:click="isOpen = !isOpen" v-bind:class="[ isOpen ? 'is-active' : '' ]">
-        <span class="icon is-small"><font-awesome-icon icon="comment-alt"></font-awesome-icon></span>
+        <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
         <slot name="buttonText"></slot>
     </button>
     <b-collapse v-bind:open.sync="isOpen">
