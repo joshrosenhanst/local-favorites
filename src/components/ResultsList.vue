@@ -4,6 +4,7 @@
     <li
         v-for="(result) in results"
         v-bind:key="result.place_id"
+        v-on:click="triggerPOIClick(result.place_id)"
         class="result-display"
     >
         <h3 class="result-name">{{ result.name }}</h3>
@@ -70,6 +71,9 @@ export default {
     }, 350),
     submitReview: function (result,event) {
       this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
+    },
+    triggerPOIClick: function (place_id) {
+      this.$emit('trigger-poi-click', { place_id });
     }
   },
   created: function () {
@@ -90,6 +94,9 @@ export default {
   padding:10px;
   &:first-child{
     border-top: 1px solid #dbdbdb;
+  }
+  &:hover{
+    background-color:#ffaafa;
   }
 }
 .result-name{

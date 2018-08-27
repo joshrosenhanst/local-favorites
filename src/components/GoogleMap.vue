@@ -8,6 +8,12 @@
       ref="mapRef"
       id="google-map"
     >
+      <!--<gmap-info-window
+        v-bind:options="{ pixelOffset: { width: 0, height: -35 } }"
+        v-bind:position="infoWindowPos"
+        v-bind:opened="infoWinOpen"
+        v-on:closeclick="infoWinOpen = false"
+      ></gmap-info-window>-->
       <gmap-marker
         v-bind:key="index"
         v-for="(m, index) in markers"
@@ -22,6 +28,9 @@
 
 export default {
     name: 'GoogleMap',
+    props: {
+      clickedPlace: String
+    },
     data: function () {
       return {
         center: {lat:40.415932, lng:-74.25753},
@@ -33,7 +42,10 @@ export default {
           streetViewControl: false,
           fullscreenControl: false,
           mapTypeControl: false
-        }
+        },
+        infoContent: '',
+        infoWindowPos: null,
+        infoWinOpen: false
       }
     },
     mounted: function () {
@@ -42,6 +54,13 @@ export default {
         //this.initSearchbox();
         this.initAutoComplete();
       })
+    },
+    watch: {
+      clickedPlace: function (place_id) {
+        this.$gmapApiPromiseLazy().then(() => {
+          let mapObject = this.$refs.mapRef.$mapObject;
+        });
+      }
     },
     methods: {
       initSearchbox: function () {
@@ -81,7 +100,6 @@ export default {
       },
       initAutoComplete: function () {
         let autocomplete_input = document.getElementById('gmap-autocomplete');
-        console.log(autocomplete_input);
         if(autocomplete_input){
           console.log("init autocomplete");
           let mapObject = this.$refs.mapRef.$mapObject;
@@ -97,8 +115,26 @@ export default {
             }else{
               autocomplete_input.placeholder = 'Enter a city...';
             }
+          });
+
+          mapObject.addListener('click', (event) => {
+            console.log(event);
           })
         }
+      },
+      toggleInfoWindow: function (marker, idx) {
+        this.infoWindowPos = marker.position;
+        this.infoContent = marker.infoText;
+        if(this.currentMidx == idx) {
+          this.infoWinOpen = !this.infoWinOpen;
+        }else{
+          this.infoWinOpen = true;
+          this.currentMidx = idx;
+        }
+      },
+      showInfoWindow: function (place_id) {
+
+        this.$emit('show-info-window');
       },
       setPlace: function (place) {
         this.currentPlace = place;

@@ -4,6 +4,8 @@
     <!--<MapDisplay></MapDisplay>-->
     <div class="columns is-gapless">
       <google-map
+        v-bind:clicked-place="clickedPlaceID"
+        v-on:show-info-window="clickedPlaceID = null"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
         class="column"
@@ -23,6 +25,7 @@
           v-bind:reviews="savedReviews"
           v-bind:is-loading="isLoading"
           v-on:set-review="setReview"
+          v-on:trigger-poi-click="clickedPlaceID = $event.place_id"
         ></results-list>
       </aside>
     </div>
@@ -50,6 +53,7 @@ export default {
   data: function () {
     return {
       isLoading: false,
+      clickedPlaceID: null,
       // dummy data
       resultsList: [
         /*{ place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },*/
