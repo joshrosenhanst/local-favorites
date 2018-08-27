@@ -7,8 +7,9 @@
         class="result-display"
     >
         <h3 class="result-name">{{ result.name }}</h3>
-        <p class="result-info">{{ result.vicinity }}
-          <a class="result-map"  v-if="result.url" href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+        <p class="result-info">
+          <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
+          <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
 
         <template v-if="result.notes || result.stars">

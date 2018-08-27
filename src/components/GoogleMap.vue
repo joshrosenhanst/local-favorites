@@ -37,9 +37,69 @@ export default {
       }
     },
     mounted: function () {
-      this.geolocate();
+      this.$gmapApiPromiseLazy().then(() => {
+        this.geolocate();
+        //this.initSearchbox();
+        this.initAutoComplete();
+      })
     },
     methods: {
+      initSearchbox: function () {
+        let searchbox_input = document.getElementById('gmap-search-box');
+        if(searchbox_input){
+          console.log("init searchbox");
+          let searchBox = new google.maps.places.SearchBox(searchbox_input);
+          let mapObject = this.$refs.mapRef.$mapObject;
+
+          mapObject.addListener('bounds_changed', () => {
+            console.log("bounds changed");
+            searchBox.setBounds(mapObject.getBounds());
+          });
+
+          searchBox.addListener('places_changed', () => {
+            console.log("searchbox places_changed");
+            let places = searchBox.getPlaces();
+            console.log(places);
+            if (places.length == 0) {
+              return;
+            }
+
+            this.$emit('get-local-places', { results: places });
+            let bounds = new google.maps.LatLngBounds();
+            places.forEach(place => {
+              if (place.geometry.viewport) {
+                // Only geocodes have viewport.
+                bounds.union(place.geometry.viewport);
+              } else {
+                bounds.extend(place.geometry.location);
+              }
+            });
+            mapObject.fitBounds(bounds);
+
+          });
+        }
+      },
+      initAutoComplete: function () {
+        let autocomplete_input = document.getElementById('gmap-autocomplete');
+        console.log(autocomplete_input);
+        if(autocomplete_input){
+          console.log("init autocomplete");
+          let mapObject = this.$refs.mapRef.$mapObject;
+          let autocomplete = new google.maps.places.Autocomplete(autocomplete_input, {
+            types: ['(cities)']
+          });
+
+          autocomplete.addListener('place_changed', () => {
+            let place = autocomplete.getPlace();
+            if(place.geometry){
+              mapObject.panTo(place.geometry.location);
+              mapObject.setZoom(15);
+            }else{
+              autocomplete_input.placeholder = 'Enter a city...';
+            }
+          })
+        }
+      },
       setPlace: function (place) {
         this.currentPlace = place;
       },
@@ -75,6 +135,7 @@ export default {
       idleMapUpdate: function () {
         let newCenter = this.$refs.mapRef.$mapObject.getCenter();
         this.getLocalPlaces(newCenter);
+        this.$emit('map-bounds-changed', { bounds: this.$refs.mapRef.$mapObject.getBounds() })
       },
       getLocalPlaces: function (center) {
         console.log("get local")
@@ -90,7 +151,9 @@ export default {
         }
       },
       emitLocalPlaces: function (results,status) {
+        console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
+          console.log(results);
           this.$emit('get-local-places', { results: results });
         }
       },

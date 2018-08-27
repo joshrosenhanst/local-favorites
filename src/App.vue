@@ -15,6 +15,9 @@
             v-on:get-local-search="updateResultsList"
           ></gmap-search-box>
         </div>
+        <!--<gmap-autocomplete class="input"
+          v-bind:options="{  }"
+        ></gmap-autocomplete>-->
         <results-list
           v-bind:results="resultsList" 
           v-bind:reviews="savedReviews"
@@ -47,10 +50,9 @@ export default {
   data: function () {
     return {
       isLoading: false,
-      mapReference: {},
       // dummy data
       resultsList: [
-        { place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },
+        /*{ place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },*/
       ],
       savedReviews: [
       ]
