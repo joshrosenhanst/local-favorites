@@ -41,7 +41,7 @@ import StarRating from './StarRating.vue'
 export default {
     name: 'GoogleMap',
     props: {
-      clickedPlace: String,
+      selectedPlace: Object,
       reviews: Array
     },
     components: {
@@ -78,11 +78,6 @@ export default {
       })
     },
     watch: {
-      clickedPlace: function (place_id) {
-        this.$gmapApiPromiseLazy().then(() => {
-          //let mapObject = this.$refs.mapRef.$mapObject;
-        });
-      }
     },
     methods: {
       initMapObject: function () {

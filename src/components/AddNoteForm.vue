@@ -1,79 +1,84 @@
 <template>
 <section class="add-note-form">
-    <button class="button" v-on:click="isOpen = !isOpen" v-bind:class="[ isOpen ? 'is-active' : '' ]">
-        <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
-        <slot name="buttonText"></slot>
-    </button>
-    <b-collapse v-bind:open.sync="isOpen">
-        <div class="box note-box">
-            <h4 class="title is-6">Add a Note and a Star Rating for this location</h4>
-            <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
-            <b-field>
-                <StarRating
-                    v-bind:stars="reviewStars"
-                    v-on:set-stars="reviewStars = $event.value"
-                ></StarRating>
-            </b-field>
-            <b-field message="">
-                <b-input type="textarea" placeholder="Add a note..." 
-                    v-model="reviewNotes"
-                ></b-input>
-            </b-field>
-            <b-field grouped position="is-centered">
-                <div class="control">
-                <button class="button is-success"
-                    v-on:click="submitReview"
-                >
-                    <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
-                    <span>Save Note</span>
-                </button>
-                </div>
-                <div class="control">
-                <button class="button is-danger"
-                    v-on:click="cancelReview"
-                >
-                    <span class="icon"><font-awesome-icon icon="ban"></font-awesome-icon></span>
-                    <span>Cancel</span>
-                </button>
-            </div>
-        </b-field>
+  <button class="button is-small" v-on:click="$emit('toggle-note-form')" v-bind:class="[ isOpen ? 'is-active' : '' ]">
+      <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
+      <slot name="buttonText"></slot>
+  </button>
+  <b-collapse v-bind:open.sync="isOpen">
+    <div class="box note-box">
+      <h4 class="title is-6">Add a Note and a Star Rating for this location</h4>
+      <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
+      <b-field>
+          <StarRating
+            v-bind:stars="reviewStars"
+            v-on:set-stars="reviewStars = $event.value"
+          ></StarRating>
+      </b-field>
+      <b-field message="">
+          <b-input type="textarea" placeholder="Add a note..." 
+              v-model="reviewNotes"
+          ></b-input>
+      </b-field>
+      <b-field grouped position="is-centered">
+        <div class="control">
+          <button class="button is-success"
+            v-on:click="submitReview"
+          >
+            <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
+            <span>Save Note</span>
+          </button>
         </div>
-    </b-collapse>
+        <div class="control">
+          <button class="button is-danger"
+            v-on:click="cancelReview"
+          >
+            <span class="icon"><font-awesome-icon icon="ban"></font-awesome-icon></span>
+            <span>Cancel</span>
+          </button>
+        </div>
+      </b-field>
+    </div>
+  </b-collapse>
 </section>
 </template>
 
 <script>
 import StarRating from './StarRating.vue'
 export default {
-    name: 'AddNoteForm',
-    props: {
-        result: Object
-    },
-    components: {
-        StarRating
-    },
-    data: function () {
-        return {
-            isOpen: false,
-            reviewStars: 0,
-            reviewNotes: null
-        }
-    },
-    created: function () {
-        this.reviewStars = this.result.stars;
-        this.reviewNotes = this.result.notes;
-    },
-    methods: {
-        submitReview: function () {
-            this.$emit('submit-note', { stars: this.reviewStars, notes: this.reviewNotes });
-            this.isOpen = false;
-        },
-        cancelReview: function () {
-            this.reviewStars = 0;
-            this.reviewNotes = null;
-            this.isOpen = false;
-        }
+  name: 'AddNoteForm',
+  props: {
+    result: Object
+  },
+  components: {
+    StarRating
+  },
+  data: function () {
+    return {
+      reviewStars: 0,
+      reviewNotes: null
     }
+  },
+  created: function () {
+    this.reviewStars = this.result.stars;
+    this.reviewNotes = this.result.notes;
+  },
+  methods: {
+    submitReview: function () {
+      this.$emit('submit-note', { stars: this.reviewStars, notes: this.reviewNotes });
+      //this.isOpen = false;
+    },
+    cancelReview: function () {
+      this.reviewStars = this.result.stars || 0;
+      this.reviewNotes = this.result.notes || null;
+      this.$emit('close-note-form');
+      //this.isOpen = false;
+    }
+  },
+  computed: {
+    isOpen: function () {
+      return this.result.hasOwnProperty('isNoteFormOpen') && this.result.isNoteFormOpen;
+    }
+  }
 }
 </script>
 

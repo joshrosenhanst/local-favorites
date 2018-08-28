@@ -2,13 +2,11 @@
   <div id="app">
     <app-header></app-header>
     <div class="columns is-gapless">
-      <google-map
-        v-bind:clicked-place="clickedPlaceID"
+      <google-map class="column"
+        v-bind:selected-place="selectedPlace"
         v-bind:reviews="savedReviews"
-        v-on:show-info-window="clickedPlaceID = null"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
-        class="column"
       ></google-map>
       <aside class="column is-one-third">
         <div id="searchbox-container" class="has-background-primary">
@@ -18,11 +16,15 @@
           ></gmap-city-search>
         </div>
         <results-list
+          v-bind:selected-place="selectedPlace"
           v-bind:results="resultsList" 
           v-bind:reviews="savedReviews"
           v-bind:is-loading="isLoading"
           v-on:set-review="setReview"
-          v-on:trigger-poi-click="clickedPlaceID = $event.place_id"
+          v-on:select-result="selectResult"
+          v-on:toggle-note-form="toggleNoteForm"
+          v-on:open-different-note-form="openDifferentNoteForm"
+          v-on:close-note-form="closeNoteForm"
         ></results-list>
       </aside>
     </div>
@@ -48,13 +50,9 @@ export default {
   data: function () {
     return {
       isLoading: false,
-      clickedPlaceID: null,
-      // dummy data
-      resultsList: [
-        /*{ place_id: 'ChIJYRW7lMbMw4kRxwZoPaGKGNY', name: 'The UPS Store', 'vicinity': '253 Main Street, Matawan', url: '', website: '', types: ["finance", "store", "point_of_interest", "establishment"] },*/
-      ],
-      savedReviews: [
-      ]
+      resultsList: [],
+      savedReviews: [],
+      selectedPlace: {}
     }
   },
   methods: {
@@ -69,13 +67,16 @@ export default {
         // else add the review to the array
         this.savedReviews.push(starredReview);
       }
-      //update the Results array with the new review
+      // update the Results array with the new review
       let matchedResultIndex = _.findIndex(this.resultsList, { place_id:event.place_id });
       let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes };
       if (matchedResultIndex >= 0) {
         this.resultsList.splice(matchedResultIndex,1,updatedResult);
       }
-      //update localStorage
+      // update the selectedPlace Obj with the new review
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, isNoteFormOpen: false });
+
+      // update localStorage
       localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
     },
     updateResultsList: function (event) {
@@ -84,13 +85,41 @@ export default {
         this.savedReviews.forEach(review => {
           let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
           if (matchedResultIndex >= 0) {
-            this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
+            this.resultsList[matchedResultIndex] = Object.assign({}, this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes, isNoteFormOpen: false })
           }
         })
       }
+      if(this.resultsList.length) {
+        // set the selectedPlace to the first item in ResultsList
+        this.selectedPlace = Object.assign({}, this.selectedPlace, this.resultsList[0], { isNoteFormOpen: false });
+      }else{
+        this.selectedPlace = {};
+      }
       this.isLoading = false;
-
+    },
+    selectResult: function (event) {
+      //user selects a place from the ResultsList
+      //update the selectedPlace object
+    },
+    clickMapPoint: function (event) {
+      //user selects a point of interest on the GoogleMap
+      //update the selectedPlace obj
+    },
+    openNoteForm: function (event) {
+      //open the AddNoteForm on the Results List
+      this.selectedPlace.isNoteFormOpen = true;
+    },
+    closeNoteForm: function (event) {
+      this.selectedPlace.isNoteFormOpen = false;
+    },
+    toggleNoteForm: function () {
+      this.selectedPlace.isNoteFormOpen = !this.selectedPlace.isNoteFormOpen;
+    },
+    openDifferentNoteForm: function (result) {
+      this.selectedPlace.isNoteFormOpen = false;
+      this.selectedPlace = Object.assign({}, this.selectedPlace, result, { isNoteFormOpen: true });
     }
+
   },
   created: function () {
     // get localstorage review data

@@ -1,39 +1,43 @@
 <template>
 <div id="results-list-container">
   <ul id="results-list">
-    <li
-        v-for="(result) in results"
-        v-bind:key="result.place_id"
-        v-on:click="triggerPOIClick(result.place_id)"
-        class="result-display"
+    <li class="result-display"
+      v-for="(result) in results"
+      v-bind:class="[ selectedPlace.place_id === result.place_id ? 'selected' : '' ]"
+      v-bind:key="result.place_id"
+      v-on:click="$emit('select-result',result)"
     >
-        <h3 class="result-name">{{ result.name }}</h3>
-        <p class="result-info">
-          <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
-          <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
-          <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
+      <h3 class="result-name">{{ result.name }}</h3>
+      <p class="result-info">
+        <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
+        <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+        <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
 
-        <template v-if="result.notes || result.stars">
-          <star-rating
-            v-bind:stars="result.stars"
-            v-bind:readonly="true"
-          ></star-rating>
-          <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-          <add-note-form
-            v-bind:result="result"
-            v-on:submit-note="submitReview(result,$event)"
-          >
-            <span slot="buttonText">Edit Note</span>
-          </add-note-form>
-        </template>
-        <template v-else>
-          <add-note-form
-            v-bind:result="result"
-            v-on:submit-note="submitReview(result,$event)"
-          >
-            <span slot="buttonText">Add a Note</span>
-          </add-note-form>
-        </template>
+      <template v-if="result.notes || result.stars">
+        <star-rating
+          v-bind:stars="result.stars"
+          v-bind:readonly="true"
+        ></star-rating>
+        <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
+        <add-note-form
+          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+          v-on:toggle-note-form="toggleNoteForm(result)"
+          v-on:close-note-form="$emit('close-note-form')"
+          v-on:submit-note="submitReview(result,$event)"
+        >
+          <span slot="buttonText">Edit Note</span>
+        </add-note-form>
+      </template>
+      <template v-else>
+        <add-note-form
+          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+          v-on:toggle-note-form="toggleNoteForm(result)"
+          v-on:close-note-form="$emit('close-note-form')"
+          v-on:submit-note="submitReview(result,$event)"
+        >
+          <span slot="buttonText">Add a Note</span>
+        </add-note-form>
+      </template>
     </li>
   </ul>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
@@ -52,6 +56,7 @@ export default {
     AddNoteForm
   },
   props: {
+    selectedPlace: Object,
     results: Array,
     reviews: Array,
     isLoading: Boolean
@@ -62,18 +67,15 @@ export default {
     }
   },
   methods: {
-    setNotes: function (event) {
-      
-    },
-    debouncedSetNotes: _.debounce(function (event) {
-      console.log("debounced");
-      this.$emit('set-review', {place_id: event.place_id, stars: event.stars, notes:event.notes });
-    }, 350),
     submitReview: function (result,event) {
       this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
     },
-    triggerPOIClick: function (place_id) {
-      this.$emit('trigger-poi-click', { place_id });
+    toggleNoteForm: function (result) {
+      if(this.selectedPlace.place_id === result.place_id) {
+        this.$emit('toggle-note-form');
+      }else{
+        this.$emit('open-different-note-form', result);
+      }
     }
   },
   created: function () {
@@ -97,6 +99,9 @@ export default {
   }
   &:hover{
     background-color:#ffaafa;
+  }
+  &.selected{
+    background-color:#dadada;
   }
 }
 .result-name{
