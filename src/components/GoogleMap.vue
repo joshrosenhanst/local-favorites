@@ -4,21 +4,23 @@
       v-bind:center="center"
       v-bind:zoom="zoom"
       v-bind:options="mapOptions"
-      v-on:idle="idleMapUpdate"
       ref="mapRef"
       id="google-map"
     >
-      <!--<gmap-info-window
+      <gmap-info-window
         v-bind:options="{ pixelOffset: { width: 0, height: -35 } }"
-        v-bind:position="infoWindowPos"
-        v-bind:opened="infoWinOpen"
-        v-on:closeclick="infoWinOpen = false"
-      ></gmap-info-window>-->
+        v-bind:position="infoWindow.position"
+        v-bind:opened="infoWindow.open"
+        v-on:closeclick="infoWindow.open = false"
+      >
+        <label>Name</label> {{ infoWindow.place.name }}<br>
+        <label>Address</label> {{ infoWindow.place.formatted_address }}<br>
+        <label>Another label</label>
+      </gmap-info-window>
       <gmap-marker
-        v-bind:key="index"
-        v-for="(m, index) in markers"
-        v-bind:position="m.position"
-        v-on:click="center=m.position"
+        v-if="marker"
+        v-bind:position="marker.position"
+        v-on:click="toggleInfoWindow"
       ></gmap-marker>
     </gmap-map>
   </section>
@@ -36,6 +38,7 @@ export default {
         center: {lat:40.415932, lng:-74.25753},
         zoom: 15,
         markers: [],
+        marker: {},
         places: [],
         currentPlace: null,
         mapOptions: {
@@ -43,66 +46,53 @@ export default {
           fullscreenControl: false,
           mapTypeControl: false
         },
-        infoContent: '',
-        infoWindowPos: null,
-        infoWinOpen: false
+        infoWindow: {
+          place: {},
+          position: null,
+          open: false
+        },
+        gPlacesService: null,
+        mapObject: null
       }
     },
     mounted: function () {
       this.$gmapApiPromiseLazy().then(() => {
-        this.geolocate();
-        //this.initSearchbox();
+        this.initMapObject();
+        this.initInfoWindow();
         this.initAutoComplete();
+        this.geolocate();
       })
     },
     watch: {
       clickedPlace: function (place_id) {
         this.$gmapApiPromiseLazy().then(() => {
-          let mapObject = this.$refs.mapRef.$mapObject;
+          //let mapObject = this.$refs.mapRef.$mapObject;
         });
       }
     },
     methods: {
-      initSearchbox: function () {
-        let searchbox_input = document.getElementById('gmap-search-box');
-        if(searchbox_input){
-          console.log("init searchbox");
-          let searchBox = new google.maps.places.SearchBox(searchbox_input);
-          let mapObject = this.$refs.mapRef.$mapObject;
+      initMapObject: function () {
+        this.mapObject = this.$refs.mapRef.$mapObject;
+        this.gPlacesService = new google.maps.places.PlacesService(this.mapObject);
 
-          mapObject.addListener('bounds_changed', () => {
-            console.log("bounds changed");
-            searchBox.setBounds(mapObject.getBounds());
-          });
-
-          searchBox.addListener('places_changed', () => {
-            console.log("searchbox places_changed");
-            let places = searchBox.getPlaces();
-            console.log(places);
-            if (places.length == 0) {
-              return;
-            }
-
-            this.$emit('get-local-places', { results: places });
-            let bounds = new google.maps.LatLngBounds();
-            places.forEach(place => {
-              if (place.geometry.viewport) {
-                // Only geocodes have viewport.
-                bounds.union(place.geometry.viewport);
-              } else {
-                bounds.extend(place.geometry.location);
-              }
-            });
-            mapObject.fitBounds(bounds);
-
-          });
-        }
+        this.mapObject.addListener('idle', this.idleMapUpdate);
+      },
+      initInfoWindow: function () {
+        this.mapObject.addListener('click', (event) => {
+          console.log("click map");
+          let place_id = "xyz";
+          //let position = {};
+          if(event.placeId){
+            console.log("icon click");
+            event.stop();
+            this.getPlaceDetails(event.placeId);
+          }
+        });
       },
       initAutoComplete: function () {
         let autocomplete_input = document.getElementById('gmap-autocomplete');
         if(autocomplete_input){
           console.log("init autocomplete");
-          let mapObject = this.$refs.mapRef.$mapObject;
           let autocomplete = new google.maps.places.Autocomplete(autocomplete_input, {
             types: ['(cities)']
           });
@@ -110,41 +100,36 @@ export default {
           autocomplete.addListener('place_changed', () => {
             let place = autocomplete.getPlace();
             if(place.geometry){
-              mapObject.panTo(place.geometry.location);
-              mapObject.setZoom(15);
+              this.mapObject.panTo(place.geometry.location);
+              this.mapObject.setZoom(15);
             }else{
               autocomplete_input.placeholder = 'Enter a city...';
             }
           });
-
-          mapObject.addListener('click', (event) => {
-            console.log(event);
-          })
         }
       },
-      toggleInfoWindow: function (marker, idx) {
-        this.infoWindowPos = marker.position;
-        this.infoContent = marker.infoText;
-        if(this.currentMidx == idx) {
-          this.infoWinOpen = !this.infoWinOpen;
-        }else{
-          this.infoWinOpen = true;
-          this.currentMidx = idx;
-        }
+      toggleInfoWindow: function () {
+        this.infoWindow.position = this.marker.position;
+        this.infoWindow.place = this.marker.place;
+        this.infoWindow.open = !this.infoWindow.open;
       },
-      showInfoWindow: function (place_id) {
-
-        this.$emit('show-info-window');
+      setInfoWindowVisibility: function (open) {
+        this.infoWindow.position = this.marker.position;
+        this.infoWindow.place = this.marker.place;
+        this.infoWindow.open = open;
       },
-      setPlace: function (place) {
-        this.currentPlace = place;
-      },
-      getCenterGeo: function () { 
-        if (this.center) {
-          return {
-            lat: this.center.lat,
-            lng: this.center.lng
-          };
+      getPlaceDetails: function (place_id) {
+        if(this.gPlacesService){
+          this.gPlacesService.getDetails({placeId: place_id}, (place,status) => {
+            if(status === google.maps.places.PlacesServiceStatus.OK) {
+              this.marker = {
+                position: place.geometry.location,
+                place: place
+              };
+              this.setInfoWindowVisibility(true);
+              console.log(place);
+            }
+          });
         }
       },
       addMarker: function () {
@@ -168,20 +153,20 @@ export default {
           };
         });
       },
-      idleMapUpdate: function () {
-        let newCenter = this.$refs.mapRef.$mapObject.getCenter();
+      idleMapUpdate: function (event) {
+        let newCenter = this.mapObject.getCenter();
         this.getLocalPlaces(newCenter);
-        this.$emit('map-bounds-changed', { bounds: this.$refs.mapRef.$mapObject.getBounds() })
+        this.$emit('map-bounds-changed', { bounds: this.mapObject.getBounds() })
       },
       getLocalPlaces: function (center) {
         console.log("get local")
         this.$emit('start-nearby-search');
         if(center){
-          let service = new google.maps.places.PlacesService(this.$refs.mapRef.$mapObject);
+          let service = new google.maps.places.PlacesService(this.mapObject);
           service.nearbySearch({
             /*location: center,
             radius: 500,*/
-            bounds: this.$refs.mapRef.$mapObject.getBounds(),
+            bounds: this.mapObject.getBounds(),
             type: ['point_of_interest']
           }, this.emitLocalPlaces);
         }
