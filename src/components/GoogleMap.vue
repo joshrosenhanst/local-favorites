@@ -9,27 +9,28 @@
     >
       <gmap-info-window
         v-bind:options="{ pixelOffset: { width: 0, height: -35 } }"
-        v-bind:position="infoWindow.position"
+        v-if="selectedPlace && selectedPlace.geometry"
+        v-bind:position="selectedPlace.geometry.location"
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
-        <div class="infowindow-name">{{ infoWindow.place.name }}</div>
-        <div class="infowindow-address">{{ infoWindow.place.formatted_address }}</div>
-        <template v-if="infoWindow.place.stars || infoWindow.place.notes">
+        <div class="infowindow-name">{{ selectedPlace.name }}</div>
+        <div class="infowindow-address">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</div>
+        <template v-if="selectedPlace.stars || selectedPlace.notes">
           <star-rating
-            v-bind:stars="infoWindow.place.stars"
+            v-bind:stars="selectedPlace.stars"
             v-bind:readonly="true"
           ></star-rating>
-          <p class="infowindow-notes" v-if="infoWindow.place.notes">{{ infoWindow.place.notes }}</p>
+          <p class="infowindow-notes" v-if="selectedPlace.notes">{{ selectedPlace.notes }}</p>
         </template>
         <template v-else>
           <a href="">Add a Note</a>
         </template>
       </gmap-info-window>
       <gmap-marker
-        v-if="marker"
-        v-bind:position="marker.position"
-        v-on:click="toggleInfoWindow"
+        v-if="selectedPlace && selectedPlace.geometry"
+        v-bind:position="selectedPlace.geometry.location"
+        v-on:click="infoWindow.open = true"
       ></gmap-marker>
     </gmap-map>
   </section>
@@ -61,9 +62,7 @@ export default {
           mapTypeControl: false
         },
         infoWindow: {
-          place: {},
-          position: null,
-          open: false
+          open: true
         },
         gPlacesService: null,
         mapObject: null
@@ -118,13 +117,9 @@ export default {
         }
       },
       toggleInfoWindow: function () {
-        this.infoWindow.position = this.marker.position;
-        this.infoWindow.place = this.marker.place;
         this.infoWindow.open = !this.infoWindow.open;
       },
       setInfoWindowVisibility: function (open) {
-        this.infoWindow.position = this.marker.position;
-        this.infoWindow.place = this.marker.place;
         this.infoWindow.open = open;
       },
       getPlaceDetails: function (place_id) {

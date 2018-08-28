@@ -91,23 +91,25 @@ export default {
       }
       if(this.resultsList.length) {
         // set the selectedPlace to the first item in ResultsList
-        this.selectedPlace = Object.assign({}, this.selectedPlace, this.resultsList[0], { isNoteFormOpen: false });
+        // stars and notes should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, this.resultsList[0], { isNoteFormOpen: false });
       }else{
         this.selectedPlace = {};
       }
       this.isLoading = false;
     },
     selectResult: function (result) {
-      //user selects a place from the ResultsList
-      //update the selectedPlace object
-      this.selectedPlace = Object.assign({}, this.selectedPlace, result, { isNoteFormOpen: false });
+      // user selects a place from the ResultsList
+      // update the selectedPlace object
+      // stars and notes should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, result, { isNoteFormOpen: false });
     },
     clickMapPoint: function (event) {
-      //user selects a point of interest on the GoogleMap
-      //update the selectedPlace obj
+      // user selects a point of interest on the GoogleMap
+      // update the selectedPlace obj
     },
     openNoteForm: function (event) {
-      //open the AddNoteForm on the Results List
+      // open the AddNoteForm on the Results List
       this.selectedPlace.isNoteFormOpen = true;
     },
     closeNoteForm: function (event) {
@@ -118,7 +120,7 @@ export default {
     },
     openDifferentNoteForm: function (result) {
       this.selectedPlace.isNoteFormOpen = false;
-      this.selectedPlace = Object.assign({}, this.selectedPlace, result, { isNoteFormOpen: true });
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, result, { isNoteFormOpen: true } );
     }
 
   },
