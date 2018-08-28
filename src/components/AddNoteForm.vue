@@ -1,8 +1,11 @@
 <template>
 <section class="add-note-form">
-  <button class="button is-small" v-on:click="$emit('toggle-note-form')" v-bind:class="[ isOpen ? 'is-active' : '' ]">
-      <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
-      <slot name="buttonText"></slot>
+  <button class="button is-small" 
+    v-bind:class="[ isOpen ? 'is-active' : '' ]"
+    v-on:click.stop="$emit('toggle-note-form')" 
+  >
+    <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
+    <slot name="buttonText"></slot>
   </button>
   <b-collapse v-bind:open.sync="isOpen">
     <div class="box note-box">

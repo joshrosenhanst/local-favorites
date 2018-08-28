@@ -71,6 +71,7 @@ export default {
       this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
     },
     toggleNoteForm: function (result) {
+      //event.stopPropogation();
       if(this.selectedPlace.place_id === result.place_id) {
         this.$emit('toggle-note-form');
       }else{

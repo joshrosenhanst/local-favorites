@@ -97,9 +97,10 @@ export default {
       }
       this.isLoading = false;
     },
-    selectResult: function (event) {
+    selectResult: function (result) {
       //user selects a place from the ResultsList
       //update the selectedPlace object
+      this.selectedPlace = Object.assign({}, this.selectedPlace, result, { isNoteFormOpen: false });
     },
     clickMapPoint: function (event) {
       //user selects a point of interest on the GoogleMap
