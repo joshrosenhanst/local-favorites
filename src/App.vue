@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <!--<MapDisplay></MapDisplay>-->
     <div class="columns is-gapless">
       <google-map
         v-bind:clicked-place="clickedPlaceID"
+        v-bind:reviews="savedReviews"
         v-on:show-info-window="clickedPlaceID = null"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
@@ -12,14 +12,11 @@
       ></google-map>
       <aside class="column is-one-third">
         <div id="searchbox-container" class="has-background-primary">
-          <gmap-search-box
+          <gmap-city-search
             v-on:start-search="isLoading = true"
             v-on:get-local-search="updateResultsList"
-          ></gmap-search-box>
+          ></gmap-city-search>
         </div>
-        <!--<gmap-autocomplete class="input"
-          v-bind:options="{  }"
-        ></gmap-autocomplete>-->
         <results-list
           v-bind:results="resultsList" 
           v-bind:reviews="savedReviews"
@@ -36,9 +33,8 @@
 import HelloWorld from './components/HelloWorld.vue'
 import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
-import MapDisplay from './components/MapDisplay.vue'
 import GoogleMap from './components/GoogleMap.vue'
-import GmapSearchBox from './components/GmapSearchBox.vue'
+import GmapCitySearch from './components/GmapCitySearch.vue'
 
 export default {
   name: 'app',
@@ -46,9 +42,8 @@ export default {
     HelloWorld,
     AppHeader,
     ResultsList,
-    MapDisplay,
     GoogleMap,
-    GmapSearchBox
+    GmapCitySearch
   },
   data: function () {
     return {

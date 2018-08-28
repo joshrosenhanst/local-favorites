@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'GmapSearchBox',
+  name: 'GmapCitySearch',
   props: {
     value: String,
     placeholder: String

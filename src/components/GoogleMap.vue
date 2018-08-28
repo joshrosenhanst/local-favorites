@@ -13,9 +13,18 @@
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
-        <label>Name</label> {{ infoWindow.place.name }}<br>
-        <label>Address</label> {{ infoWindow.place.formatted_address }}<br>
-        <label>Another label</label>
+        <div class="infowindow-name">{{ infoWindow.place.name }}</div>
+        <div class="infowindow-address">{{ infoWindow.place.formatted_address }}</div>
+        <template v-if="infoWindow.place.stars || infoWindow.place.notes">
+          <star-rating
+            v-bind:stars="infoWindow.place.stars"
+            v-bind:readonly="true"
+          ></star-rating>
+          <p class="infowindow-notes" v-if="infoWindow.place.notes">{{ infoWindow.place.notes }}</p>
+        </template>
+        <template v-else>
+          <a href="">Add a Note</a>
+        </template>
       </gmap-info-window>
       <gmap-marker
         v-if="marker"
@@ -27,11 +36,16 @@
 </template>
 
 <script>
+import StarRating from './StarRating.vue'
 
 export default {
     name: 'GoogleMap',
     props: {
-      clickedPlace: String
+      clickedPlace: String,
+      reviews: Array
+    },
+    components: {
+      StarRating
     },
     data: function () {
       return {
@@ -122,15 +136,27 @@ export default {
         if(this.gPlacesService){
           this.gPlacesService.getDetails({placeId: place_id}, (place,status) => {
             if(status === google.maps.places.PlacesServiceStatus.OK) {
+              let updatedPlaceOb = this.getReviewForPlace(place);
               this.marker = {
                 position: place.geometry.location,
-                place: place
+                place: updatedPlaceOb
               };
               this.setInfoWindowVisibility(true);
-              console.log(place);
             }
           });
         }
+      },
+      getReviewForPlace: function (place) {
+        let matchedReviewIndex = _.findIndex(this.reviews, { place_id:place.place_id });
+        console.log(place.place_id);
+        if (matchedReviewIndex >= 0) {
+          // if it exists, combine add the review to the saved place
+          place = Object.assign({}, place, {
+            stars: this.reviews[matchedReviewIndex].stars,
+            notes: this.reviews[matchedReviewIndex].notes,
+          });
+        }
+        return place;
       },
       addMarker: function () {
         if (this.currentPlace) {
