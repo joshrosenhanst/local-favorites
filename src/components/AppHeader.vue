@@ -1,5 +1,5 @@
 <template>
-    <header class="app-header">
+    <header id="app-header">
       <section class="hero">
         <div class="hero-body">
           <div class="container">
@@ -42,7 +42,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-header.app-header {
+#app-header {
   text-align:center;
 }
 #random-predicate {

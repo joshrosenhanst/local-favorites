@@ -221,13 +221,19 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+  #google-map-container {
+    flex-grow:1;
+  }
   #map-search-field{
     width:500px;
     margin:0 auto;
   }
   #google-map{
     width:100%;
-    height:500px;
+    height:100%;
+    @media (max-width: 769px) {
+      height:250px;
+    }
   }
 </style>
 

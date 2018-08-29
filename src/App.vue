@@ -1,15 +1,15 @@
 <template>
   <div id="app">
     <app-header></app-header>
-    <div class="columns is-gapless">
-      <google-map class="column"
+    <main id="app-body">
+      <google-map
         v-bind:selected-place="selectedPlace"
         v-bind:reviews="savedReviews"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
       ></google-map>
-      <aside class="column is-one-third">
-        <div id="searchbox-container" class="has-background-primary">
+      <aside id="map-sidebar">
+        <div id="city-search-container" class="has-background-primary">
           <gmap-city-search
             v-on:start-search="isLoading = true"
             v-on:get-local-search="updateResultsList"
@@ -27,12 +27,14 @@
           v-on:close-note-form="closeNoteForm"
         ></results-list>
       </aside>
-    </div>
+    </main>
+    <footer id="app-footer">
+      <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
+    </footer>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
 import GoogleMap from './components/GoogleMap.vue'
@@ -41,7 +43,6 @@ import GmapCitySearch from './components/GmapCitySearch.vue'
 export default {
   name: 'app',
   components: {
-    HelloWorld,
     AppHeader,
     ResultsList,
     GoogleMap,
@@ -143,9 +144,51 @@ export default {
 </script>
 
 <style lang='scss'>
-#app {
+html{
+  overflow-y:auto;
 }
-#searchbox-container{
+#app {
+  height:100vh;
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+#app-header{
+  flex-grow: 0;
+}
+#app-body {
+  flex-grow: 1;
+  min-height:0;
+
+  display:flex;
+  flex-direction:column;
+  @media (min-width: 769px) {
+    flex-direction:row;
+  }
+}
+#app-footer {
+  flex-grow: 0;
+
+  font-size:12px;
+  font-style:italic;
+  padding:20px;
+  text-align:center;
+}
+
+#map-sidebar{
+  flex-grow:1;
+
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+  max-height:100vh;
+  @media (min-width: 769px) {
+    flex-grow:0;
+    width:400px;
+  }
+}
+#city-search-container{
   padding:15px 10px;
 }
 </style>

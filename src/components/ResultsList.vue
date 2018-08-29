@@ -1,45 +1,43 @@
 <template>
-<div id="results-list-container">
-  <ul id="results-list">
-    <li class="result-display"
-      v-for="(result) in results"
-      v-bind:class="[ selectedPlace.place_id === result.place_id ? 'selected' : '' ]"
-      v-bind:key="result.place_id"
-      v-on:click="$emit('select-result',result)"
-    >
-      <h3 class="result-name">{{ result.name }}</h3>
-      <p class="result-info">
-        <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
-        <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
-        <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
+<div id="results-list-container" class="scrollable-content">
+  <div class="result-display"
+    v-for="(result) in results"
+    v-bind:class="[ selectedPlace.place_id === result.place_id ? 'selected' : '' ]"
+    v-bind:key="result.place_id"
+    v-on:click="$emit('select-result',result)"
+  >
+    <h3 class="result-name">{{ result.name }}</h3>
+    <p class="result-info">
+      <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
+      <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+      <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
 
-      <template v-if="result.notes || result.stars">
-        <star-rating
-          v-bind:stars="result.stars"
-          v-bind:readonly="true"
-        ></star-rating>
-        <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-        <add-note-form
-          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-          v-on:toggle-note-form="toggleNoteForm(result)"
-          v-on:close-note-form="$emit('close-note-form')"
-          v-on:submit-note="submitReview(result,$event)"
-        >
-          <span slot="buttonText">Edit Note</span>
-        </add-note-form>
-      </template>
-      <template v-else>
-        <add-note-form
-          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-          v-on:toggle-note-form="toggleNoteForm(result)"
-          v-on:close-note-form="$emit('close-note-form')"
-          v-on:submit-note="submitReview(result,$event)"
-        >
-          <span slot="buttonText">Add a Note</span>
-        </add-note-form>
-      </template>
-    </li>
-  </ul>
+    <template v-if="result.notes || result.stars">
+      <star-rating
+        v-bind:stars="result.stars"
+        v-bind:readonly="true"
+      ></star-rating>
+      <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
+      <add-note-form
+        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+        v-on:toggle-note-form="toggleNoteForm(result)"
+        v-on:close-note-form="$emit('close-note-form')"
+        v-on:submit-note="submitReview(result,$event)"
+      >
+        <span slot="buttonText">Edit Note</span>
+      </add-note-form>
+    </template>
+    <template v-else>
+      <add-note-form
+        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+        v-on:toggle-note-form="toggleNoteForm(result)"
+        v-on:close-note-form="$emit('close-note-form')"
+        v-on:submit-note="submitReview(result,$event)"
+      >
+        <span slot="buttonText">Add a Note</span>
+      </add-note-form>
+    </template>
+  </div>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
 </div>
 </template>
@@ -87,8 +85,13 @@ export default {
 <style lang="scss" scoped>
 #results-list-container {
   position:relative;
-  max-height:500px;
-  overflow-y:scroll;
+  display:flex;
+  flex-direction:column;
+}
+.scrollable-content {
+  flex-grow: 1;
+  overflow:auto;
+  min-height:0;
 }
 .result-display{
   border-bottom: 1px solid #dbdbdb;
