@@ -156,8 +156,14 @@ export default {
       },
       idleMapUpdate: function (event) {
         let newCenter = this.mapObject.getCenter();
-        this.getLocalPlaces(newCenter);
-        this.$emit('map-bounds-changed', { bounds: this.mapObject.getBounds() })
+        let mapBounds = this.mapObject.getBounds();
+        if(this.selectedPlace && this.selectedPlace.geometry && mapBounds.contains(this.selectedPlace.geometry.location)){
+          console.log("inside bounds")
+        }else{
+          console.log("outside bounds")
+          this.getLocalPlaces(newCenter);
+        }
+        this.$emit('map-bounds-changed', { bounds: mapBounds })
       },
       getLocalPlaces: function (center) {
         console.log("get local")
