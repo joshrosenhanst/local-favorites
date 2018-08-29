@@ -7,6 +7,7 @@
         v-bind:reviews="savedReviews"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
+        v-on:click-map-point="clickMapPoint"
       ></google-map>
       <aside id="map-sidebar">
         <div id="city-search-container" class="has-background-primary">
@@ -105,9 +106,10 @@ export default {
       // stars and notes should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
       this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, result, { isNoteFormOpen: false });
     },
-    clickMapPoint: function (event) {
+    clickMapPoint: function (place) {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, place, { isNoteFormOpen: false });
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List

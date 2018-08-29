@@ -127,10 +127,7 @@ export default {
           this.gPlacesService.getDetails({placeId: place_id}, (place,status) => {
             if(status === google.maps.places.PlacesServiceStatus.OK) {
               let updatedPlaceOb = this.getReviewForPlace(place);
-              this.marker = {
-                position: place.geometry.location,
-                place: updatedPlaceOb
-              };
+              this.$emit('click-map-point',updatedPlaceOb);
               this.setInfoWindowVisibility(true);
             }
           });
@@ -147,18 +144,6 @@ export default {
           });
         }
         return place;
-      },
-      addMarker: function () {
-        if (this.currentPlace) {
-          const marker = {
-            lat: this.currentPlace.geometry.location.lat(),
-            lng: this.currentPlace.geometry.location.lng()
-          };
-          this.markers.push({ position:marker });
-          this.places.push(this.currentPlace);
-          this.center = marker;
-          this.currentPlace = null;
-        }
       },
       geolocate: function () {
         console.log("geolocate");
