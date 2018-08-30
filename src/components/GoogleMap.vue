@@ -14,19 +14,19 @@
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
-        <div class="infowindow-name">{{ selectedPlace.name }}</div>
+
+        <span class="infowindow-saved"
+          v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
+        ><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
+        <star-rating
+          v-if="selectedPlace.stars"
+          v-bind:stars="selectedPlace.stars"
+          v-bind:readonly="true"
+        ></star-rating>
+        <h3 class="infowindow-name">{{ selectedPlace.name }}</h3>
         <div class="infowindow-address">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</div>
-        <template v-if="selectedPlace.stars || selectedPlace.notes">
-          <span class="infowindow-saved"
-            v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
-          ><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
-          <star-rating
-            v-bind:stars="selectedPlace.stars"
-            v-bind:readonly="true"
-          ></star-rating>
-          <p class="infowindow-notes" v-if="selectedPlace.notes">{{ selectedPlace.notes }}</p>
-        </template>
-        <template v-else>
+        <p class="infowindow-notes" v-if="selectedPlace.notes">{{ selectedPlace.notes }}</p>
+        <template v-if="!(selectedPlace.stars || selectedPlace.notes)">
           <a href="">Add a Note</a>
         </template>
       </gmap-info-window>
@@ -228,6 +228,20 @@ export default {
     @media (max-width: 769px) {
       height:250px;
     }
+  }
+  .infowindow-name{
+    font-size:1rem;
+    font-weight:500;
+    color:#4a4a4a;
+    line-height:1.25;
+  }
+  .infowindow-address{
+    font-size:0.8rem;
+    font-weight:400;
+  }
+  .infowindow-notes{
+    font-style:italic;
+    font-weight:400;
   }
   .infowindow-saved{
     float:right;

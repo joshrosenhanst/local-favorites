@@ -24,6 +24,11 @@
         </button>
       </div>
     </b-field>
+    <star-rating
+      v-if="result.stars"
+      v-bind:stars="result.stars"
+      v-bind:readonly="true"
+    ></star-rating>
     <h3 class="result-name">{{ result.name }}</h3>
     <p class="result-info">
       <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
@@ -32,10 +37,6 @@
     </p>
 
     <template v-if="result.notes || result.stars">
-      <star-rating
-        v-bind:stars="result.stars"
-        v-bind:readonly="true"
-      ></star-rating>
       <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
       <add-note-form
         v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
@@ -137,6 +138,11 @@ export default {
 }
 .result-info{
   font-size:0.8rem;
+}
+.result-notes{
+  font-style:italic;
+  border-left:3px solid #cacaca;
+  padding-left:5px;
 }
 .result-buttons{
   float:right;
