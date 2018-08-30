@@ -16,6 +16,11 @@
             v-on:get-local-search="updateResultsList"
           ></gmap-city-search>
         </div>
+        <!--<b-tabs position="is-centered" class="block" type="is-toggle">
+          <b-tab-item label="Nearby"></b-tab-item>
+          <b-tab-item label="My Favorites"></b-tab-item>
+          <b-tab-item label="My Reviews"></b-tab-item>
+        </b-tabs>-->
         <results-list
           v-bind:selected-place="selectedPlace"
           v-bind:results="resultsList" 
