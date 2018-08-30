@@ -14,7 +14,6 @@
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
-
         <span class="infowindow-saved"
           v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
         ><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
@@ -41,6 +40,7 @@
 
 <script>
 import StarRating from './StarRating.vue'
+import GmapCitySearch from './GmapCitySearch.vue'
 
 export default {
     name: 'GoogleMap',
@@ -49,7 +49,8 @@ export default {
       reviews: Array
     },
     components: {
-      StarRating
+      StarRating,
+      GmapCitySearch
     },
     data: function () {
       return {
@@ -86,6 +87,8 @@ export default {
         this.mapObject = this.$refs.mapRef.$mapObject;
         this.gPlacesService = new google.maps.places.PlacesService(this.mapObject);
 
+        let mapControlSearch = document.getElementById("city-search-container");
+        this.mapObject.controls[google.maps.ControlPosition.TOP_RIGHT].push(mapControlSearch);
         this.mapObject.addListener('idle', this.idleMapUpdate);
       },
       initInfoWindow: function () {

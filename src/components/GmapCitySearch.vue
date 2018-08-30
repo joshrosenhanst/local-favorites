@@ -1,7 +1,7 @@
 <template>
   <div class="field">
     <div class="control has-icons-left">
-      <input type="text" class="input" :value="value" placeholder="Enter a city..." ref="gmap-autocomplete" id="gmap-autocomplete" />
+      <input type="text" class="input" :value="value" placeholder="Search by City..." ref="gmap-autocomplete" id="gmap-autocomplete" />
       <span class="icon is-small is-left">
         <font-awesome-icon icon="search"></font-awesome-icon>
       </span>

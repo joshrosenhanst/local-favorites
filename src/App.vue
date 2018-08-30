@@ -10,12 +10,6 @@
         v-on:click-map-point="clickMapPoint"
       ></google-map>
       <aside id="map-sidebar">
-        <div id="city-search-container" class="has-background-primary">
-          <gmap-city-search
-            v-on:start-search="isLoading = true"
-            v-on:get-local-search="updateResultsList"
-          ></gmap-city-search>
-        </div>
         <!--<b-tabs position="is-centered" class="block" type="is-toggle">
           <b-tab-item label="Nearby"></b-tab-item>
           <b-tab-item label="My Favorites"></b-tab-item>
@@ -34,6 +28,12 @@
           v-on:close-note-form="closeNoteForm"
         ></results-list>
       </aside>
+      <div id="city-search-container">
+        <gmap-city-search
+          v-on:start-search="isLoading = true"
+          v-on:get-local-search="updateResultsList"
+        ></gmap-city-search>
+      </div>
     </main>
     <footer id="app-footer">
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
@@ -203,6 +203,9 @@ html{
   }
 }
 #city-search-container{
-  padding:15px 10px;
+  padding:5px 10px;
+  background:white;
+  box-shadow:rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
+  border-radius: 2px;
 }
 </style>
