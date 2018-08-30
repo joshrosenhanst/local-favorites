@@ -1,62 +1,32 @@
 <template>
 <div id="results-list-container" class="scrollable-content">
-  <div class="result-display"
+  <result-display
     v-for="(result) in results"
-    v-bind:class="[ selectedPlace.place_id === result.place_id ? 'selected' : '' ]"
     v-bind:key="result.place_id"
-    v-on:click="$emit('select-result',result)"
-  >
-    <h3 class="result-name">{{ result.name }}</h3>
-    <p class="result-info">
-      <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
-      <a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
-      <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a></p>
-
-    <template v-if="result.notes || result.stars">
-      <star-rating
-        v-bind:stars="result.stars"
-        v-bind:readonly="true"
-      ></star-rating>
-      <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-      <add-note-form
-        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-        v-on:toggle-note-form="toggleNoteForm(result)"
-        v-on:close-note-form="$emit('close-note-form')"
-        v-on:submit-note="submitReview(result,$event)"
-      >
-        <span slot="buttonText">Edit Note</span>
-      </add-note-form>
-    </template>
-    <template v-else>
-      <add-note-form
-        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-        v-on:toggle-note-form="toggleNoteForm(result)"
-        v-on:close-note-form="$emit('close-note-form')"
-        v-on:submit-note="submitReview(result,$event)"
-      >
-        <span slot="buttonText">Add a Note</span>
-      </add-note-form>
-    </template>
-  </div>
+    v-bind:result="result"
+    v-bind:selected-place="selectedPlace"
+    v-on:select-result="$emit('select-result',$event)"
+    v-on:set-review="$emit('set-review',$event)"
+    v-on:toggle-note-form="$emit('toggle-note-form')"
+    v-on:close-note-form="$emit('close-note-form')"
+    v-on:open-different-note-form="$emit('open-different-note-form',$event)"
+  ></result-display>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
 </div>
 </template>
 
 <script>
 import _ from 'lodash'
-import StarRating from './StarRating.vue'
-import AddNoteForm from './AddNoteForm.vue'
+import ResultDisplay from './ResultDisplay.vue'
 
 export default {
   name: 'ResultsList',
   components: {
-    StarRating,
-    AddNoteForm
+    ResultDisplay
   },
   props: {
     selectedPlace: Object,
     results: Array,
-    reviews: Array,
     isLoading: Boolean
   },
   data: function () {
@@ -64,20 +34,19 @@ export default {
       
     }
   },
-  methods: {
-    submitReview: function (result,event) {
-      this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
-    },
-    toggleNoteForm: function (result) {
-      //event.stopPropogation();
-      if(this.selectedPlace.place_id === result.place_id) {
-        this.$emit('toggle-note-form');
-      }else{
-        this.$emit('open-different-note-form', result);
-      }
+  computed: {
+    isSelectedPlaceInResults: function () {
+      //return boolean if selectedPlace exists inside the results array (matched by place_id)
+      return !!(this.selectedPlace && _.find(this.results, { 'place_id': this.selectedPlace.place_id }));
     }
   },
-  created: function () {
+  watch: {
+    selectedPlace: function (newPlace) {
+      console.log("updated selected place")
+      if(!this.isSelectedPlaceInResults) {
+        this.results.unshift(this.selectedPlace);
+      }
+    }
   }
 }
 </script>
