@@ -1,8 +1,28 @@
 <template>
   <div class="result-display"
-    v-bind:class="[ selectedPlace.place_id === result.place_id ? 'selected' : '' ]"
+    v-bind:class="[ isSelected ? 'selected' : '' ]"
     v-on:click="$emit('select-result',result)"
   >
+
+    <b-field class="result-buttons">
+      <div class="control">
+        <button class="button is-small result-add-note" 
+          v-bind:title="noteButtonText"
+          v-bind:class="[ isOpen ? 'is-active' : '' ]"
+          v-on:click.stop="toggleNoteForm(result)" 
+        >
+          <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
+          <span class="buttonText">{{ noteButtonText }}</span>
+        </button>
+      </div>
+      <div class="control">
+        <button class="button is-small result-favorite"
+          v-bind:title="saveButtonText"
+        >
+          <span class="icon is-small"><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
+        </button>
+      </div>
+    </b-field>
     <h3 class="result-name">{{ result.name }}</h3>
     <p class="result-info">
       <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
@@ -65,9 +85,57 @@ export default {
       }
     }
   },
+  computed: {
+    isSelected: function () {
+      return this.selectedPlace.place_id === this.result.place_id;
+    },
+    isOpen: function () {
+      return this.isSelected && this.selectedPlace.hasOwnProperty('isNoteFormOpen') && this.selectedPlace.isNoteFormOpen;
+    },
+    noteButtonText: function () {
+      return (this.result.notes || this.result.stars)?"Edit Note":"Add Note";
+    },
+    saveButtonText: function () {
+      return this.result.saved?"Unsave Location":"Unsave Location";
+    }
+  }
 }
 </script>
 
-<style>
-
+<style lang="scss" scoped>
+.result-display{
+  position:relative;
+  border-bottom: 1px solid #dbdbdb;
+  border-left: 1px solid #dbdbdb;
+  border-right: 1px solid #dbdbdb;
+  padding:10px;
+  &:first-child{
+    border-top: 1px solid #dbdbdb;
+  }
+  &:hover{
+    background-color:#ffaafa;
+  }
+  &.selected{
+    background-color:#dadada;
+  }
+}
+.result-buttons{
+  float:right;
+  margin:0 0 4px 4px;
+}
+.result-name{
+  font-size: 1rem;
+  color: #4a4a4a;
+  font-weight: 500;
+  line-height: 1.25;
+}
+.result-map{
+  margin-left:10px;
+}
+.result-link{
+  margin-left:10px;
+}
+.result-info{
+  font-size:0.8rem;
+}
 </style>

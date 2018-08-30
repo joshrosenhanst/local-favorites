@@ -62,35 +62,4 @@ export default {
   overflow:auto;
   min-height:0;
 }
-.result-display{
-  border-bottom: 1px solid #dbdbdb;
-  border-left: 1px solid #dbdbdb;
-  border-right: 1px solid #dbdbdb;
-  padding:10px;
-  &:first-child{
-    border-top: 1px solid #dbdbdb;
-  }
-  &:hover{
-    background-color:#ffaafa;
-  }
-  &.selected{
-    background-color:#dadada;
-  }
-}
-.result-name{
-  font-size: 1rem;
-  color: #4a4a4a;
-  font-weight: 500;
-  line-height: 1.25;
-}
-.result-map{
-  margin-left:10px;
-}
-.result-link{
-  margin-left:10px;
-}
-.result-info{
-  font-size:0.8rem;
-}
-
 </style>
