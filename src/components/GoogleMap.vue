@@ -17,6 +17,9 @@
         <div class="infowindow-name">{{ selectedPlace.name }}</div>
         <div class="infowindow-address">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</div>
         <template v-if="selectedPlace.stars || selectedPlace.notes">
+          <span class="infowindow-saved"
+            v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
+          ><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
           <star-rating
             v-bind:stars="selectedPlace.stars"
             v-bind:readonly="true"
@@ -224,6 +227,12 @@ export default {
     height:100%;
     @media (max-width: 769px) {
       height:250px;
+    }
+  }
+  .infowindow-saved{
+    float:right;
+    &.is-saved{
+      color:yellow;
     }
   }
 </style>

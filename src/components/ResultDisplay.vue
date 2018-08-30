@@ -3,10 +3,9 @@
     v-bind:class="[ isSelected ? 'selected' : '' ]"
     v-on:click="$emit('select-result',result)"
   >
-
     <b-field class="result-buttons">
       <div class="control">
-        <button class="button is-small result-add-note" 
+        <button class="button is-small result-add-note is-rounded" 
           v-bind:title="noteButtonText"
           v-bind:class="[ isOpen ? 'is-active' : '' ]"
           v-on:click.stop="toggleNoteForm(result)" 
@@ -16,8 +15,10 @@
         </button>
       </div>
       <div class="control">
-        <button class="button is-small result-favorite"
+        <button class="button is-small result-favorite is-rounded"
           v-bind:title="saveButtonText"
+          v-bind:class="[ result.saved?'is-saved':'' ]"
+          v-on:click="toggleSaveStatus(result)"
         >
           <span class="icon is-small"><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
         </button>
@@ -74,7 +75,7 @@ export default {
   },
   methods: {
     submitReview: function (result,event) {
-      this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes })
+      this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
     },
     toggleNoteForm: function (result) {
       //event.stopPropogation();
@@ -83,6 +84,9 @@ export default {
       }else{
         this.$emit('open-different-note-form', result);
       }
+    },
+    toggleSaveStatus: function (result) {
+      this.submitReview(result, { place_id: result.place_id, stars: result.stars, notes: result.notes, saved: !result.saved })
     }
   },
   computed: {
@@ -119,10 +123,6 @@ export default {
     background-color:#dadada;
   }
 }
-.result-buttons{
-  float:right;
-  margin:0 0 4px 4px;
-}
 .result-name{
   font-size: 1rem;
   color: #4a4a4a;
@@ -137,5 +137,12 @@ export default {
 }
 .result-info{
   font-size:0.8rem;
+}
+.result-buttons{
+  float:right;
+  margin:0 0 4px 4px;
+}
+.result-favorite.is-saved{
+  color:yellow;
 }
 </style>

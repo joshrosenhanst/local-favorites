@@ -24,6 +24,7 @@
           v-on:set-review="setReview"
           v-on:select-result="selectResult"
           v-on:toggle-note-form="toggleNoteForm"
+          v-on:toggle-save-status="setReview"
           v-on:open-different-note-form="openDifferentNoteForm"
           v-on:close-note-form="closeNoteForm"
         ></results-list>
@@ -61,7 +62,7 @@ export default {
     setReview: function (event) {
       // look up place_id in savedReviews
       let matchedReviewIndex = _.findIndex(this.savedReviews, { place_id:event.place_id });
-      let starredReview = { place_id:event.place_id, stars:event.stars, notes:event.notes };
+      let starredReview = { place_id:event.place_id, stars:event.stars, notes:event.notes, saved: event.saved };
       if (matchedReviewIndex >= 0) {
         // if it exists, set the review
         this.savedReviews.splice(matchedReviewIndex,1,starredReview);
@@ -71,15 +72,18 @@ export default {
       }
       // update the Results array with the new review
       let matchedResultIndex = _.findIndex(this.resultsList, { place_id:event.place_id });
-      let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes };
+      let updatedResult = { ...this.resultsList[matchedResultIndex], stars:event.stars, notes:event.notes, saved: event.saved };
       if (matchedResultIndex >= 0) {
         this.resultsList.splice(matchedResultIndex,1,updatedResult);
       }
       // update the selectedPlace Obj with the new review
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, isNoteFormOpen: false });
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, saved: event.saved, isNoteFormOpen: false });
 
       // update localStorage
       localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
+    },
+    setLocationSaveStatus: function (event) {
+      this.setReview(event);
     },
     updateResultsList: function (event) {
       this.resultsList = event.results;
@@ -87,14 +91,14 @@ export default {
         this.savedReviews.forEach(review => {
           let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
           if (matchedResultIndex >= 0) {
-            this.resultsList[matchedResultIndex] = Object.assign({}, this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes, isNoteFormOpen: false })
+            this.resultsList[matchedResultIndex] = Object.assign({}, this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes, saved: review.saved, isNoteFormOpen: false })
           }
         })
       }
       if(this.resultsList.length) {
         // set the selectedPlace to the first item in ResultsList
-        // stars and notes should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, this.resultsList[0], { isNoteFormOpen: false });
+        // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
       }else{
         this.selectedPlace = {};
       }
@@ -102,14 +106,17 @@ export default {
     },
     selectResult: function (result) {
       // user selects a place from the ResultsList
+      // do a sanity check to make sure they arent just clicking the same location
       // update the selectedPlace object
-      // stars and notes should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, result, { isNoteFormOpen: false });
+      // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+      if(result.place_id !== this.selectedPlace.place_id) {
+        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: false });
+      }
     },
     clickMapPoint: function (place) {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, place, { isNoteFormOpen: false });
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
@@ -123,7 +130,7 @@ export default {
     },
     openDifferentNoteForm: function (result) {
       this.selectedPlace.isNoteFormOpen = false;
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null }, result, { isNoteFormOpen: true } );
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } );
     }
 
   },
@@ -136,7 +143,7 @@ export default {
       this.savedReviews.forEach(review => {
         let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
         if (matchedResultIndex >= 0) {
-          this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes })
+          this.resultsList[matchedResultIndex] = Object.assign(this.resultsList[matchedResultIndex], { stars: review.stars, notes: review.notes, saved: review.saved })
         }
       })
     }
