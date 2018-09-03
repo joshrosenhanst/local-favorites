@@ -16,7 +16,7 @@
       >
         <span class="infowindow-saved"
           v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
-        ><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
+        ><font-awesome-icon v-bind:icon="[selectedPlace.saved?'fas':'far','bookmark']"></font-awesome-icon></span>
         <star-rating
           v-if="selectedPlace.stars"
           v-bind:stars="selectedPlace.stars"

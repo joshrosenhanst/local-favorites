@@ -20,7 +20,7 @@
           v-bind:class="[ result.saved?'is-saved':'' ]"
           v-on:click="toggleSaveStatus(result)"
         >
-          <span class="icon is-small"><font-awesome-icon icon="bookmark"></font-awesome-icon></span>
+          <span class="icon is-small"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']"></font-awesome-icon></span>
         </button>
       </div>
     </b-field>
@@ -148,7 +148,12 @@ export default {
   float:right;
   margin:0 0 4px 4px;
 }
-.result-favorite.is-saved{
-  color:yellow;
+.result-favorite{
+  &:hover{
+    font-weight:bold;
+  }
+  &.is-saved{
+    color:yellow;
+  }
 }
 </style>
