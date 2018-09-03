@@ -103,7 +103,7 @@ export default {
       if(this.resultsList.length) {
         // set the selectedPlace to the first item in ResultsList
         // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
+        this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
       }else{
         this.selectedPlace = {};
       }
@@ -135,7 +135,7 @@ export default {
     },
     openDifferentNoteForm: function (result) {
       this.selectedPlace.isNoteFormOpen = false;
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } );
+      this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } );
     }
 
   },
