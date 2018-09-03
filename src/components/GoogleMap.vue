@@ -107,17 +107,19 @@ export default {
         let autocomplete_input = document.getElementById('gmap-autocomplete');
         if(autocomplete_input){
           console.log("init autocomplete");
-          let autocomplete = new google.maps.places.Autocomplete(autocomplete_input, {
-            types: ['(cities)']
-          });
+          let autocomplete = new google.maps.places.Autocomplete(autocomplete_input);
 
           autocomplete.addListener('place_changed', () => {
             let place = autocomplete.getPlace();
+            console.log(place);
             if(place.geometry){
               this.mapObject.panTo(place.geometry.location);
               this.mapObject.setZoom(15);
+              if(place.types.includes('point_of_interest')){
+                this.getReviewThenEmitPlace(place);
+              }
             }else{
-              autocomplete_input.placeholder = 'Enter a city...';
+              autocomplete_input.placeholder = 'Find places near...';
             }
           });
         }
@@ -128,13 +130,16 @@ export default {
       setInfoWindowVisibility: function (open) {
         this.infoWindow.open = open;
       },
+      getReviewThenEmitPlace: function (place){
+        let updatedPlaceOb = this.getReviewForPlace(place);
+        this.$emit('click-map-point',updatedPlaceOb);
+        this.setInfoWindowVisibility(true);
+      },
       getPlaceDetails: function (place_id) {
         if(this.gPlacesService){
           this.gPlacesService.getDetails({placeId: place_id}, (place,status) => {
             if(status === google.maps.places.PlacesServiceStatus.OK) {
-              let updatedPlaceOb = this.getReviewForPlace(place);
-              this.$emit('click-map-point',updatedPlaceOb);
-              this.setInfoWindowVisibility(true);
+              this.getReviewThenEmitPlace(place);
             }
           });
         }

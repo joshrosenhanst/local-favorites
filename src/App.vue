@@ -28,16 +28,16 @@
           v-on:close-note-form="closeNoteForm"
         ></results-list>
       </aside>
-      <div id="city-search-container">
-        <gmap-city-search
-          v-on:start-search="isLoading = true"
-          v-on:get-local-search="updateResultsList"
-        ></gmap-city-search>
-      </div>
     </main>
     <footer id="app-footer">
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
     </footer>
+    <div id="city-search-container">
+      <gmap-city-search
+        v-on:start-search="isLoading = true"
+        v-on:get-local-search="updateResultsList"
+      ></gmap-city-search>
+    </div>
   </div>
 </template>
 
@@ -115,13 +115,13 @@ export default {
       // update the selectedPlace object
       // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
       if(result.place_id !== this.selectedPlace.place_id) {
-        this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: false });
+        this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: false });
       }
     },
     clickMapPoint: function (place) {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
+      this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
@@ -203,9 +203,11 @@ html{
   }
 }
 #city-search-container{
+  float:left;
   padding:5px 10px;
   background:white;
   box-shadow:rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
   border-radius: 2px;
+  flex:none;
 }
 </style>
