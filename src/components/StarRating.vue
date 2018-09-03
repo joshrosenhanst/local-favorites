@@ -9,7 +9,7 @@
             v-on:mouseleave="currentHover = 0"
             v-bind:title="readonly? (n+' stars'):(`Rate ${n} stars`)"
         >
-            <font-awesome-icon icon="star" class="star-icon"></font-awesome-icon>
+            <font-awesome-icon v-bind:icon="[((stars >= n)||(currentHover >= n && !readonly))?'fas':'far','star']" class="star-icon"></font-awesome-icon>
         </span>
         <span class="star-rating-icon ban-icon" title="Remove Star Rating"
             v-if="stars && !readonly"
