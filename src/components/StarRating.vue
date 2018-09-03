@@ -44,32 +44,34 @@ export default {
 
 
 <style lang="scss" scoped>
-    .star{
-        font-size:1rem;
-        &.empty>.star-icon {
-            color:grey;
-        }
-        &.full>.star-icon {
-            color:blue;
-        }
-        &.is-hovered>.star-icon {
-            color:green;
-        }
+  .star{
+    font-size:1rem;
+    &.empty>.star-icon {
+      color:grey;
     }
-    .star-rating-icon{
-        display:inline-block;
-        margin-right:5px;
-        &:hover{
-            color:red;
-        }
-        &.is-editable{
-            font-size:1.5rem;
-            cursor: pointer;
-        }
+    &.full>.star-icon {
+      color:blue;
     }
-    .ban-icon{
-        margin-left:5px;
-        vertical-align: -1px;
+    &.is-hovered>.star-icon {
+      color:green;
     }
+  }
+  .star-rating-icon{
+    display:inline-block;
+    margin-right:5px;
+    &:hover{
+      color:red;
+    }
+    &.is-editable{
+      font-size:1.5rem;
+      cursor: pointer;
+    }
+  }
+  .ban-icon{
+    cursor: pointer;
+    font-size:1.2rem;
+    margin-left:5px;
+    vertical-align: 0;
+  }
 </style>
 
