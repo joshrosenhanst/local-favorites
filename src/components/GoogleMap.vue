@@ -34,6 +34,15 @@
         v-bind:position="selectedPlace.geometry.location"
         v-on:click="infoWindow.open = true"
       ></gmap-marker>
+      <!--<gmap-marker
+        v-for="(marker,index) in results"
+        v-if="selectedPlace && marker.place_id !== selectedPlace.place_id"
+        v-bind:key="'marker_'+index"
+        v-bind:position="marker.geometry.location"
+        v-bind:label="marker.name"
+        v-bind:animation="markerOptions.animation"
+        v-bind:icon="{ url:marker.icon, size:markerOptions.size, scaledSize:markerOptions.scale }"
+      ></gmap-marker>-->
     </gmap-map>
   </section>
 </template>
@@ -46,7 +55,8 @@ export default {
     name: 'GoogleMap',
     props: {
       selectedPlace: Object,
-      reviews: Array
+      reviews: Array,
+      results: Array
     },
     components: {
       StarRating,
@@ -55,15 +65,28 @@ export default {
     data: function () {
       return {
         center: {lat:40.415932, lng:-74.25753},
-        zoom: 15,
+        zoom: 17,
         markers: [],
         marker: {},
         places: [],
         currentPlace: null,
+        forceUpdateLocalPlaces: false,
+        keepSelected: false,
         mapOptions: {
           streetViewControl: false,
           fullscreenControl: false,
           mapTypeControl: false
+        },
+        markerOptions: {
+          animation: 2,
+          size: {
+            width:25,
+            height:25
+          },
+          scale: {
+            width:25,
+            height:25
+          }
         },
         infoWindow: {
           open: true
@@ -93,9 +116,6 @@ export default {
       },
       initInfoWindow: function () {
         this.mapObject.addListener('click', (event) => {
-          console.log("click map");
-          let place_id = "xyz";
-          //let position = {};
           if(event.placeId){
             console.log("icon click");
             event.stop();
@@ -113,11 +133,13 @@ export default {
             let place = autocomplete.getPlace();
             console.log(place);
             if(place.geometry){
-              this.mapObject.panTo(place.geometry.location);
-              this.mapObject.setZoom(15);
               if(place.types.includes('point_of_interest')){
+                this.forceUpdateLocalPlaces = true;
                 this.getReviewThenEmitPlace(place);
+                this.keepSelected = true;
               }
+              this.mapObject.panTo(place.geometry.location);
+              this.mapObject.setZoom(17);
             }else{
               autocomplete_input.placeholder = 'Find places near...';
             }
@@ -168,11 +190,15 @@ export default {
       idleMapUpdate: function (event) {
         let newCenter = this.mapObject.getCenter();
         let mapBounds = this.mapObject.getBounds();
-        if(this.selectedPlace && this.selectedPlace.geometry && mapBounds.contains(this.selectedPlace.geometry.location)){
-          console.log("inside bounds")
-        }else{
-          console.log("outside bounds")
+        if(this.forceUpdateLocalPlaces) {
+          // if we are forcing an update to the local places results list:
           this.getLocalPlaces(newCenter);
+        }else{
+          // otherwise, check if the selecetedPlace is outside the map bounds before we update the local places results list
+          if(!(this.selectedPlace && this.selectedPlace.geometry && mapBounds.contains(this.selectedPlace.geometry.location))){
+            console.log("outside bounds")
+            this.getLocalPlaces(newCenter);
+          }
         }
         this.$emit('map-bounds-changed', { bounds: mapBounds })
       },
@@ -193,7 +219,9 @@ export default {
         console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           console.log(results);
-          this.$emit('get-local-places', { results: results });
+          this.$emit('get-local-places', { results: results, keepSelected: this.keepSelected });
+          this.keepSelected = false;
+          this.forceUpdateLocalPlaces = false;
         }
       },
       addLocalPlacesMarkers: function (results,status) {

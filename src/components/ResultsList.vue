@@ -1,9 +1,10 @@
 <template>
 <div id="results-list-container" class="scrollable-content">
   <result-display
-    v-for="(result) in results"
+    v-for="(result,index) in results"
     v-bind:key="result.place_id"
     v-bind:result="result"
+    v-bind:index="index"
     v-bind:selected-place="selectedPlace"
     v-on:select-result="$emit('select-result',$event)"
     v-on:set-review="$emit('set-review',$event)"

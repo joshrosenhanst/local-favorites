@@ -29,12 +29,15 @@
       v-bind:stars="result.stars"
       v-bind:readonly="true"
     ></star-rating>
-    <h3 class="result-name">{{ result.name }}</h3>
-    <p class="result-info">
-      <span class="result-address">{{ result.vicinity || result.formatted_address }}</span>
+    <h3 class="result-name">{{ index }} - {{ result.name }}</h3>
+    <div class="result-info">
+      <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
+      <div class="result-map-link">
+        <a v-bind:href="mapLinkURL" title="Open in Google Maps">Open in Google Maps</a>
+      </div>
       <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
       <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
-    </p>
+    </div>
 
     <template v-if="result.notes || result.stars">
       <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
@@ -64,6 +67,8 @@
 import StarRating from './StarRating.vue'
 import AddNoteForm from './AddNoteForm.vue'
 
+const MAP_SEARCH_URL = "https://www.google.com/maps/search/?api=1&";
+
 export default {
   name:'ResultDisplay',
   components: {
@@ -72,7 +77,8 @@ export default {
   },
   props: {
     result: Object,
-    selectedPlace: Object
+    selectedPlace: Object,
+    index: Number
   },
   methods: {
     submitReview: function (result,event) {
@@ -102,6 +108,10 @@ export default {
     },
     saveButtonText: function () {
       return this.result.saved?"Unsave Location":"Unsave Location";
+    },
+    mapLinkURL: function () {
+      let query = this.result.geometry?this.result.geometry.location.toUrlValue():this.result.name;
+      return MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.result.place_id);
     }
   }
 }
@@ -129,9 +139,6 @@ export default {
   color: #4a4a4a;
   font-weight: 500;
   line-height: 1.25;
-}
-.result-map{
-  margin-left:10px;
 }
 .result-link{
   margin-left:10px;

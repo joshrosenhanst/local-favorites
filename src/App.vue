@@ -4,6 +4,7 @@
     <main id="app-body">
       <google-map
         v-bind:selected-place="selectedPlace"
+        v-bind:results="resultsList" 
         v-bind:reviews="savedReviews"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
@@ -33,10 +34,7 @@
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
     </footer>
     <div id="city-search-container">
-      <gmap-city-search
-        v-on:start-search="isLoading = true"
-        v-on:get-local-search="updateResultsList"
-      ></gmap-city-search>
+      <gmap-city-search></gmap-city-search>
     </div>
   </div>
 </template>
@@ -100,12 +98,15 @@ export default {
           }
         })
       }
-      if(this.resultsList.length) {
-        // set the selectedPlace to the first item in ResultsList
-        // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-        this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
-      }else{
-        this.selectedPlace = {};
+      console.log(event.keepSelected);
+      if(!event.keepSelected) {
+        if(this.resultsList.length) {
+          // set the selectedPlace to the first item in ResultsList
+          // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+          this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
+        }else{
+          this.selectedPlace = {};
+        }
       }
       this.isLoading = false;
     },
