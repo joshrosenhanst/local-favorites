@@ -3,63 +3,63 @@
     v-bind:class="[ isSelected ? 'selected' : '' ]"
     v-on:click="$emit('select-result',result)"
   >
-    <b-field class="result-buttons">
-      <div class="control">
-        <button class="button is-small result-add-note is-rounded" 
-          v-bind:title="noteButtonText"
-          v-bind:class="[ isOpen ? 'is-active' : '' ]"
-          v-on:click.stop="toggleNoteForm(result)" 
-        >
-          <span class="icon is-small"><font-awesome-icon icon="sticky-note"></font-awesome-icon></span>
-          <span class="buttonText">{{ noteButtonText }}</span>
-        </button>
+    <div class="result-main-section">
+      <div class="result-info-section">
+        <star-rating
+          v-if="result.stars"
+          v-bind:stars="result.stars"
+          v-bind:readonly="true"
+        ></star-rating>
+        <h3 class="result-name">{{ index }} - {{ result.name }}</h3>
+        <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
+        <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
+        <div class="result-map-link">
+          <a v-bind:href="mapLinkURL" title="Open in Google Maps">Open in Google Maps</a>
+        </div>
+          <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+          <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
       </div>
-      <div class="control">
-        <button class="button is-small result-favorite is-rounded"
-          v-bind:title="saveButtonText"
+      <div class="result-buttons-section">
+        <button class="side-button result-favorite"
           v-bind:class="[ result.saved?'is-saved':'' ]"
+          v-bind:title="saveButtonText"
           v-on:click="toggleSaveStatus(result)"
         >
-          <span class="icon is-small"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']"></font-awesome-icon></span>
+          <div class="button-icon"><font-awesome-icon v-bind:icon="['far','bookmark']"></font-awesome-icon></div>
+          <div class="button-text">{{ saveButtonText }}</div>
+        </button>
+        <button class="side-button result-add-note"
+          v-bind:class="[ isOpen ? 'is-active' : '' ]"
+          v-bind:title="noteButtonText"
+          v-on:click.stop="toggleNoteForm(result)" 
+        >
+          <div class="button-icon"><font-awesome-icon v-bind:icon="[(result.notes || result.stars)?'fas':'far','sticky-note']"></font-awesome-icon></div>
+          <div class="button-text">{{ noteButtonText }}</div>
         </button>
       </div>
-    </b-field>
-    <star-rating
-      v-if="result.stars"
-      v-bind:stars="result.stars"
-      v-bind:readonly="true"
-    ></star-rating>
-    <h3 class="result-name">{{ index }} - {{ result.name }}</h3>
-    <div class="result-info">
-      <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
-      <div class="result-map-link">
-        <a v-bind:href="mapLinkURL" title="Open in Google Maps">Open in Google Maps</a>
-      </div>
-      <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
-      <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
     </div>
-
-    <template v-if="result.notes || result.stars">
-      <p class="result-notes" v-if="result.notes">{{ result.notes }}</p>
-      <add-note-form
-        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-        v-on:toggle-note-form="toggleNoteForm(result)"
-        v-on:close-note-form="$emit('close-note-form')"
-        v-on:submit-note="submitReview(result,$event)"
-      >
-        <span slot="buttonText">Edit Note</span>
-      </add-note-form>
-    </template>
-    <template v-else>
-      <add-note-form
-        v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-        v-on:toggle-note-form="toggleNoteForm(result)"
-        v-on:close-note-form="$emit('close-note-form')"
-        v-on:submit-note="submitReview(result,$event)"
-      >
-        <span slot="buttonText">Add a Note</span>
-      </add-note-form>
-    </template>
+    <div class="result-notes-section">
+      <template v-if="result.notes || result.stars">
+        <add-note-form
+          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+          v-on:toggle-note-form="toggleNoteForm(result)"
+          v-on:close-note-form="$emit('close-note-form')"
+          v-on:submit-note="submitReview(result,$event)"
+        >
+          <span slot="buttonText">Edit Note</span>
+        </add-note-form>
+      </template>
+      <template v-else>
+        <add-note-form
+          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
+          v-on:toggle-note-form="toggleNoteForm(result)"
+          v-on:close-note-form="$emit('close-note-form')"
+          v-on:submit-note="submitReview(result,$event)"
+        >
+          <span slot="buttonText">Add a Note</span>
+        </add-note-form>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -107,7 +107,7 @@ export default {
       return (this.result.notes || this.result.stars)?"Edit Note":"Add Note";
     },
     saveButtonText: function () {
-      return this.result.saved?"Unsave Location":"Unsave Location";
+      return this.result.saved?"Unsave":"Save";
     },
     mapLinkURL: function () {
       let query = this.result.geometry?this.result.geometry.location.toUrlValue():this.result.name;
@@ -124,6 +124,9 @@ export default {
   border-left: 1px solid #dbdbdb;
   border-right: 1px solid #dbdbdb;
   padding:10px;
+  display:flex;
+  flex-direction: column;
+  align-items:stretch;
   &:first-child{
     border-top: 1px solid #dbdbdb;
   }
@@ -134,26 +137,66 @@ export default {
     background-color:#dadada;
   }
 }
+.result-main-section {
+  flex-grow:1;
+  display:flex;
+  justify-content:space-between;
+}
+.result-info-section {
+  flex-grow:1;
+}
 .result-name{
   font-size: 1rem;
   color: #4a4a4a;
   font-weight: 500;
   line-height: 1.25;
 }
-.result-link{
-  margin-left:10px;
+.result-address{
+  font-size:0.85rem;
 }
-.result-info{
-  font-size:0.8rem;
+.result-map-link{
+  font-size:0.85rem;
 }
 .result-notes{
+  font-size:0.85rem;
   font-style:italic;
   border-left:3px solid #cacaca;
   padding-left:5px;
 }
-.result-buttons{
-  float:right;
-  margin:0 0 4px 4px;
+.result-buttons-section {
+  flex-grow:0;
+  flex-shrink:1;
+  display:flex;
+  flex-direction:column;
+  .side-button{
+    flex-grow:1;
+    text-align:center;
+    cursor:pointer;
+    background:transparent;
+    border:1px solid green;
+    border-radius:0;
+    padding:5px 12px;
+    &:hover{
+
+    }
+    &.is-active{
+
+    }
+    &.is-saved{
+      
+    }
+    &:not(:last-child) {
+      border-bottom:none;
+    }
+    .button-icon{
+      width:100%;
+      font-size:1.25rem;
+      margin:0 auto;
+    }
+    .button-text{
+      font-weight:500;
+    }
+  }
 }
 .result-favorite{
   &:hover{
@@ -162,5 +205,8 @@ export default {
   &.is-saved{
     color:yellow;
   }
+}
+.result-notes-section {
+  flex-grow:1;
 }
 </style>
