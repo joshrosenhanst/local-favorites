@@ -63,7 +63,7 @@ export default {
       color:red;
     }
     &.is-editable{
-      font-size:1.5rem;
+      font-size:1.3rem;
       cursor: pointer;
     }
   }

@@ -2,22 +2,20 @@
 <section class="add-note-form">
   <b-collapse v-bind:open.sync="isOpen">
     <div class="box note-box">
-      <h4 class="title is-6">Add a Note and a Star Rating for this location</h4>
+      <h4 class="title">Add a Note and a Star Rating for this location</h4>
       <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
-      <b-field>
-          <StarRating
-            v-bind:stars="reviewStars"
-            v-on:set-stars="reviewStars = $event.value"
-          ></StarRating>
-      </b-field>
+        <StarRating
+          v-bind:stars="reviewStars"
+          v-on:set-stars="reviewStars = $event.value"
+        ></StarRating>
       <b-field message="">
-          <b-input type="textarea" placeholder="Add a note..." 
-              v-model="reviewNotes"
-          ></b-input>
+        <b-input type="textarea" placeholder="Add a note..." size="is-small"
+          v-model="reviewNotes"
+        ></b-input>
       </b-field>
       <b-field grouped position="is-centered">
         <div class="control">
-          <button class="button is-success"
+          <button class="button is-success is-small"
             v-on:click="submitReview"
           >
             <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
@@ -25,7 +23,7 @@
           </button>
         </div>
         <div class="control">
-          <button class="button is-danger"
+          <button class="button is-danger is-small"
             v-on:click="cancelReview"
           >
             <span class="icon"><font-awesome-icon icon="ban"></font-awesome-icon></span>
@@ -81,13 +79,18 @@ export default {
 <style lang="scss" scoped>
 .note-box{
   text-align:center;
-  margin:0 auto;
+  margin:0 auto 5px auto;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  padding:10px;
   .title{
-    font-size:1rem;
+    font-size:0.9rem;
   }
   .subtitle{
-    font-size:0.9rem;
-    margin-bottom:10px;
+    font-size:0.8rem;
+    margin-bottom:5px;
+  }
+  .textarea{
   }
 }
 </style>

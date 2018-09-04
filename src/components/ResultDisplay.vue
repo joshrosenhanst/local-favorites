@@ -123,7 +123,7 @@ export default {
   border-bottom: 1px solid #dbdbdb;
   border-left: 1px solid #dbdbdb;
   border-right: 1px solid #dbdbdb;
-  padding:10px;
+  padding:0;
   display:flex;
   flex-direction: column;
   align-items:stretch;
@@ -144,6 +144,7 @@ export default {
 }
 .result-info-section {
   flex-grow:1;
+  padding:10px;
 }
 .result-name{
   font-size: 1rem;
@@ -160,8 +161,9 @@ export default {
 .result-notes{
   font-size:0.85rem;
   font-style:italic;
-  border-left:3px solid #cacaca;
+  border-left:2px solid #cacaca;
   padding-left:5px;
+  margin:5px 0;
 }
 .result-buttons-section {
   flex-grow:0;
@@ -169,13 +171,14 @@ export default {
   display:flex;
   flex-direction:column;
   .side-button{
-    flex-grow:1;
+    flex-grow:0;
     text-align:center;
     cursor:pointer;
     background:transparent;
     border:1px solid green;
     border-radius:0;
-    padding:5px 12px;
+    padding:8px 6px;
+    width:70px;
     &:hover{
 
     }
