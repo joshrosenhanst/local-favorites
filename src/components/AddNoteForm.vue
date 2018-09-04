@@ -60,7 +60,7 @@ export default {
   },
   methods: {
     submitReview: function () {
-      this.$emit('submit-note', { stars: this.reviewStars, notes: this.reviewNotes });
+      this.$emit('submit-note', { stars: this.reviewStars, notes: this.reviewNotes, saved: this.result.saved });
       //this.isOpen = false;
     },
     cancelReview: function () {

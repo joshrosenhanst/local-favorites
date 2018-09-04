@@ -25,7 +25,7 @@
           v-bind:title="saveButtonText"
           v-on:click="toggleSaveStatus(result)"
         >
-          <div class="button-icon"><font-awesome-icon v-bind:icon="['far','bookmark']"></font-awesome-icon></div>
+          <div class="button-icon"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']"></font-awesome-icon></div>
           <div class="button-text">{{ saveButtonText }}</div>
         </button>
         <button class="side-button result-add-note"
