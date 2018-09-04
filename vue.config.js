@@ -7,5 +7,12 @@ module.exports = {
     svgRule
       .use('vue-svg-loader')
       .loader('vue-svg-loader')
+  },
+  css: {
+    loaderOptions: {
+      sass: {
+        data: `@import "@/scss/variables.scss";`
+      }
+    }
   }
 }

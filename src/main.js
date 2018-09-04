@@ -7,7 +7,7 @@ import { faExternalLinkAlt, faMapMarkedAlt, faStar, faBan, faCommentAlt, faCheck
 import { faBookmark as farBookmark, faStar as farStar, faStickyNote as farStickyNote } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './registerServiceWorker'
-import 'buefy/lib/buefy.css'
+// import 'buefy/lib/buefy.css'
 
 Vue.use(Buefy, {
   defaultIconPack: 'fas'

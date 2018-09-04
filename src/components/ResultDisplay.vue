@@ -175,7 +175,7 @@ export default {
     text-align:center;
     cursor:pointer;
     background:transparent;
-    border:1px solid green;
+    border:1px solid $primary;
     border-radius:0;
     padding:8px 6px;
     width:70px;

@@ -159,6 +159,7 @@ export default {
 </script>
 
 <style lang='scss'>
+@import "scss/app.scss";
 html{
   overflow-y:auto;
 }
