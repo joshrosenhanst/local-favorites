@@ -4,7 +4,7 @@
         <div class="hero-body">
           <div class="container">
             <h1 class="title">Local Notes</h1>
-            <h2 class="subtitle">Save custom notes for local stores, so you can <span id="random-predicate" class="has-text-primary" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
+            <h2 class="subtitle">Save custom notes for local stores, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
           </div>
         </div>
       </section>
@@ -50,6 +50,9 @@ export default {
   padding:.25em .5em .25em;
   font-size:0.875em;
   font-weight:500;
+  color:$primary;
+  -webkit-touch-callout: none;
+  user-select: none;
 }
 .title{
   font-size:2.5rem;
