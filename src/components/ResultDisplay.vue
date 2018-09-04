@@ -14,7 +14,7 @@
         <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
         <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
         <div class="result-map-link">
-          <a v-bind:href="mapLinkURL" title="Open in Google Maps">Open in Google Maps</a>
+          <a v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" >Open in Google Maps</a>
         </div>
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
