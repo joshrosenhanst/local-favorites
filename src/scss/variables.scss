@@ -8,6 +8,7 @@ $purple: #9C27B0;
 $red: #F44336;
 
 $primary: #3F51B5 !default;
+$link: $blue;
 
 $family-sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 $title-weight: 400;
@@ -25,6 +26,7 @@ $button-active-border-color: transparent;
 $input-disabled-background-color: transparent;
 
 $border-width: 2px;
+$border: hsl(0%,0%,86%);
 
 $navbar-height: 4rem;
 

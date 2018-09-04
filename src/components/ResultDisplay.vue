@@ -25,7 +25,7 @@
           v-bind:title="saveButtonText"
           v-on:click="toggleSaveStatus(result)"
         >
-          <div class="button-icon"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']"></font-awesome-icon></div>
+          <div class="button-icon"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']" ></font-awesome-icon></div>
           <div class="button-text">{{ saveButtonText }}</div>
         </button>
         <button class="side-button result-add-note"
@@ -120,15 +120,15 @@ export default {
 <style lang="scss" scoped>
 .result-display{
   position:relative;
-  border-bottom: 1px solid #dbdbdb;
-  border-left: 1px solid #dbdbdb;
-  border-right: 1px solid #dbdbdb;
+  border-bottom: 1px solid $border;
+  border-left: 1px solid $border;
+  border-right: 0;
   padding:0;
   display:flex;
   flex-direction: column;
   align-items:stretch;
   &:first-child{
-    border-top: 1px solid #dbdbdb;
+    border-top: 1px solid $border;
   }
   &:hover{
     background-color:#ffaafa;
@@ -170,15 +170,19 @@ export default {
   flex-shrink:1;
   display:flex;
   flex-direction:column;
+  border-left:1px solid $border;
   .side-button{
     flex-grow:0;
     text-align:center;
     cursor:pointer;
     background:transparent;
-    border:1px solid $primary;
+    border-width:1px 0 1px 0;
+    border-style:solid;
+    border-color:$border;
     border-radius:0;
     padding:8px 6px;
     width:70px;
+    color:$link;
     &:hover{
 
     }
@@ -187,6 +191,9 @@ export default {
     }
     &.is-saved{
       
+    }
+    &:first-child {
+      border-top:0;
     }
     &:not(:last-child) {
       border-bottom:none;
@@ -206,7 +213,7 @@ export default {
     font-weight:bold;
   }
   &.is-saved{
-    color:yellow;
+    color:$orange;
   }
 }
 .result-notes-section {
