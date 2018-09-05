@@ -12,14 +12,13 @@
           v-bind:readonly="true"
         ></star-rating>
         <h3 class="result-name">
-
           <span class="map-marker-icon" v-if="isSelected && !result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
           {{ result.name }}
         </h3>
         <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
         <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
         <div class="result-map-link">
-          <a v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" >Open in Google Maps</a>
+          <a v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="external-link-alt"></font-awesome-icon>  Open in Google Maps</a>
         </div>
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
@@ -152,6 +151,8 @@ export default {
 .result-info-section {
   flex-grow:1;
   padding:10px;
+  display:flex;
+  flex-direction: column;
 }
 .map-marker-icon{
   float:left;
@@ -168,7 +169,8 @@ export default {
   font-size:0.85rem;
 }
 .result-map-link{
-  font-size:0.85rem;
+  font-size:0.75rem;
+  margin-top:auto;
 }
 .result-notes{
   font-size:0.85rem;
