@@ -14,9 +14,9 @@
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
-        <span class="infowindow-saved"
-          v-bind:class="[ selectedPlace.saved?'is-saved':'' ]"
-        ><font-awesome-icon v-bind:icon="[selectedPlace.saved?'fas':'far','bookmark']"></font-awesome-icon></span>
+        <span class="infowindow-saved is-saved"
+          v-if="selectedPlace.saved"
+        ><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
         <star-rating
           v-if="selectedPlace.stars"
           v-bind:stars="selectedPlace.stars"
@@ -279,11 +279,16 @@ export default {
   .infowindow-notes{
     font-style:italic;
     font-weight:400;
+    font-size:0.85rem;
+    border-left:2px solid $turquoise;
+    color:$turquoise-dark;
+    padding-left:5px;
+    margin:5px 0;
   }
   .infowindow-saved{
     float:right;
     &.is-saved{
-      color:yellow;
+      color:$orange;
     }
   }
 </style>
