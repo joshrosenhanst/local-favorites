@@ -1,4 +1,4 @@
-$orange: #FF9800;
+$orange: #ff912b;
 $yellow: #FFEB3B;
 $green: #4CAF50;
 $turquoise: #009688;
@@ -9,6 +9,14 @@ $red: #F44336;
 
 $primary: #3F51B5 !default;
 $link: $blue;
+$link-hover:hsl(217, 71%, 53%);
+$white-bis: hsl(0, 0%, 98%);
+$white-ter: hsl(0, 0%, 96%);
+$grey-lightest: hsl(0, 0%, 92%);
+$grey-lighter: hsl(0, 0%, 86%);
+$grey-light: hsl(0, 0%, 71%);
+$grey-dark:  hsl(0, 0%, 29%);
+$turquoise-dark: #134a44;
 
 $family-sans-serif: "Roboto", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 $title-weight: 400;
@@ -26,7 +34,7 @@ $button-active-border-color: transparent;
 $input-disabled-background-color: transparent;
 
 $border-width: 2px;
-$border: hsl(0%,0%,86%);
+$border: $grey-lighter;
 
 $navbar-height: 4rem;
 

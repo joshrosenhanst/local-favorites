@@ -47,20 +47,20 @@ export default {
   .star{
     font-size:1rem;
     &.empty>.star-icon {
-      color:grey;
+      color:$grey-light;
     }
     &.full>.star-icon {
-      color:blue;
+      color:$primary;
     }
     &.is-hovered>.star-icon {
-      color:green;
+      color:$link;
     }
   }
   .star-rating-icon{
     display:inline-block;
     margin-right:5px;
     &:hover{
-      color:red;
+      color:$red;
     }
     &.is-editable{
       font-size:1.3rem;

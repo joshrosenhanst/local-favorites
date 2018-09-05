@@ -10,7 +10,10 @@
           v-bind:stars="result.stars"
           v-bind:readonly="true"
         ></star-rating>
-        <h3 class="result-name">{{ index }} - {{ result.name }}</h3>
+        <h3 class="result-name">
+          <span class="map-marker-icon" v-if="isSelected"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
+          {{ result.name }}
+        </h3>
         <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
         <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
         <div class="result-map-link">
@@ -29,11 +32,11 @@
           <div class="button-text">{{ saveButtonText }}</div>
         </button>
         <button class="side-button result-add-note"
-          v-bind:class="[ isOpen ? 'is-active' : '' ]"
+          v-bind:class="[ isOpen ? 'is-active' : '', (result.notes || result.stars)?'has-note':'' ]"
           v-bind:title="noteButtonText"
           v-on:click.stop="toggleNoteForm(result)" 
         >
-          <div class="button-icon"><font-awesome-icon v-bind:icon="[(result.notes || result.stars)?'fas':'far','sticky-note']"></font-awesome-icon></div>
+          <div class="button-icon"><font-awesome-icon v-bind:icon="[(result.notes || result.stars)?'fas':'far','edit']"></font-awesome-icon></div>
           <div class="button-text">{{ noteButtonText }}</div>
         </button>
       </div>
@@ -127,14 +130,16 @@ export default {
   display:flex;
   flex-direction: column;
   align-items:stretch;
+  cursor:pointer;
   &:first-child{
     border-top: 1px solid $border;
   }
   &:hover{
     background-color:#ffaafa;
+    background-color:$white-ter;
   }
   &.selected{
-    background-color:#dadada;
+    background-color:$white-bis;
   }
 }
 .result-main-section {
@@ -145,6 +150,11 @@ export default {
 .result-info-section {
   flex-grow:1;
   padding:10px;
+}
+.map-marker-icon{
+  float:left;
+  margin-right:2px;
+  color:$red;
 }
 .result-name{
   font-size: 1rem;
@@ -161,7 +171,8 @@ export default {
 .result-notes{
   font-size:0.85rem;
   font-style:italic;
-  border-left:2px solid #cacaca;
+  border-left:2px solid $turquoise;
+  color:$turquoise-dark;
   padding-left:5px;
   margin:5px 0;
 }
@@ -184,13 +195,19 @@ export default {
     width:70px;
     color:$link;
     &:hover{
-
+      background-color:$grey-lightest;
+      color:$link-hover;
     }
-    &.is-active{
-
+    &.is-active,&:active{
+      background-color:$grey-lighter;
+      color:$primary;
     }
     &.is-saved{
-      
+      color:$orange;
+    }
+    &.has-note{
+      //color:$primary;
+      color:$turquoise;
     }
     &:first-child {
       border-top:0;
@@ -203,17 +220,14 @@ export default {
       font-size:1.25rem;
       margin:0 auto;
     }
+    &.result-add-note .fa-edit{
+      margin-left:5px;
+    }
+    &.result-favorite{
+    }
     .button-text{
       font-weight:500;
     }
-  }
-}
-.result-favorite{
-  &:hover{
-    font-weight:bold;
-  }
-  &.is-saved{
-    color:$orange;
   }
 }
 .result-notes-section {
