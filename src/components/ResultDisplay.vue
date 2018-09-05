@@ -6,7 +6,7 @@
     <div class="result-main-section">
       <div class="result-info-section">
         <div class="result-info-header">
-          <span class="bookmark-icon" v-if="!isSelected && result.stars && result.saved"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
+          <span class="bookmark-icon" v-if="!isSelected && result.stars && result.saved" title="Bookmarked"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
           <star-rating
             v-if="result.stars"
             v-bind:stars="result.stars"
@@ -14,7 +14,7 @@
           ></star-rating>
         </div>
         <h3 class="result-name">
-          <span class="bookmark-icon" v-if="!isSelected && result.saved && !result.stars"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
+          <span class="bookmark-icon" v-if="!isSelected && result.saved && !result.stars" title="Bookmarked"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
           {{ result.name }}
         </h3>
         <div class="result-address">
