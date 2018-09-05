@@ -5,13 +5,13 @@
   >
     <div class="result-main-section">
       <div class="result-info-section">
+        <span class="map-marker-icon" v-if="isSelected"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
         <star-rating
           v-if="result.stars"
           v-bind:stars="result.stars"
           v-bind:readonly="true"
         ></star-rating>
         <h3 class="result-name">
-          <span class="map-marker-icon" v-if="isSelected"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
           {{ result.name }}
         </h3>
         <div class="result-address">{{ result.vicinity || result.formatted_address }}</div>
@@ -153,7 +153,7 @@ export default {
 }
 .map-marker-icon{
   float:left;
-  margin-right:2px;
+  margin-right:6px;
   color:$red;
 }
 .result-name{

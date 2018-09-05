@@ -1,5 +1,7 @@
 <template>
-  <div class="star-rating">
+  <span class="star-rating"
+    v-bind:title="stars?(`Rated ${stars} stars`):null"
+  >
     <span class="star-rating-icon star"
       v-for="n in 5"
       v-bind:key="'star_'+n"
@@ -7,7 +9,7 @@
       v-on:click="setStars(n)"
       v-on:mouseenter="currentHover = n"
       v-on:mouseleave="currentHover = 0"
-      v-bind:title="readonly? (n+' stars'):(`Rate ${n} stars`)"
+      v-bind:title="readonly? null:(`Rate ${n} stars`)"
     >
       <font-awesome-icon v-bind:icon="[((stars >= n)||(currentHover >= n && !readonly))?'fas':'far','star']" class="star-icon"></font-awesome-icon>
     </span>
@@ -17,7 +19,7 @@
     >
       <font-awesome-icon icon="ban"></font-awesome-icon>
     </span>
-  </div>
+  </span>
 </template>
 
 <script>
