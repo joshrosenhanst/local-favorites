@@ -6,7 +6,7 @@
     <div class="result-main-section">
       <div class="result-info-section">
         <div class="result-info-header">
-          <span class="map-marker-icon" v-if="isSelected && result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
+          <span class="bookmark-icon" v-if="!isSelected && result.stars && result.saved"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
           <star-rating
             v-if="result.stars"
             v-bind:stars="result.stars"
@@ -14,7 +14,7 @@
           ></star-rating>
         </div>
         <h3 class="result-name">
-          <span class="map-marker-icon" v-if="isSelected && !result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
+          <span class="bookmark-icon" v-if="!isSelected && result.saved && !result.stars"><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
           {{ result.name }}
         </h3>
         <div class="result-address">
@@ -156,6 +156,12 @@ export default {
 .result-info-section {
   flex-grow:1;
   padding:10px;
+}
+.bookmark-icon{
+  float:right;
+  margin-right:6px;
+  font-size:1rem;
+  color:$orange;
 }
 .map-marker-icon{
   float:left;
