@@ -5,23 +5,27 @@
   >
     <div class="result-main-section">
       <div class="result-info-section">
-        <span class="map-marker-icon" v-if="isSelected && result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
-        <star-rating
-          v-if="result.stars"
-          v-bind:stars="result.stars"
-          v-bind:readonly="true"
-        ></star-rating>
+        <div class="result-info-header">
+          <span class="map-marker-icon" v-if="isSelected && result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
+          <star-rating
+            v-if="result.stars"
+            v-bind:stars="result.stars"
+            v-bind:readonly="true"
+          ></star-rating>
+        </div>
         <h3 class="result-name">
           <span class="map-marker-icon" v-if="isSelected && !result.stars"><font-awesome-icon icon="map-marker-alt"></font-awesome-icon></span>
           {{ result.name }}
         </h3>
-        <div class="result-address">{{ result.vicinity || result.formatted_address }}
-          <a class="external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a></div>
+        <div class="result-address">
+          <span class="result-address-text">{{ result.vicinity || result.formatted_address }}</span>
+          <a class="external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
+        </div>
         <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
       </div>
-      <div class="result-buttons-section">
+      <div class="result-buttons-section" v-if="isSelected">
         <button class="side-button result-favorite"
           v-bind:class="[ result.saved?'is-saved':'' ]"
           v-bind:title="saveButtonText"
@@ -82,6 +86,9 @@ export default {
     selectedPlace: Object,
     index: Number
   },
+  created: function () {
+    console.log(this.result.rating)
+  },
   methods: {
     submitReview: function (result,event) {
       this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
@@ -131,7 +138,7 @@ export default {
   align-items:stretch;
   cursor:pointer;
   &:first-child{
-    border-top: 1px solid $border;
+    //border-top: 1px solid $border;
   }
   &:hover{
     background-color:#ffaafa;
@@ -149,8 +156,6 @@ export default {
 .result-info-section {
   flex-grow:1;
   padding:10px;
-  display:flex;
-  flex-direction: column;
 }
 .map-marker-icon{
   float:left;
@@ -159,7 +164,7 @@ export default {
 }
 .external-link-icon{
   font-size:0.8rem;
-  margin-left:2px;
+  margin-left:4px;
 }
 .result-name{
   font-size: 1rem;
@@ -193,7 +198,7 @@ export default {
     border-style:solid;
     border-color:$border;
     border-radius:0;
-    padding:8px 6px;
+    padding:10px 6px;
     width:70px;
     color:$link;
     &:hover{
@@ -215,11 +220,11 @@ export default {
       border-top:0;
     }
     &:not(:last-child) {
-      border-bottom:none;
+      border-bottom:0;
     }
     .button-icon{
       width:100%;
-      font-size:1.25rem;
+      font-size:1rem;
       margin:0 auto;
     }
     &.result-add-note .fa-edit{

@@ -175,6 +175,8 @@ html{
 #app-body {
   flex-grow: 1;
   min-height:0;
+  border-top:1px solid $border;
+  border-bottom:1px solid $border;
 
   display:flex;
   flex-direction:column;

@@ -253,7 +253,6 @@ export default {
 <style lang="scss" scoped>
   #google-map-container {
     flex-grow:1;
-    border-top:1px solid $border;
   }
   #map-search-field{
     width:500px;
