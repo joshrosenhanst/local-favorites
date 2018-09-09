@@ -168,7 +168,6 @@ export default {
       },
       getReviewForPlace: function (place) {
         let matchedReviewIndex = _.findIndex(this.reviews, { place_id:place.place_id });
-        console.log(place.place_id);
         if (matchedReviewIndex >= 0) {
           // if it exists, combine add the review to the saved place
           place = Object.assign({}, place, {
@@ -216,10 +215,13 @@ export default {
         }
       },
       emitLocalPlaces: function (results,status) {
-        console.log(status);
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log(results);
           this.$emit('get-local-places', { results: results, keepSelected: this.keepSelected });
+          this.keepSelected = false;
+          this.forceUpdateLocalPlaces = false;
+        }
+        if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+          this.$emit('get-local-places', { results: null, keepSelected: this.keepSelected });
           this.keepSelected = false;
           this.forceUpdateLocalPlaces = false;
         }

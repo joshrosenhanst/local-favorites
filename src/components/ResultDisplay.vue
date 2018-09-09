@@ -86,9 +86,6 @@ export default {
     selectedPlace: Object,
     index: Number
   },
-  created: function () {
-    console.log(this.result.rating)
-  },
   methods: {
     submitReview: function (result,event) {
       this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })

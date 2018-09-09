@@ -89,8 +89,8 @@ export default {
       this.setReview(event);
     },
     updateResultsList: function (event) {
-      this.resultsList = event.results;
-      if(this.savedReviews.length){
+      this.resultsList = (event.results?event.results:[]);
+      if(this.savedReviews.length > 0 && this.resultsList.length > 0){
         this.savedReviews.forEach(review => {
           let matchedResultIndex = _.findIndex(this.resultsList, { place_id:review.place_id });
           if (matchedResultIndex >= 0) {

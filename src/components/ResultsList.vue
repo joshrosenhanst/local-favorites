@@ -13,6 +13,7 @@
     v-on:open-different-note-form="$emit('open-different-note-form',$event)"
   ></result-display>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
+<div v-if="results.length === 0">No Results</div>
 </div>
 </template>
 
