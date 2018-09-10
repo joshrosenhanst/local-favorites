@@ -80,11 +80,12 @@ export default {
 .note-box{
   text-align:center;
   margin:0 auto 5px auto;
-  border-top-left-radius: 0;
-  border-top-right-radius: 0;
+  border-radius:0;
   padding:10px;
   .title{
     font-size:0.9rem;
+    color:$primary;
+    font-weight:500;
   }
   .subtitle{
     font-size:0.8rem;
