@@ -27,7 +27,7 @@
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
       </div>
-      <div class="result-buttons-section" v-if="isSelected">
+      <div class="result-buttons-section" v-show="isSelected">
         <button class="side-button result-favorite"
           v-bind:class="[ result.saved?'is-saved':'' ]"
           v-bind:title="saveButtonText"
@@ -143,7 +143,30 @@ export default {
     background-color:$white-ter;
   }
   &.selected{
-    background-color:$white-bis;
+    //background-color:$white-bis;
+    background-color:$primary;
+    //border-top: 1px solid $border;
+    //border-color:$primary;
+    cursor:default;
+    color:$white-bis;
+    .result-name{
+      //color:$primary;
+      color:white;
+    }
+    .result-notes{
+      border-color:$grey-lightest;
+      color:$grey-lightest;
+    }
+    .result-external-link>a{
+      color:$white-bis;
+      &:hover{
+        color:white;
+        text-decoration: underline;
+      }
+    }
+    .result-buttons-section{
+      background-color:$white-bis;
+    }
   }
 }
 .result-main-section {
@@ -192,11 +215,14 @@ export default {
   display:flex;
   flex-direction:column;
   border-left:1px solid $border;
+  transition:display 700ms ease;
   .side-button{
     flex-grow:0;
     text-align:center;
     cursor:pointer;
-    border:0;
+    border-width:1px 0 1px;
+    border-style:solid;
+    border-color:$border;
     background:transparent;
     border-radius:0;
     padding:10px 6px;
@@ -225,7 +251,7 @@ export default {
     }
     &.has-note{
       //color:$primary;
-      color:$turquoise;
+      //color:$turquoise;
     }
     &:first-child {
       border-top:0;

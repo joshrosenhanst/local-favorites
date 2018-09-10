@@ -75,5 +75,16 @@ export default {
     margin-left:5px;
     vertical-align: 0;
   }
+
+  .result-display.selected .result-info-header{
+    .star{
+      &.empty>.star-icon {
+        color:$grey-lighter;
+      }
+      &.full>.star-icon {
+        color:white;
+      }
+    }
+  }
 </style>
 
