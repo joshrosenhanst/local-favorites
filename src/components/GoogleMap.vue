@@ -48,8 +48,7 @@ export default {
     name: 'GoogleMap',
     props: {
       selectedPlace: Object,
-      reviews: Array,
-      results: Array
+      reviews: Array
     },
     components: {
       StarRating,

@@ -4,7 +4,6 @@
     <main id="app-body">
       <google-map
         v-bind:selected-place="selectedPlace"
-        v-bind:results="resultsList" 
         v-bind:reviews="savedReviews"
         v-on:start-nearby-search="isLoading = true"
         v-on:get-local-places="updateResultsList"
