@@ -88,7 +88,8 @@ export default {
   },
   methods: {
     submitReview: function (result,event) {
-      this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
+      // this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
+      this.$emit('set-review', Object.assign({}, result, { stars: event.stars, notes: event.notes, saved: event.saved }))
     },
     toggleNoteForm: function (result) {
       //event.stopPropogation();

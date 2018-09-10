@@ -65,12 +65,13 @@ export default {
     setReview: function (event) {
       // look up place_id in savedReviews
       let matchedReviewIndex = _.findIndex(this.savedReviews, { place_id:event.place_id });
-      let starredReview = { place_id:event.place_id, stars:event.stars, notes:event.notes, saved: event.saved };
+      // create an object with the place details as well as the stars/notes/saved status
+      let starredReview = event;
       if (matchedReviewIndex >= 0) {
-        // if it exists, set the review
+        // if it exists, update the entry
         this.savedReviews.splice(matchedReviewIndex,1,starredReview);
       }else{
-        // else add the review to the array
+        // else add the object to the array
         this.savedReviews.push(starredReview);
       }
       // update the Results array with the new review
