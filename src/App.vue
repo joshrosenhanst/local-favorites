@@ -98,7 +98,6 @@ export default {
           }
         })
       }
-      console.log(event.keepSelected);
       if(!event.keepSelected) {
         if(this.resultsList.length) {
           // set the selectedPlace to the first item in ResultsList

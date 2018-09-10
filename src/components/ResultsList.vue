@@ -13,7 +13,10 @@
     v-on:open-different-note-form="$emit('open-different-note-form',$event)"
   ></result-display>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
-<div v-if="results.length === 0">No Results</div>
+  <div v-if="results.length === 0" id="no-results">
+    <h3 class="title">No Results</h3>
+    <small class="subtitle">Try searching in another area</small>
+  </div>
 </div>
 </template>
 
@@ -39,13 +42,12 @@ export default {
   computed: {
     isSelectedPlaceInResults: function () {
       //return boolean if selectedPlace exists inside the results array (matched by place_id)
-      return !!(this.selectedPlace && _.find(this.results, { 'place_id': this.selectedPlace.place_id }));
+      return !!(this.selectedPlace.place_id && _.find(this.results, { 'place_id': this.selectedPlace.place_id }));
     }
   },
   watch: {
     selectedPlace: function (newPlace) {
-      console.log("updated selected place")
-      if(!this.isSelectedPlaceInResults) {
+      if(this.selectedPlace.place_id && !this.isSelectedPlaceInResults) {
         this.results.unshift(this.selectedPlace);
       }
     }
@@ -58,6 +60,12 @@ export default {
   position:relative;
   display:flex;
   flex-direction:column;
+  border-left: 1px solid $border;
+}
+#no-results{
+  text-align:center;
+  font-weight:bold;
+  padding:1.5rem 10px;
 }
 .scrollable-content {
   flex-grow: 1;

@@ -127,7 +127,7 @@ export default {
 .result-display{
   position:relative;
   border-bottom: 1px solid $border;
-  border-left: 1px solid $border;
+  border-left: 0;
   border-right: 0;
   padding:0;
   display:flex;
