@@ -58,9 +58,8 @@ export default {
 <style lang="scss" scoped>
 #results-list-container {
   position:relative;
-  display:flex;
-  flex-direction:column;
-  border-left: 1px solid $border;
+  //display:flex;
+  //flex-direction:column;
 }
 #no-results{
   text-align:center;
@@ -68,8 +67,8 @@ export default {
   padding:1.5rem 10px;
 }
 .scrollable-content {
-  flex-grow: 1;
-  overflow:auto;
-  min-height:0;
+  //flex-grow: 1;
+  //overflow:auto;
+  //min-height:0;
 }
 </style>

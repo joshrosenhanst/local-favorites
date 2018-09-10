@@ -10,22 +10,31 @@
         v-on:click-map-point="clickMapPoint"
       ></google-map>
       <aside id="map-sidebar">
-        <!--<b-tabs position="is-centered" class="block" type="is-toggle">
-          <b-tab-item label="Nearby"></b-tab-item>
-          <b-tab-item label="My Favorites"></b-tab-item>
-          <b-tab-item label="My Reviews"></b-tab-item>
-        </b-tabs>-->
-        <results-list
-          v-bind:selected-place="selectedPlace"
-          v-bind:results="resultsList" 
-          v-bind:is-loading="isLoading"
-          v-on:set-review="setReview"
-          v-on:select-result="selectResult"
-          v-on:toggle-note-form="toggleNoteForm"
-          v-on:toggle-save-status="setReview"
-          v-on:open-different-note-form="openDifferentNoteForm"
-          v-on:close-note-form="closeNoteForm"
-        ></results-list>
+        <b-tabs position="is-centered" class="block" expanded type="is-toggle">
+          <b-tab-item label="Nearby">
+            <template slot="header">
+              <font-awesome-icon v-bind:icon="['fas','map-marker-alt']" class="tab-icon is-nearby"></font-awesome-icon>
+              <span>Nearby</span>
+            </template>
+            <results-list
+              v-bind:selected-place="selectedPlace"
+              v-bind:results="resultsList" 
+              v-bind:is-loading="isLoading"
+              v-on:set-review="setReview"
+              v-on:select-result="selectResult"
+              v-on:toggle-note-form="toggleNoteForm"
+              v-on:toggle-save-status="setReview"
+              v-on:open-different-note-form="openDifferentNoteForm"
+              v-on:close-note-form="closeNoteForm"
+            ></results-list>
+          </b-tab-item>
+          <b-tab-item label="My Favorites">
+            <template slot="header">
+              <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
+              <span>My Favorites</span>
+            </template>
+          </b-tab-item>
+        </b-tabs>
       </aside>
     </main>
     <footer id="app-footer">
@@ -158,7 +167,7 @@ export default {
 
 <style lang='scss'>
 html{
-  overflow-y:auto;
+  overflow-y:auto !important;
 }
 #app {
   height:100vh;
@@ -193,14 +202,40 @@ html{
 
 #map-sidebar{
   flex-grow:1;
-
-  display:flex;
-  flex-direction:column;
   min-height:0;
-  max-height:100vh;
+  overflow:auto;
+  //max-height:100vh;
   @media (min-width: 769px) {
     flex-grow:0;
     width:400px;
+    border-left: 1px solid $border;
+  }
+  .b-tabs{
+    min-height:0;
+    nav.tabs{
+      border-width:0;
+      font-weight:bold;
+      &.is-toggle{
+        li.is-active a{
+          background-color:$primary;
+          .tab-icon{
+            color:white;
+          }
+        }
+      }
+      .tab-icon{
+        margin-right:4px;
+        &.is-bookmark{
+          color:$orange;
+        }
+        &.is-nearby{
+          color:$primary;
+        }
+      }
+    }
+    .tab-content{
+      padding:0;
+    }
   }
 }
 #city-search-container{

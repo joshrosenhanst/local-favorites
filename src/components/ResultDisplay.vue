@@ -134,7 +134,7 @@ export default {
   display:flex;
   flex-direction: column;
   align-items:stretch;
-  flex:none;
+  //flex:none;
   cursor:pointer;
   &:first-child{
     //border-top: 1px solid $border;
