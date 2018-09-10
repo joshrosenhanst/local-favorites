@@ -18,7 +18,6 @@
         <results-list
           v-bind:selected-place="selectedPlace"
           v-bind:results="resultsList" 
-          v-bind:reviews="savedReviews"
           v-bind:is-loading="isLoading"
           v-on:set-review="setReview"
           v-on:select-result="selectResult"
