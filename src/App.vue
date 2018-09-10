@@ -188,7 +188,7 @@ html{
 
   font-size:12px;
   font-style:italic;
-  padding:20px;
+  padding:10px;
   text-align:center;
 }
 
