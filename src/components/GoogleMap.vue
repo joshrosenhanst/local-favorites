@@ -8,7 +8,7 @@
       id="google-map"
     >
       <gmap-info-window
-        v-bind:options="{ pixelOffset: { width: 0, height: -35 } }"
+        v-bind:options="{ pixelOffset: { width: 0, height: -35 }, maxWidth:400 }"
         v-if="selectedPlace && selectedPlace.geometry"
         v-bind:position="selectedPlace.geometry.location"
         v-bind:opened="infoWindow.open"
@@ -23,26 +23,19 @@
           v-bind:readonly="true"
         ></star-rating>
         <h3 class="infowindow-name">{{ selectedPlace.name }}</h3>
-        <div class="infowindow-address">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</div>
+        <div class="infowindow-address">
+          <span class="infowindow-address-text">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</span>
+        </div>
         <p class="infowindow-notes" v-if="selectedPlace.notes">{{ selectedPlace.notes }}</p>
-        <template v-if="!(selectedPlace.stars || selectedPlace.notes)">
-          <a href="">Add a Note</a>
-        </template>
+        <div class="infowindow-external-link">
+          <a class="infowindow-external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon> Open in Google Maps</a>
+        </div>
       </gmap-info-window>
       <gmap-marker
         v-if="selectedPlace && selectedPlace.geometry"
         v-bind:position="selectedPlace.geometry.location"
         v-on:click="infoWindow.open = true"
       ></gmap-marker>
-      <!--<gmap-marker
-        v-for="(marker,index) in results"
-        v-if="selectedPlace && marker.place_id !== selectedPlace.place_id"
-        v-bind:key="'marker_'+index"
-        v-bind:position="marker.geometry.location"
-        v-bind:label="marker.name"
-        v-bind:animation="markerOptions.animation"
-        v-bind:icon="{ url:marker.icon, size:markerOptions.size, scaledSize:markerOptions.scale }"
-      ></gmap-marker>-->
     </gmap-map>
   </section>
 </template>
@@ -117,7 +110,6 @@ export default {
       initInfoWindow: function () {
         this.mapObject.addListener('click', (event) => {
           if(event.placeId){
-            console.log("icon click");
             event.stop();
             this.getPlaceDetails(event.placeId);
           }
@@ -126,12 +118,10 @@ export default {
       initAutoComplete: function () {
         let autocomplete_input = document.getElementById('gmap-autocomplete');
         if(autocomplete_input){
-          console.log("init autocomplete");
           let autocomplete = new google.maps.places.Autocomplete(autocomplete_input);
 
           autocomplete.addListener('place_changed', () => {
             let place = autocomplete.getPlace();
-            console.log(place);
             if(place.geometry){
               if(place.types.includes('point_of_interest')){
                 this.forceUpdateLocalPlaces = true;
@@ -178,7 +168,6 @@ export default {
         return place;
       },
       geolocate: function () {
-        console.log("geolocate");
         navigator.geolocation.getCurrentPosition(position => {
           this.center = {
             lat: position.coords.latitude,
@@ -195,14 +184,12 @@ export default {
         }else{
           // otherwise, check if the selecetedPlace is outside the map bounds before we update the local places results list
           if(!(this.selectedPlace && this.selectedPlace.geometry && mapBounds.contains(this.selectedPlace.geometry.location))){
-            console.log("outside bounds")
             this.getLocalPlaces(newCenter);
           }
         }
         this.$emit('map-bounds-changed', { bounds: mapBounds })
       },
       getLocalPlaces: function (center) {
-        console.log("get local")
         this.$emit('start-nearby-search');
         if(center){
           let service = new google.maps.places.PlacesService(this.mapObject);
@@ -228,7 +215,6 @@ export default {
       },
       addLocalPlacesMarkers: function (results,status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log(results);
           this.markers = [];
           for(var i=0;i<results.length;i++){
             this.markers.push({
@@ -247,7 +233,10 @@ export default {
       }
     },
     computed: {
-      //google: gmapApi
+      mapLinkURL: function () {
+        let query = this.selectedPlace.geometry?this.selectedPlace.geometry.location.toUrlValue():this.selectedPlace.name;
+        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.selectedPlace.place_id);
+      }
     }
 }
 </script>
@@ -274,6 +263,10 @@ export default {
     line-height:1.25;
   }
   .infowindow-address{
+    font-size:0.8rem;
+    font-weight:400;
+  }
+  .infowindow-external-link{
     font-size:0.8rem;
     font-weight:400;
   }

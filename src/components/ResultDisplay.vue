@@ -19,9 +19,11 @@
         </h3>
         <div class="result-address">
           <span class="result-address-text">{{ result.vicinity || result.formatted_address }}</span>
-          <a class="external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
         </div>
         <div class="result-notes" v-if="result.notes">{{ result.notes }}</div>
+        <div class="result-external-link" v-if="isSelected">
+          <a class="external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon> Open in Google Maps</a>
+        </div>
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
       </div>
@@ -73,8 +75,6 @@
 import StarRating from './StarRating.vue'
 import AddNoteForm from './AddNoteForm.vue'
 
-const MAP_SEARCH_URL = "https://www.google.com/maps/search/?api=1&";
-
 export default {
   name:'ResultDisplay',
   components: {
@@ -117,7 +117,7 @@ export default {
     },
     mapLinkURL: function () {
       let query = this.result.geometry?this.result.geometry.location.toUrlValue():this.result.name;
-      return MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.result.place_id);
+      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.result.place_id);
     }
   }
 }
@@ -166,9 +166,8 @@ export default {
   margin-right:6px;
   color:$red;
 }
-.external-link-icon{
+.result-external-link{
   font-size:0.8rem;
-  margin-left:4px;
 }
 .result-name{
   font-size: 1rem;
