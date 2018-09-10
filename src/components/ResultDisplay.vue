@@ -197,14 +197,18 @@ export default {
     flex-grow:0;
     text-align:center;
     cursor:pointer;
+    border:0;
     background:transparent;
-    border-width:1px 0 1px 0;
-    border-style:solid;
-    border-color:$border;
     border-radius:0;
     padding:10px 6px;
     width:70px;
     color:$link;
+    outline:0;
+    transition:background-color 500ms ease, color 500ms ease;
+    &::-moz-focus-inner{
+      border-style: none;
+      padding: 0;
+    }
     &:hover{
       background-color:$grey-lightest;
       color:$link-hover;
@@ -212,6 +216,10 @@ export default {
     &.is-active,&:active{
       background-color:$grey-lighter;
       color:$primary;
+      outline:none;
+    }
+    &.is-focused,&:focus{
+      outline:none;
     }
     &.is-saved{
       color:$orange;
