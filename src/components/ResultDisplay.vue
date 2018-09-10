@@ -145,8 +145,8 @@ export default {
   &.selected{
     //background-color:$white-bis;
     background-color:$primary;
-    //border-top: 1px solid $border;
-    //border-color:$primary;
+    border-top: 1px solid $border;
+    border-color:$primary;
     cursor:default;
     color:$white-bis;
     .result-name{
