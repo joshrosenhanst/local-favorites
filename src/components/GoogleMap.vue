@@ -187,15 +187,11 @@ export default {
       },
       getLocalPlaces: function (center) {
         this.$emit('start-nearby-search');
-        if(center){
-          let service = new google.maps.places.PlacesService(this.mapObject);
-          service.nearbySearch({
-            /*location: center,
-            radius: 500,*/
-            bounds: this.mapObject.getBounds(),
-            type: ['point_of_interest']
-          }, this.emitLocalPlaces);
-        }
+        let service = new google.maps.places.PlacesService(this.mapObject);
+        service.nearbySearch({
+          bounds: this.mapObject.getBounds(),
+          type: ['point_of_interest']
+        }, this.emitLocalPlaces);
       },
       emitLocalPlaces: function (results,status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
