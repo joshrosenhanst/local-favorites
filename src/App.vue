@@ -131,7 +131,6 @@ export default {
           // update the selectedPlace Obj with the new review
           this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, saved: event.saved, isNoteFormOpen: false });
         }
-        console.log(this.selectedPlace.place_id);
       });
 
       // update localStorage
@@ -181,7 +180,6 @@ export default {
       if(this.activeTab === TAB_NEARBY){
         // if the selectedPlace object is not in the resultList, add it to the front of the array
         if(!this.isPlaceIDInArray(this.selectedPlace.place_id, this.resultsList)){
-          console.log("unshift")
           this.resultsList.unshift(this.selectedPlace);
         }
       }
