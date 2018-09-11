@@ -46,27 +46,16 @@
         </button>
       </div>
     </div>
-    <div class="result-notes-section">
-      <template v-if="result.notes || result.stars">
-        <add-note-form
-          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-          v-on:toggle-note-form="toggleNoteForm(result)"
-          v-on:close-note-form="$emit('close-note-form')"
-          v-on:submit-note="submitReview(result,$event)"
-        >
-          <span slot="buttonText">Edit Note</span>
-        </add-note-form>
-      </template>
-      <template v-else>
-        <add-note-form
-          v-bind:result="selectedPlace.place_id === result.place_id ? selectedPlace : result"
-          v-on:toggle-note-form="toggleNoteForm(result)"
-          v-on:close-note-form="$emit('close-note-form')"
-          v-on:submit-note="submitReview(result,$event)"
-        >
-          <span slot="buttonText">Add a Note</span>
-        </add-note-form>
-      </template>
+    <div class="result-notes-section" v-if="isSelected">
+      <add-note-form
+        v-bind:stars="result.stars"
+        v-bind:notes="result.notes"
+        v-bind:saved="result.saved"
+        v-bind:is-open="isOpen"
+        v-on:toggle-note-form="toggleNoteForm(result)"
+        v-on:close-note-form="$emit('close-note-form')"
+        v-on:submit-note="submitReview(result,$event)"
+      ></add-note-form>
     </div>
   </div>
 </template>
@@ -89,7 +78,7 @@ export default {
   methods: {
     submitReview: function (result,event) {
       // this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
-      this.$emit('set-review', Object.assign({}, result, { stars: event.stars, notes: event.notes, saved: event.saved }))
+      this.$emit('set-review', Object.assign({}, result, { stars: event.stars, notes: event.notes, saved: event.saved, isNoteFormOpen: false }))
     },
     toggleNoteForm: function (result) {
       //event.stopPropogation();
@@ -124,6 +113,15 @@ export default {
     mapLinkURL: function () {
       let query = this.result.geometry?this.getLatLangURL(this.result.geometry.location):this.result.name;
       return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.result.place_id);
+    },
+    formObject: function () {
+      let place = this.isSelected?this.selectedPlace:this.result;
+      return { 
+        notes: place.notes,
+        stars: place.stars,
+        isOpen: (this.isSelected && place.isNoteFormOpen),
+        saved: place.saved
+      };
     }
   }
 }

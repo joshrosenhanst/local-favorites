@@ -216,16 +216,19 @@ export default {
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
-      this.selectedPlace.isNoteFormOpen = true;
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { isNoteFormOpen: true });
     },
     closeNoteForm: function (event) {
-      this.selectedPlace.isNoteFormOpen = false;
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { isNoteFormOpen: false });
     },
     toggleNoteForm: function () {
-      this.selectedPlace.isNoteFormOpen = !this.selectedPlace.isNoteFormOpen;
+      this.selectedPlace = Object.assign({}, this.selectedPlace, { isNoteFormOpen: !this.selectedPlace.isNoteFormOpen });
     },
     openDifferentNoteForm: function (result) {
-      this.selectedPlace.isNoteFormOpen = false;
+      // close the old form
+      //this.selectedPlace.isNoteFormOpen = false;
+
+      // open the new form
       this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } );
     },
     isPlaceIDInArray(place_id,array){
