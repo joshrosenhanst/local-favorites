@@ -10,11 +10,13 @@
         v-on:click-map-point="clickMapPoint"
       ></google-map>
       <aside id="map-sidebar">
-        <b-tabs position="is-centered" class="block" expanded type="is-toggle">
-          <b-tab-item label="Nearby">
+        <b-tabs position="is-centered" class="block" expanded type="is-toggle"
+          v-model="activeTab"
+        >
+          <b-tab-item>
             <template slot="header">
               <font-awesome-icon v-bind:icon="['fas','map-marker-alt']" class="tab-icon is-nearby"></font-awesome-icon>
-              <span>Nearby</span>
+              <span class="tab_nearby-text">Nearby</span>
             </template>
             <results-list
               v-bind:selected-place="selectedPlace"
@@ -28,10 +30,10 @@
               v-on:close-note-form="closeNoteForm"
             ></results-list>
           </b-tab-item>
-          <b-tab-item label="My Favorites">
+          <b-tab-item>
             <template slot="header">
               <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
-              <span>My Favorites</span>
+              <span class="tab_favorites-text">My Favorites</span>
             </template>
           </b-tab-item>
         </b-tabs>
@@ -52,6 +54,8 @@ import ResultsList from './components/ResultsList.vue'
 import GoogleMap from './components/GoogleMap.vue'
 import GmapCitySearch from './components/GmapCitySearch.vue'
 
+const TAB_NEARBY = 0, TAB_FAVORITES = 1;
+
 export default {
   name: 'app',
   components: {
@@ -65,7 +69,8 @@ export default {
       isLoading: false,
       resultsList: [],
       savedReviews: [],
-      selectedPlace: {}
+      selectedPlace: {},
+      activeTab: TAB_NEARBY
     }
   },
   methods: {
@@ -130,6 +135,7 @@ export default {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
       this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
+      this.activeTab = TAB_NEARBY;
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
@@ -218,9 +224,14 @@ html{
       &.is-toggle{
         li.is-active a{
           background-color:$primary;
+          border:0;
+          color:white;
           .tab-icon{
             color:white;
           }
+        }
+        a{
+          border:0;
         }
       }
       .tab-icon{
