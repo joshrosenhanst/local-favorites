@@ -1,5 +1,5 @@
 <template>
-<div id="results-list-container" class="scrollable-content">
+<div class="results-list-container">
   <result-display
     v-for="(result,index) in results"
     v-bind:key="result.place_id"
@@ -13,9 +13,9 @@
     v-on:open-different-note-form="$emit('open-different-note-form',$event)"
   ></result-display>
   <b-loading v-bind:active.sync="isLoading" v-bind:is-full-page="false"></b-loading>
-  <div v-if="results.length === 0" id="no-results">
+  <div v-if="results.length === 0" class="no-results">
     <h3 class="title">No Results</h3>
-    <small class="subtitle">Try searching in another area</small>
+    <small class="subtitle"><slot name="no-results-text"></slot></small>
   </div>
 </div>
 </template>
@@ -41,38 +41,35 @@ export default {
     }
   },
   methods: {
-    isSelectedPlaceInResults: function () {
+    isPlaceInResults: function (place_id) {
       //return boolean if selectedPlace exists inside the results array (matched by place_id)
-      return !!(this.selectedPlace.place_id && _.find(this.results, { 'place_id': this.selectedPlace.place_id }));
+      return !!(place_id && _.find(this.results, { 'place_id': place_id }));
     }
   },
   watch: {
-    selectedPlace: function (newPlace) {
+    /*selectedPlace: function (newPlace) {
       // when the selectedPlace object changes
       // check if the place_id exists, the place is not in the results array, and this tab is active
       // if that is true, add the selectedPlace to the results array
-      if(this.selectedPlace.place_id && !this.isSelectedPlaceInResults() && this.isTabActive) {
-        this.results.unshift(this.selectedPlace);
+      console.log(newPlace.name);
+      if(newPlace.place_id && !this.isPlaceInResults(newPlace.place_id) && this.isTabActive) {
+        console.log("unshift")
+        this.results.unshift(newPlace);
       }
-    }
+    }*/
   }
 }
 </script>
 
 <style lang="scss" scoped>
-#results-list-container {
+.results-list-container {
   position:relative;
   //display:flex;
   //flex-direction:column;
 }
-#no-results{
+.no-results{
   text-align:center;
   font-weight:bold;
   padding:1.5rem 10px;
-}
-.scrollable-content {
-  //flex-grow: 1;
-  //overflow:auto;
-  //min-height:0;
 }
 </style>

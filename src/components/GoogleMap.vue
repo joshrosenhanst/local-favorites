@@ -178,6 +178,8 @@ export default {
         // check if the selectedPlace is inside the bounds of the map after the move/zoom.
         // if it is, keep it as the selectedPlace when we update the resultsList
         if(this.selectedPlace && this.selectedPlace.geometry){
+          console.log(this.selectedPlace.name)
+          console.log(mapBounds.contains(this.selectedPlace.geometry.location))
           if(mapBounds.contains(this.selectedPlace.geometry.location)){
             this.keepSelected = true;
           }

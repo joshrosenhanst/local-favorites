@@ -19,7 +19,7 @@
               <font-awesome-icon v-bind:icon="['fas','map-marker-alt']" class="tab-icon is-nearby"></font-awesome-icon>
               <span class="tab_nearby-text">Nearby</span>
             </template>
-            <results-list
+            <results-list id="nearby-list"
               v-bind:selected-place="selectedPlace"
               v-bind:results="resultsList" 
               v-bind:is-loading="isLoading"
@@ -30,14 +30,16 @@
               v-on:toggle-save-status="setReview"
               v-on:open-different-note-form="openDifferentNoteForm"
               v-on:close-note-form="closeNoteForm"
-            ></results-list>
+            >
+              <template slot="no-results-text">Try searching in another area</template>
+            </results-list>
           </b-tab-item>
           <b-tab-item>
             <template slot="header">
               <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
               <span class="tab_favorites-text">My Favorites</span>
             </template>
-            <results-list
+            <results-list id="favorites-list"
               v-bind:selected-place="selectedPlace"
               v-bind:results="favoritesList" 
               v-bind:is-loading="isLoading"
@@ -48,7 +50,9 @@
               v-on:toggle-save-status="setReview"
               v-on:open-different-note-form="openDifferentNoteForm"
               v-on:close-note-form="closeNoteForm"
-            ></results-list>
+            >
+              <template slot="no-results-text">Add a place to your favorites list</template>
+            </results-list>
           </b-tab-item>
         </b-tabs>
       </aside>
@@ -111,8 +115,24 @@ export default {
       if (matchedResultIndex >= 0) {
         this.resultsList.splice(matchedResultIndex,1,updatedResult);
       }
-      // update the selectedPlace Obj with the new review
-      this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, saved: event.saved, isNoteFormOpen: false });
+
+      // wait until the DOM has fully updated from changing savedReviews/resultsList, then set the selectedPlace
+      this.$nextTick(function () {
+        // if we are on the My Favorites tab and we just unsaved something, set a different selectedPlace
+        if(this.activeTab === TAB_FAVORITES && !event.saved){
+          if(this.favoritesList.length){
+            // set the selectedPlace to the first item, if we can
+            this.selectedPlace = Object.assign({}, this.favoritesList[0], {isNoteFormOpen: false});
+          }else{
+            // otherwise, set to empty object
+            this.selectedPlace = {};
+          }
+        }else{
+          // update the selectedPlace Obj with the new review
+          this.selectedPlace = Object.assign({}, this.selectedPlace, { stars:event.stars, notes:event.notes, saved: event.saved, isNoteFormOpen: false });
+        }
+        console.log(this.selectedPlace.place_id);
+      });
 
       // update localStorage
       localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.savedReviews));
@@ -130,7 +150,11 @@ export default {
           }
         })
       }
-      if(!event.keepSelected) {
+      if(event.keepSelected) {
+        // if we are told to keep the current selectedPlace, check if the selectedPlace is in the resultsList
+        this.addMissingSelectedPlace();
+      }else{        
+        // if we dont need to keep the current selectedPlace, grab the first available
         let currentList = (this.activeTab === TAB_FAVORITES?this.favoritesList:this.resultsList);
         if(currentList.length) {
           // set the selectedPlace to the first item in ResultsList/FavoritesList
@@ -141,20 +165,33 @@ export default {
         }
       }
       this.isLoading = false;
+      this.scrollListToPlace();
     },
-    selectResult: function (result) {
+    selectResult: function (place) {
       // user selects a place from the ResultsList
       // do a sanity check to make sure they arent just clicking the same location
       // update the selectedPlace object
       // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-      if(result.place_id !== this.selectedPlace.place_id) {
-        this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: false });
+      if(place.place_id !== this.selectedPlace.place_id) {
+        this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
+      }
+      this.addMissingSelectedPlace();
+    },
+    addMissingSelectedPlace: function () {
+      if(this.activeTab === TAB_NEARBY){
+        // if the selectedPlace object is not in the resultList, add it to the front of the array
+        if(!this.isPlaceIDInArray(this.selectedPlace.place_id, this.resultsList)){
+          console.log("unshift")
+          this.resultsList.unshift(this.selectedPlace);
+        }
       }
     },
     clickMapPoint: function (place) {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
-      this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
+      // this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
+      this.selectResult(place);
+
       if(this.activeTab === TAB_FAVORITES){
         // check if the place is in the favorites list
         // if it isnt, switch tabs
@@ -162,6 +199,20 @@ export default {
           this.activeTab = TAB_NEARBY;
         }
       }
+      
+      this.scrollListToPlace();
+    },
+    scrollListToPlace: function () {
+      let map_sidebar = document.getElementById('map-sidebar');
+      //delay the scroll work until the DOM has fully updated
+      this.$nextTick(function() {
+        let element_id = (this.activeTab === TAB_FAVORITES?'favorites-list':'nearby-list');
+        let parent_element = document.getElementById(element_id);
+        let selected_element = parent_element.getElementsByClassName('result-display selected')[0];
+        if(selected_element){
+          map_sidebar.scrollTop = selected_element.offsetTop;
+        }
+      });
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
