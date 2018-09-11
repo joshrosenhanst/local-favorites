@@ -275,7 +275,9 @@ html{
   overflow-y:auto !important;
 }
 #app {
-  height:100vh;
+  @media (min-width: 769px) {
+    height:100vh;
+  }
   align-items: stretch;
   display: flex;
   flex-direction: column;
@@ -308,12 +310,12 @@ html{
 #map-sidebar{
   flex-grow:1;
   min-height:0;
-  overflow:auto;
   //max-height:100vh;
   @media (min-width: 769px) {
     flex-grow:0;
     width:400px;
     border-left: 1px solid $border;
+    overflow:auto;
   }
   .b-tabs{
     min-height:0;
