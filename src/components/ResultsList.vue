@@ -32,14 +32,15 @@ export default {
   props: {
     selectedPlace: Object,
     results: Array,
-    isLoading: Boolean
+    isLoading: Boolean,
+    isTabActive: Boolean
   },
   data: function () {
     return {
       
     }
   },
-  computed: {
+  methods: {
     isSelectedPlaceInResults: function () {
       //return boolean if selectedPlace exists inside the results array (matched by place_id)
       return !!(this.selectedPlace.place_id && _.find(this.results, { 'place_id': this.selectedPlace.place_id }));
@@ -47,7 +48,10 @@ export default {
   },
   watch: {
     selectedPlace: function (newPlace) {
-      if(this.selectedPlace.place_id && !this.isSelectedPlaceInResults) {
+      // when the selectedPlace object changes
+      // check if the place_id exists, the place is not in the results array, and this tab is active
+      // if that is true, add the selectedPlace to the results array
+      if(this.selectedPlace.place_id && !this.isSelectedPlaceInResults() && this.isTabActive) {
         this.results.unshift(this.selectedPlace);
       }
     }

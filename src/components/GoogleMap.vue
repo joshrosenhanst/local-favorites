@@ -62,7 +62,6 @@ export default {
         marker: {},
         places: [],
         currentPlace: null,
-        forceUpdateLocalPlaces: false,
         keepSelected: false,
         mapOptions: {
           streetViewControl: false,
@@ -123,7 +122,6 @@ export default {
             let place = autocomplete.getPlace();
             if(place.geometry){
               if(place.types.includes('point_of_interest')){
-                this.forceUpdateLocalPlaces = true;
                 this.getReviewThenEmitPlace(place);
                 this.keepSelected = true;
               }
@@ -177,15 +175,14 @@ export default {
       idleMapUpdate: function (event) {
         let newCenter = this.mapObject.getCenter();
         let mapBounds = this.mapObject.getBounds();
-        if(this.forceUpdateLocalPlaces) {
-          // if we are forcing an update to the local places results list:
-          this.getLocalPlaces(newCenter);
-        }else{
-          // otherwise, check if the selecetedPlace is outside the map bounds before we update the local places results list
-          if(!(this.selectedPlace && this.selectedPlace.geometry && mapBounds.contains(this.selectedPlace.geometry.location))){
-            this.getLocalPlaces(newCenter);
+        // check if the selectedPlace is inside the bounds of the map after the move/zoom.
+        // if it is, keep it as the selectedPlace when we update the resultsList
+        if(this.selectedPlace && this.selectedPlace.geometry){
+          if(mapBounds.contains(this.selectedPlace.geometry.location)){
+            this.keepSelected = true;
           }
         }
+        this.getLocalPlaces(newCenter);
         this.$emit('map-bounds-changed', { bounds: mapBounds })
       },
       getLocalPlaces: function (center) {
@@ -204,12 +201,10 @@ export default {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           this.$emit('get-local-places', { results: results, keepSelected: this.keepSelected });
           this.keepSelected = false;
-          this.forceUpdateLocalPlaces = false;
         }
         if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
           this.$emit('get-local-places', { results: null, keepSelected: this.keepSelected });
           this.keepSelected = false;
-          this.forceUpdateLocalPlaces = false;
         }
       },
       addLocalPlacesMarkers: function (results,status) {
@@ -229,12 +224,17 @@ export default {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
           console.log(results);
         }
+      },
+      getLatLangURL: function (locObject) {
+        let lng = (typeof locObject.lng === 'function'?locObject.lng():locObject.lng);
+        let lat = (typeof locObject.lat === 'function'?locObject.lat():locObject.lat);
+        return lat.toFixed(6)+","+lng.toFixed(6);
       }
     },
     computed: {
       mapLinkURL: function () {
-        let query = this.selectedPlace.geometry?this.selectedPlace.geometry.location.toUrlValue():this.selectedPlace.name;
-        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.selectedPlace.place_id);
+        let query = this.selectedPlace.geometry?this.getLatLangURL(this.selectedPlace.geometry.location):this.selectedPlace.name;
+        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.selectedPlace.place_id);
       }
     }
 }

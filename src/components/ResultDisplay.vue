@@ -101,6 +101,11 @@ export default {
     },
     toggleSaveStatus: function (result) {
       this.submitReview(result, { place_id: result.place_id, stars: result.stars, notes: result.notes, saved: !result.saved })
+    },
+    getLatLangURL: function (locObject) {
+      let lng = (typeof locObject.lng === 'function'?locObject.lng():locObject.lng);
+      let lat = (typeof locObject.lat === 'function'?locObject.lat():locObject.lat);
+      return lat.toFixed(6)+","+lng.toFixed(6);
     }
   },
   computed: {
@@ -117,8 +122,8 @@ export default {
       return this.result.saved?"Unsave":"Save";
     },
     mapLinkURL: function () {
-      let query = this.result.geometry?this.result.geometry.location.toUrlValue():this.result.name;
-      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("&query=" + query + "&query_place_id=" + this.result.place_id);
+      let query = this.result.geometry?this.getLatLangURL(this.result.geometry.location):this.result.name;
+      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.result.place_id);
     }
   }
 }

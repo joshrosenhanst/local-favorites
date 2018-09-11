@@ -5,13 +5,14 @@
       <google-map
         v-bind:selected-place="selectedPlace"
         v-bind:reviews="savedReviews"
-        v-on:start-nearby-search="isLoading = true"
+        v-on:start-nearby-search="isLoading = (activeTab === 0)"
         v-on:get-local-places="updateResultsList"
         v-on:click-map-point="clickMapPoint"
       ></google-map>
       <aside id="map-sidebar">
         <b-tabs position="is-centered" class="block" expanded type="is-toggle"
           v-model="activeTab"
+          v-on:change="onChangeTab"
         >
           <b-tab-item>
             <template slot="header">
@@ -22,6 +23,7 @@
               v-bind:selected-place="selectedPlace"
               v-bind:results="resultsList" 
               v-bind:is-loading="isLoading"
+              v-bind:is-tab-active="(activeTab === 0)"
               v-on:set-review="setReview"
               v-on:select-result="selectResult"
               v-on:toggle-note-form="toggleNoteForm"
@@ -35,6 +37,18 @@
               <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
               <span class="tab_favorites-text">My Favorites</span>
             </template>
+            <results-list
+              v-bind:selected-place="selectedPlace"
+              v-bind:results="favoritesList" 
+              v-bind:is-loading="isLoading"
+              v-bind:is-tab-active="(activeTab === 1)"
+              v-on:set-review="setReview"
+              v-on:select-result="selectResult"
+              v-on:toggle-note-form="toggleNoteForm"
+              v-on:toggle-save-status="setReview"
+              v-on:open-different-note-form="openDifferentNoteForm"
+              v-on:close-note-form="closeNoteForm"
+            ></results-list>
           </b-tab-item>
         </b-tabs>
       </aside>
@@ -71,6 +85,11 @@ export default {
       savedReviews: [],
       selectedPlace: {},
       activeTab: TAB_NEARBY
+    }
+  },
+  computed: {
+    favoritesList: function () {
+      return this.savedReviews.filter(review => review.saved);
     }
   },
   methods: {
@@ -112,10 +131,11 @@ export default {
         })
       }
       if(!event.keepSelected) {
-        if(this.resultsList.length) {
-          // set the selectedPlace to the first item in ResultsList
+        let currentList = (this.activeTab === TAB_FAVORITES?this.favoritesList:this.resultsList);
+        if(currentList.length) {
+          // set the selectedPlace to the first item in ResultsList/FavoritesList
           // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-          this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, this.resultsList[0], { isNoteFormOpen: false });
+          this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, currentList[0], { isNoteFormOpen: false });
         }else{
           this.selectedPlace = {};
         }
@@ -135,7 +155,13 @@ export default {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
       this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
-      this.activeTab = TAB_NEARBY;
+      if(this.activeTab === TAB_FAVORITES){
+        // check if the place is in the favorites list
+        // if it isnt, switch tabs
+        if(!this.isPlaceIDInArray(this.selectedPlace.place_id, this.favoritesList)){
+          this.activeTab = TAB_NEARBY;
+        }
+      }
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
@@ -150,6 +176,27 @@ export default {
     openDifferentNoteForm: function (result) {
       this.selectedPlace.isNoteFormOpen = false;
       this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } );
+    },
+    isPlaceIDInArray(place_id,array){
+      // check if a place_id is in an array, return a boolean
+      return !!(place_id && _.find(array, { 'place_id': place_id }));
+    },
+    onChangeTab(index) {
+      // if the tab is changed to "My Favorites", check if the selectedPlace is in the favoritesList
+      // if true, set the selectedPlace to that array item
+      // if not, set the selectedPlace to the first favoritesList result
+      if(index === TAB_FAVORITES){
+        if(this.selectedPlace){
+          let matchedFavoritesIndex = _.findIndex(this.favoritesList, { place_id:this.selectedPlace.place_id });
+          if (matchedFavoritesIndex >= 0) {
+            this.selectedPlace = this.favoritesList[matchedFavoritesIndex];
+          }else{
+            this.selectedPlace = (this.favoritesList.length?this.favoritesList[0]:{});
+          }
+        }else{
+          this.selectedPlace = (this.favoritesList.length?this.favoritesList[0]:{});
+        }
+      }
     }
 
   },
