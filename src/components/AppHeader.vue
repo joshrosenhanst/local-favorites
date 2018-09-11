@@ -3,7 +3,7 @@
       <section class="hero">
         <div class="hero-body">
           <div class="container">
-            <h1 class="title">Local Notes</h1>
+            <h1 class="title"><font-awesome-icon class="title-icon" v-bind:icon="['fas','map-marker-alt']"></font-awesome-icon>Local Notes</h1>
             <h2 class="subtitle">Save custom notes for local stores, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
           </div>
         </div>
@@ -43,7 +43,9 @@ export default {
 
 <style lang="scss" scoped>
 #app-header {
-  text-align:center;
+  //@media (min-width: 769px) {
+    text-align:center;
+  //}
 }
 #random-predicate {
   background-color:#f5f5f5;
@@ -54,10 +56,39 @@ export default {
   -webkit-touch-callout: none;
   user-select: none;
 }
-.title{
-  font-size:2.5rem;
+h1.title{
+  font-size:1.5rem;
+  color:$primary;
+  font-weight:300;
+  margin-bottom:0;
+  @media (min-width: 426px) and (max-width:769px) {
+    font-size:2rem;
+    margin-bottom:1.5rem;
+  }
+  @media (min-width: 769px) {
+    font-size:2.5rem;
+    margin-bottom:1.5rem;
+  }
+  .title-icon{
+    margin-right:5px;
+  }
+}
+h2.subtitle{
+  font-size:1rem;
+  display:none;
+  margin-top:0;
+  @media (min-width: 426px) and (max-width:769px) {
+    display:block;
+  }
+  @media (min-width: 769px) {
+    font-size:1.25rem;
+    display:block;
+  }
 }
 .hero-body{
-  padding:1.5rem;
+  padding:15px;
+  @media (min-width: 769px) {
+    padding:1.5rem;
+  }
 }
 </style>

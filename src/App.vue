@@ -321,7 +321,9 @@ html{
     min-height:0;
     nav.tabs{
       border-width:0;
+      border-bottom:1px solid $border;
       font-weight:bold;
+      margin-bottom:-1px;
       &.is-toggle{
         li.is-active a{
           background-color:$primary;
