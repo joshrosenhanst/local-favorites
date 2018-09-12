@@ -11,7 +11,7 @@
 
 <script>
 export default {
-  name: 'GmapCitySearch',
+  name: 'GmapAutocompleteSearch',
   props: {
     value: String,
     placeholder: String

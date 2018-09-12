@@ -42,7 +42,7 @@
 
 <script>
 import StarRating from './StarRating.vue'
-import GmapCitySearch from './GmapCitySearch.vue'
+//import GmapAutocompleteSearch from './GmapAutocompleteSearch.vue'
 
 export default {
     name: 'GoogleMap',
@@ -52,7 +52,7 @@ export default {
     },
     components: {
       StarRating,
-      GmapCitySearch
+      //GmapAutocompleteSearch
     },
     data: function () {
       return {
@@ -101,7 +101,7 @@ export default {
         this.mapObject = this.$refs.mapRef.$mapObject;
         this.gPlacesService = new google.maps.places.PlacesService(this.mapObject);
 
-        let mapControlSearch = document.getElementById("city-search-container");
+        let mapControlSearch = document.getElementById("autocomplete-search-container");
         this.mapObject.controls[google.maps.ControlPosition.TOP_RIGHT].push(mapControlSearch);
         this.mapObject.addListener('idle', this.idleMapUpdate);
       },

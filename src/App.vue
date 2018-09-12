@@ -60,8 +60,8 @@
     <footer id="app-footer">
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
     </footer>
-    <div id="city-search-container">
-      <gmap-city-search></gmap-city-search>
+    <div id="autocomplete-search-container">
+      <gmap-autocomplete-search></gmap-autocomplete-search>
     </div>
   </div>
 </template>
@@ -70,7 +70,7 @@
 import AppHeader from './components/AppHeader.vue'
 import ResultsList from './components/ResultsList.vue'
 import GoogleMap from './components/GoogleMap.vue'
-import GmapCitySearch from './components/GmapCitySearch.vue'
+import GmapAutocompleteSearch from './components/GmapAutocompleteSearch.vue'
 
 const TAB_NEARBY = 0, TAB_FAVORITES = 1;
 
@@ -80,7 +80,7 @@ export default {
     AppHeader,
     ResultsList,
     GoogleMap,
-    GmapCitySearch
+    GmapAutocompleteSearch
   },
   data: function () {
     return {
@@ -352,7 +352,7 @@ html{
     }
   }
 }
-#city-search-container{
+#autocomplete-search-container{
   float:left;
   padding:5px 10px;
   background:white;
