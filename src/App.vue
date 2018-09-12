@@ -335,6 +335,9 @@ html{
         }
         a{
           border:0;
+          &:hover,&:focus{
+            background-color:$grey-lighter;
+          }
         }
       }
       .tab-icon{
