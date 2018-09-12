@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import App from './App.vue'
 import Buefy from 'buefy'
+import _ from 'lodash'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faExternalLinkAlt, faMapMarkedAlt, faStar, faBan, faCommentAlt, faCheck, faStickyNote, faSearch, faBookmark, faEdit, faMapMarkerAlt } from '@fortawesome/free-solid-svg-icons'

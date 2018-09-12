@@ -52,6 +52,7 @@
         v-bind:notes="result.notes"
         v-bind:saved="result.saved"
         v-bind:is-open="isOpen"
+        
         v-on:toggle-note-form="toggleNoteForm(result)"
         v-on:close-note-form="$emit('close-note-form')"
         v-on:submit-note="submitReview(result,$event)"
@@ -61,6 +62,7 @@
 </template>
 
 <script>
+import AppStore from '../AppStore.js'
 import StarRating from './StarRating.vue'
 import AddNoteForm from './AddNoteForm.vue'
 
@@ -72,8 +74,12 @@ export default {
   },
   props: {
     result: Object,
-    selectedPlace: Object,
     index: Number
+  },
+  data: function () {
+    return {
+      AppData: AppStore.state
+    }
   },
   methods: {
     submitReview: function (result,event) {
@@ -82,7 +88,7 @@ export default {
     },
     toggleNoteForm: function (result) {
       //event.stopPropogation();
-      if(this.selectedPlace.place_id === result.place_id) {
+      if(this.AppData.selectedPlace && this.AppData.selectedPlace.place_id === result.place_id) {
         this.$emit('toggle-note-form');
       }else{
         this.$emit('open-different-note-form', result);
@@ -99,10 +105,10 @@ export default {
   },
   computed: {
     isSelected: function () {
-      return this.selectedPlace.place_id === this.result.place_id;
+      return this.AppData.selectedPlace && ( this.AppData.selectedPlace.place_id === this.result.place_id )
     },
     isOpen: function () {
-      return this.isSelected && this.selectedPlace.hasOwnProperty('isNoteFormOpen') && this.selectedPlace.isNoteFormOpen;
+      return this.isSelected && this.AppData.selectedPlace.hasOwnProperty('isNoteFormOpen') && this.AppData.selectedPlace.isNoteFormOpen;
     },
     noteButtonText: function () {
       return (this.result.notes || this.result.stars)?"Edit Note":"Add Note";
@@ -115,7 +121,7 @@ export default {
       return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.result.place_id);
     },
     formObject: function () {
-      let place = this.isSelected?this.selectedPlace:this.result;
+      let place = this.isSelected?this.AppData.selectedPlace:this.result;
       return { 
         notes: place.notes,
         stars: place.stars,

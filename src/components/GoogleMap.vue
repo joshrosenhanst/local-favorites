@@ -9,31 +9,31 @@
     >
       <gmap-info-window
         v-bind:options="{ pixelOffset: { width: 0, height: -35 }, maxWidth:400 }"
-        v-if="selectedPlace && selectedPlace.geometry"
-        v-bind:position="selectedPlace.geometry.location"
+        v-if="AppData.selectedPlace && AppData.selectedPlace.geometry"
+        v-bind:position="AppData.selectedPlace.geometry.location"
         v-bind:opened="infoWindow.open"
         v-on:closeclick="infoWindow.open = false"
       >
         <span class="infowindow-saved is-saved"
-          v-if="selectedPlace.saved"
+          v-if="AppData.selectedPlace.saved"
         ><font-awesome-icon v-bind:icon="['fas','bookmark']"></font-awesome-icon></span>
         <star-rating
-          v-if="selectedPlace.stars"
-          v-bind:stars="selectedPlace.stars"
+          v-if="AppData.selectedPlace.stars"
+          v-bind:stars="AppData.selectedPlace.stars"
           v-bind:readonly="true"
         ></star-rating>
-        <h3 class="infowindow-name">{{ selectedPlace.name }}</h3>
+        <h3 class="infowindow-name">{{ AppData.selectedPlace.name }}</h3>
         <div class="infowindow-address">
-          <span class="infowindow-address-text">{{ selectedPlace.vicinity || selectedPlace.formatted_address }}</span>
+          <span class="infowindow-address-text">{{ AppData.selectedPlace.vicinity || AppData.selectedPlace.formatted_address }}</span>
         </div>
-        <p class="infowindow-notes" v-if="selectedPlace.notes">{{ selectedPlace.notes }}</p>
+        <p class="infowindow-notes" v-if="AppData.selectedPlace.notes">{{ AppData.selectedPlace.notes }}</p>
         <div class="infowindow-external-link">
           <a class="infowindow-external-link-icon" v-bind:href="mapLinkURL" title="Open in Google Maps" target="_blank" rel="noopener noreferrer" ><font-awesome-icon icon="map-marked-alt"></font-awesome-icon> Open in Google Maps</a>
         </div>
       </gmap-info-window>
       <gmap-marker
-        v-if="selectedPlace && selectedPlace.geometry"
-        v-bind:position="selectedPlace.geometry.location"
+        v-if="AppData.selectedPlace && AppData.selectedPlace.geometry"
+        v-bind:position="AppData.selectedPlace.geometry.location"
         v-on:click="infoWindow.open = true"
       ></gmap-marker>
     </gmap-map>
@@ -41,12 +41,12 @@
 </template>
 
 <script>
+import AppStore from '../AppStore.js'
 import StarRating from './StarRating.vue'
 
 export default {
     name: 'GoogleMap',
     props: {
-      selectedPlace: Object,
       reviews: Array
     },
     components: {
@@ -54,6 +54,7 @@ export default {
     },
     data: function () {
       return {
+        AppData: AppStore.state,
         center: {lat:40.415932, lng:-74.25753},
         zoom: 17,
         markers: [],
@@ -174,10 +175,10 @@ export default {
       idleMapUpdate: function (event) {
         let newCenter = this.mapObject.getCenter();
         let mapBounds = this.mapObject.getBounds();
-        // check if the selectedPlace is inside the bounds of the map after the move/zoom.
-        // if it is, keep it as the selectedPlace when we update the resultsList
-        if(this.selectedPlace && this.selectedPlace.geometry){
-          if(mapBounds.contains(this.selectedPlace.geometry.location)){
+        // check if the AppData.selectedPlace is inside the bounds of the map after the move/zoom.
+        // if it is, keep it as the AppData.selectedPlace when we update the resultsList
+        if(this.AppData.selectedPlace && this.AppData.selectedPlace.geometry){
+          if(mapBounds.contains(this.AppData.selectedPlace.geometry.location)){
             this.keepSelected = true;
           }
         }
@@ -228,8 +229,8 @@ export default {
     },
     computed: {
       mapLinkURL: function () {
-        let query = this.selectedPlace.geometry?this.getLatLangURL(this.selectedPlace.geometry.location):this.selectedPlace.name;
-        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.selectedPlace.place_id);
+        let query = this.AppData.selectedPlace.geometry?this.getLatLangURL(this.AppData.selectedPlace.geometry.location):this.AppData.selectedPlace.name;
+        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.AppData.selectedPlace.place_id);
       }
     }
 }
