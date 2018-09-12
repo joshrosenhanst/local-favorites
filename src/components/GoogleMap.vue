@@ -42,7 +42,6 @@
 
 <script>
 import StarRating from './StarRating.vue'
-//import GmapAutocompleteSearch from './GmapAutocompleteSearch.vue'
 
 export default {
     name: 'GoogleMap',
@@ -51,8 +50,7 @@ export default {
       reviews: Array
     },
     components: {
-      StarRating,
-      //GmapAutocompleteSearch
+      StarRating
     },
     data: function () {
       return {
