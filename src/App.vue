@@ -2,13 +2,6 @@
   <div id="app">
     <app-header></app-header>
     <main id="app-body">
-      <google-map
-        v-bind:selected-place="selectedPlace"
-        v-bind:reviews="savedReviews"
-        v-on:start-nearby-search="isLoading = (activeTab === 0)"
-        v-on:get-local-places="updateResultsList"
-        v-on:click-map-point="clickMapPoint"
-      ></google-map>
       <aside id="map-sidebar">
         <b-tabs position="is-centered" class="block" expanded type="is-toggle"
           v-model="activeTab"
@@ -56,13 +49,20 @@
           </b-tab-item>
         </b-tabs>
       </aside>
+      <google-map
+        v-bind:selected-place="selectedPlace"
+        v-bind:reviews="savedReviews"
+        v-on:start-nearby-search="isLoading = (activeTab === 0)"
+        v-on:get-local-places="updateResultsList"
+        v-on:click-map-point="clickMapPoint"
+      ></google-map>
+      <div id="autocomplete-search-container">
+        <gmap-autocomplete-search></gmap-autocomplete-search>
+      </div>
     </main>
     <footer id="app-footer">
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
     </footer>
-    <div id="autocomplete-search-container">
-      <gmap-autocomplete-search></gmap-autocomplete-search>
-    </div>
   </div>
 </template>
 
@@ -293,9 +293,9 @@ html{
   border-bottom:1px solid $border;
 
   display:flex;
-  flex-direction:column;
+  flex-direction:column-reverse;
   @media (min-width: 769px) {
-    flex-direction:row;
+    flex-direction:row-reverse;
   }
 }
 #app-footer {

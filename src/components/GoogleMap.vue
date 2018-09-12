@@ -66,7 +66,8 @@ export default {
         mapOptions: {
           streetViewControl: false,
           fullscreenControl: false,
-          mapTypeControl: false
+          mapTypeControl: false,
+          gestureHandling: 'greedy'
         },
         markerOptions: {
           animation: 2,
@@ -239,6 +240,9 @@ export default {
 <style lang="scss" scoped>
   #google-map-container {
     flex-grow:1;
+    *:focus{
+      border:1px solid $blue;
+    }
   }
   #map-search-field{
     width:500px;
