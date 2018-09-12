@@ -76,7 +76,7 @@ export default {
       AppStore.setReview(event.place_id, event)
 
       // update the resultsList array with the new review values
-      AppStore.setResult(event.place_id, { stars:event.stars, notes:event.notes, saved: event.saved })
+      AppStore.updateResult(event.place_id, { stars:event.stars, notes:event.notes, saved: event.saved })
 
       // wait until the DOM has fully updated from changing savedReviews/resultsList, then set the selectedPlace
       this.$nextTick(function () {
