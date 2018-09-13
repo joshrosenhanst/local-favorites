@@ -105,22 +105,26 @@ export default {
           AppStore.updateResult(review.place_id, { stars: review.stars, notes: review.notes, saved: review.saved, isNoteFormOpen: false })
         })
       }
-      if(event.keepSelected) {
-        // if we are told to keep the current selectedPlace, check if the selectedPlace is in the resultsList
-        this.addMissingSelectedPlace();
-      }else{        
-        // if we dont need to keep the current selectedPlace, grab the first available
-        let currentList = (this.AppData.activeTab === TAB_FAVORITES?this.favoritesList:this.AppData.resultsList);
-        if(currentList.length) {
-          // set the selectedPlace to the first item in ResultsList/FavoritesList
-          // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-          AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, currentList[0], { isNoteFormOpen: false }))
-        }else{
-          AppStore.setSelectedPlace({});
+      if(this.AppData.activeTab === TAB_NEARBY) {
+        // we only need to update the selectedPlace from getLocalPlaces (i.e map scroll) if we are on the nearby tab
+        if(event.keepSelected) {
+          // if we are told to keep the current selectedPlace or we're on the My Favorites tab, check if the selectedPlace is in the resultsList
+          // if we are on the My Favorites tab, addMisingSelectedPlace will do nothing
+          this.addMissingSelectedPlace();
+        }else{        
+          // if we dont need to keep the current selectedPlace, grab the first available and then focus the element
+          let currentList = (this.AppData.activeTab === TAB_FAVORITES?this.favoritesList:this.AppData.resultsList);
+          if(currentList.length) {
+            // set the selectedPlace to the first item in ResultsList/FavoritesList
+            // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
+            AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, currentList[0], { isNoteFormOpen: false }))
+          }else{
+            AppStore.setSelectedPlace({});
+          }
+          this.focusOnPlaceResult();
         }
       }
       AppStore.setIsLoading(false);
-      this.focusOnPlaceResult();
     },
     selectResult: function (place) {
       // user selects a place from the ResultsList
