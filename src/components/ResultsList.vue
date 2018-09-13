@@ -12,11 +12,17 @@
     v-on:close-note-form="$emit('close-note-form')"
     v-on:open-different-note-form="$emit('open-different-note-form',$event)"
   ></result-display>
-  <b-loading v-bind:active="AppData.isLoading" v-bind:is-full-page="false"></b-loading>
   <div v-if="results.length === 0" class="no-results">
     <h3 class="title">No Results</h3>
     <small class="subtitle"><slot name="no-results-text"></slot></small>
   </div>
+  
+  <transition name="fade">
+    <div class="loading-overlay is-active" v-if="AppData.isLoading">
+        <div class="loading-background" @click="cancelLoading"/>
+        <div class="loading-icon"/>
+    </div>
+  </transition>
 </div>
 </template>
 
@@ -37,6 +43,11 @@ export default {
   data: function () {
     return {
       AppData: AppStore.state
+    }
+  },
+  methods: {
+    cancelLoading: function () { 
+      AppStore.setIsLoading(false);
     }
   }
 }
