@@ -102,7 +102,7 @@ export default {
   }
 }
 nav.tabs{
-  border-width:0;
+  border:0;
   border-bottom:1px solid $border;
   font-weight:bold;
   margin-bottom:1px;
@@ -120,7 +120,7 @@ nav.tabs{
     li.is-active a{
       background-color:$primary;
       color:white;
-      border-color:$primary;
+      border-color:$focus-outline-color;
       .tab-icon{
         color:white;
       }
