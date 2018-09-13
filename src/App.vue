@@ -15,7 +15,6 @@
       <google-map
         v-bind:selected-place="AppData.selectedPlace"
         v-bind:reviews="AppData.savedReviews"
-        v-on:start-nearby-search="onStartNearbySearch()"
         v-on:get-local-places="updateResultsList"
         v-on:click-map-point="clickMapPoint"
       ></google-map>
@@ -140,9 +139,6 @@ export default {
           AppStore.addFirstResult(this.AppData.selectedPlace)
         }
       }
-    },
-    onStartNearbySearch: function () {
-      AppStore.setIsLoading((this.AppData.activeTab === TAB_NEARBY))
     },
     clickMapPoint: function (place) {
       // user selects a point of interest on the GoogleMap

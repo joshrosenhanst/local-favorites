@@ -187,7 +187,7 @@ export default {
         this.$emit('map-bounds-changed', { bounds: mapBounds })
       },
       getLocalPlaces: function (center) {
-        this.$emit('start-nearby-search');
+        AppStore.setIsLoading((this.AppData.activeTab === 0))
         let service = new google.maps.places.PlacesService(this.mapObject);
         service.nearbySearch({
           bounds: this.mapObject.getBounds(),
