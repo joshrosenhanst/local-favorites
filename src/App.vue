@@ -5,7 +5,6 @@
       <app-sidebar
         v-bind:favorites-list="favoritesList"
 
-        v-on:change-tab="changeTab($event.value)"
         v-on:set-review="saveReview"
         v-on:select-result="selectResult"
         v-on:toggle-note-form="toggleNoteForm"
@@ -70,9 +69,6 @@ export default {
     getIndexByPlaceID: function (place_id, array){
       return _findIndex(array, { place_id: place_id })
     },
-    changeTab: function (newIndex) {
-      AppStore.setActiveTab(newIndex)
-    },
     saveReview: function (event) {
       // create or update the review in the savedReviews array
       AppStore.setReview(event.place_id, event)
@@ -125,7 +121,7 @@ export default {
         }
       }
       AppStore.setIsLoading(false);
-      this.scrollListToPlace();
+      this.focusOnPlaceResult();
     },
     selectResult: function (place) {
       // user selects a place from the ResultsList
@@ -162,16 +158,17 @@ export default {
         }
       }
       
-      this.scrollListToPlace();
+      this.focusOnPlaceResult();
     },
-    scrollListToPlace: function () {
+    focusOnPlaceResult: function () {
       let map_sidebar = document.getElementById('map-sidebar');
-      //delay the scroll work until the DOM has fully updated
+      // wait a tick for the DOM to be fully updated
       this.$nextTick(function() {
         let element_id = (this.AppData.activeTab === TAB_FAVORITES?'favorites-list':'nearby-list');
         let parent_element = document.getElementById(element_id);
         let selected_element = parent_element.getElementsByClassName('result-display selected')[0];
         if(selected_element){
+          // focus the element, which will also appropriately scroll the list
           selected_element.focus();
         }
       });
@@ -192,26 +189,7 @@ export default {
 
       // open the new form
       AppStore.setSelectedPlace( Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } ))
-    },
-    onChangeTab(index) {
-      // if the tab is changed to "My Favorites", check if the selectedPlace is in the favoritesList
-      // if true, set the selectedPlace to that array item
-      // if not, set the selectedPlace to the first favoritesList result
-      if(index === TAB_FAVORITES){
-        let firstFavorite = ( this.favoritesList.length?this.favoritesList[0]:{} )
-        if(this.AppData.selectedPlace){
-          let favoriteIndex = this.getIndexByPlaceID(this.AppData.selectedPlace.place_id, this.favoritesList)
-          if (favoriteIndex >= 0) {
-            AppStore.setSelectedPlace(this.favoritesList[matchedFavoritesIndex]);
-          }else{
-            AppStore.setSelectedPlace(firstFavorite);
-          }
-        }else{
-          AppStore.setSelectedPlace(firstFavorite);
-        }
-      }
     }
-
   },
   created: function () {
     // get localstorage review data

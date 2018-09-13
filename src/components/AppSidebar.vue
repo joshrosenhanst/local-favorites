@@ -3,13 +3,21 @@
     <nav class="tabs is-fullwidth is-toggle">
       <ul>
         <li v-bind:class="{ 'is-active':(AppData.activeTab === 0) }">
-          <a v-on:click="tabClick(0)">
+          <a tabindex="0"
+            v-on:click="changeTab(0)" 
+            v-on:keydown.enter.prevent="changeTab(0)" 
+            v-on:keydown.space.prevent="changeTab(0)" 
+          >
             <font-awesome-icon v-bind:icon="['fas','map-marker-alt']" class="tab-icon is-nearby"></font-awesome-icon>
             <span class="tab_nearby-text">Nearby</span>
           </a>
         </li>
         <li v-bind:class="{ 'is-active':(AppData.activeTab === 1) }">
-          <a v-on:click="tabClick(1)">
+          <a tabindex="0"
+            v-on:click="changeTab(1)"
+            v-on:keydown.enter.prevent="changeTab(1)" 
+            v-on:keydown.space.prevent="changeTab(1)" 
+          >
             <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
             <span class="tab_favorites-text">My Favorites</span>
           </a>
@@ -75,11 +83,7 @@ export default {
       if (this.AppData.activeTab === newIndex) return
 
       this.tabTransitionName = (newIndex < this.AppData.activeTab ? 'slide-next' : 'slide-prev');
-      this.$emit('change-tab', { value: newIndex })
-    },
-    tabClick(value) {
-      this.$emit('input', value)
-      this.changeTab(value)
+      AppStore.setActiveTab(newIndex)
     }
   }
 }
@@ -103,18 +107,25 @@ nav.tabs{
   font-weight:bold;
   margin-bottom:-1px;
   &.is-toggle{
+    li a{
+      border:0;
+      border-bottom:4px solid transparent;
+      &:hover,&:focus{
+        background-color:$grey-lighter;
+      }
+      &:focus,&.is-focused{
+        border-color:$focus-outline-color;
+      }
+    }
     li.is-active a{
       background-color:$primary;
-      border:0;
       color:white;
+      border-color:$primary;
       .tab-icon{
         color:white;
       }
-    }
-    a{
-      border:0;
-      &:hover,&:focus{
-        background-color:$grey-lighter;
+      &:focus,&.is-focused{
+        border-color:$focus-outline-color;
       }
     }
   }

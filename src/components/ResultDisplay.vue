@@ -149,6 +149,7 @@ export default {
   &:focus,&.is-focused{
     background-color:$white-ter;
     outline:2px solid $focus-outline-color;
+    outline-width:2px 0;
     outline-offset:-2px;
   }
   &.selected{
