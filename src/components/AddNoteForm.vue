@@ -10,12 +10,10 @@
               v-bind:stars="formStars"
               v-on:set-stars="setStars"
             ></StarRating>
-          <b-field message="">
-            <b-input type="textarea" placeholder="Add a note..." size="is-small"
-              v-model="formNotes"
-            ></b-input>
-          </b-field>
-          <b-field grouped position="is-centered">
+          <div class="field">
+            <textarea class="textarea is-small" placeholder="Add a note..." v-model="formNotes"></textarea>
+          </div>
+          <div class="field is-grouped-centered is-grouped">
             <div class="control">
               <button class="button is-success is-small" type="submit">
                 <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
@@ -30,7 +28,7 @@
                 <span>Cancel</span>
               </button>
             </div>
-          </b-field>
+          </div>
         </form>
       </div>
     </transition>
