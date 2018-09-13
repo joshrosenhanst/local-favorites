@@ -74,7 +74,6 @@ export default {
       // create or update the review in the savedReviews array
       AppStore.setReview(event.place_id, event)
 
-      console.log({ stars:event.stars, notes:event.notes, saved: event.saved })
       // update the resultsList array with the new review values
       AppStore.updateResult(event.place_id, { stars:event.stars, notes:event.notes, saved: event.saved })
 
@@ -130,7 +129,6 @@ export default {
       // do a sanity check to make sure they arent just clicking the same location
       // update the selectedPlace object
       // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-      console.log("select result")
       if(place.place_id !== this.AppData.selectedPlace.place_id) {
         AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false }))
       }
@@ -139,7 +137,6 @@ export default {
     addMissingSelectedPlace: function () {
       if(this.AppData.activeTab === TAB_NEARBY){
         // if the selectedPlace object is not in the resultList, add it to the front of the array
-        console.log(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList))
         if(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList)){
           AppStore.addFirstResult(this.AppData.selectedPlace)
         }

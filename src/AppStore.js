@@ -60,7 +60,6 @@ const AppStore = {
 
     // splice the new object into the resultsList array
     if (resultIndex >= 0) {
-      console.log(this.state.resultsList[resultIndex].name)
       let newResult = Object.assign({}, this.state.resultsList[resultIndex], newValues)
       this.state.resultsList.splice(resultIndex, 1, newResult)
     }
