@@ -31,7 +31,7 @@
       </div>
       <transition name="slide-in">
       <div class="result-buttons-section" v-show="isSelected">
-        <button class="side-button result-favorite"
+        <button class="side-button result-favorite" type="button"
           v-bind:class="[ result.saved?'is-saved':'' ]"
           v-bind:title="saveButtonText"
           v-on:click="toggleSaveStatus(result)"
@@ -40,7 +40,7 @@
           <div class="button-icon"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']" ></font-awesome-icon></div>
           <div class="button-text">{{ saveButtonText }}</div>
         </button>
-        <button class="side-button result-add-note"
+        <button class="side-button result-add-note" type="button"
           v-bind:class="[ isOpen ? 'is-active' : '', (result.notes || result.stars)?'has-note':'' ]"
           v-bind:title="noteButtonText"
           v-on:click.stop="toggleNoteForm(result)" 

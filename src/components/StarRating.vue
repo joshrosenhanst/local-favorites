@@ -12,7 +12,7 @@
       </span>
     </template>
     <template v-else>
-      <button class="star-rating-icon star control-button"
+      <button class="star-rating-icon star control-button" type="button"
         v-for="k in 5"
         v-bind:key="'star_'+k"
         v-bind:class="[stars >= k ? 'full' : 'empty', (currentHover >= k) ? 'is-hovered':'', 'is-editable']"
@@ -27,7 +27,7 @@
       >
         <font-awesome-icon v-bind:icon="[ (stars >= k||currentHover >= k) ? 'fas':'far','star' ]" class="star-icon"></font-awesome-icon>
       </button>
-      <button class="star-rating-icon ban-icon control-button" title="Remove Star Rating"
+      <button class="star-rating-icon ban-icon control-button" title="Remove Star Rating" type="button"
         v-if="stars"
         v-on:click="setStars(0)"
         v-on:keydown.enter.self.prevent="setStars(0)"
