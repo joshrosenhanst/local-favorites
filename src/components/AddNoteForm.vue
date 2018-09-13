@@ -1,6 +1,6 @@
 <template>
 <section class="add-note-form">
-  <b-collapse v-bind:open="isOpen">
+  <b-collapse v-bind:open="isOpen" animation="slide-down">
     <form v-on:submit.prevent="submitReview" class="box note-box">
       <h4 class="title">Add a Note and a Star Rating for this location</h4>
       <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>

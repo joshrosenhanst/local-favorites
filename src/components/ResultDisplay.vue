@@ -27,6 +27,7 @@
           <!--<a class="result-map"  v-if="result.url" v-bind:href="result.url" title="Open in Google Maps"><font-awesome-icon icon="map-marked-alt"></font-awesome-icon></a>
           <a class="result-link" v-if="result.website" v-bind:href="result.website" title="Open Website"><font-awesome-icon icon="external-link-alt"></font-awesome-icon></a>-->
       </div>
+      <transition name="slide-in">
       <div class="result-buttons-section" v-show="isSelected">
         <button class="side-button result-favorite"
           v-bind:class="[ result.saved?'is-saved':'' ]"
@@ -45,6 +46,7 @@
           <div class="button-text">{{ noteButtonText }}</div>
         </button>
       </div>
+      </transition>
     </div>
     <div class="result-notes-section" v-if="isSelected">
       <add-note-form
@@ -167,6 +169,7 @@ export default {
     }
     .result-buttons-section{
       background-color:$white-bis;
+      opacity:1;
     }
   }
 }
@@ -216,7 +219,6 @@ export default {
   display:flex;
   flex-direction:column;
   border-left:1px solid $border;
-  transition:display 700ms ease;
   .side-button{
     flex-grow:0;
     text-align:center;

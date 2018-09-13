@@ -14,6 +14,7 @@ Leave:
 */
 $speed-slow: 150ms !default;
 $speed-slower: 250ms !default;
+$speed-slowest: 750ms !default;
 $easing: ease-out;
 
 // Fade out
@@ -155,12 +156,6 @@ $easing: ease-out;
     transition: transform $speed-slower cubic-bezier(0.785, 0.135, 0.150, 0.860);
 }
 
-.slide-down-enter-active,
-.slide-down-leave-active {
-    transition: max-height $speed-slower ease-out;
-    position:relative;
-    overflow:hidden;
-}
 // left
 .slide-prev-leave-to, .slide-next-enter {
     transform: translate3d(-100%, 0, 0);
@@ -172,4 +167,32 @@ $easing: ease-out;
     transform: translate3d(100%, 0, 0);
     position: absolute;
     width: 100%;
+}
+
+// slide-down: the max-height will go from 0 to 500px (should be a value larger than the container actually needs). max-height requires a static value (instead of 100%) for the animation to look right
+.slide-down-enter-active,
+.slide-down-leave-active {
+    transition: max-height $speed-slower $easing;
+    //position:relative;
+    overflow:hidden;
+}
+.slide-down-enter,
+.slide-down-leave-to{
+    max-height:0;
+}
+.slide-down-enter-to, .slide-down-leave{
+    max-height:500px;
+}
+
+// slide-in: the max-width will go from 0 to 100% over 750ms effectively sliding the element in. No slide-out transition on leave.
+.slide-in-enter-active {
+    transition:max-width $speed-slowest $easing;
+}
+
+.slide-in-enter,
+.slide-in-leave-to{
+    max-width:0;
+}
+.slide-in-enter-to{
+    max-width:100%;
 }
