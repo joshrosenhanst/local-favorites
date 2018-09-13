@@ -105,7 +105,7 @@ nav.tabs{
   border-width:0;
   border-bottom:1px solid $border;
   font-weight:bold;
-  margin-bottom:-1px;
+  margin-bottom:1px;
   &.is-toggle{
     li a{
       border:0;

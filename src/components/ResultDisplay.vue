@@ -130,7 +130,6 @@ export default {
 
 <style lang="scss" scoped>
 .result-display{
-  position:relative;
   border-bottom: 1px solid $border;
   border-left: 0;
   border-right: 0;
@@ -140,6 +139,7 @@ export default {
   align-items:stretch;
   //flex:none;
   cursor:pointer;
+  overflow:hidden;
   &:first-child{
     //border-top: 1px solid $border;
   }
@@ -149,18 +149,16 @@ export default {
   &:focus,&.is-focused{
     background-color:$white-ter;
     outline:2px solid $focus-outline-color;
-    outline-width:2px 0;
-    outline-offset:-2px;
+    outline-offset:0px;
   }
   &.selected{
-    //background-color:$white-bis;
     background-color:$primary;
-    //border-top: 1px solid $border;
-    border-color:$border;
+    border-color:$focus-outline-color;
+    outline:2px solid $focus-outline-color;
+    outline-offset:0px;
     cursor:default;
     color:$white-bis;
     .result-name{
-      //color:$primary;
       color:white;
     }
     .result-notes{
