@@ -172,7 +172,7 @@ export default {
         let parent_element = document.getElementById(element_id);
         let selected_element = parent_element.getElementsByClassName('result-display selected')[0];
         if(selected_element){
-          map_sidebar.scrollTop = selected_element.offsetTop;
+          selected_element.focus();
         }
       });
     },
