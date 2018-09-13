@@ -1,36 +1,40 @@
 <template>
 <section class="add-note-form">
-  <b-collapse v-bind:open="isOpen" animation="slide-down">
-    <form v-on:submit.prevent="submitReview" class="box note-box">
-      <h4 class="title">Add a Note and a Star Rating for this location</h4>
-      <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
-        <StarRating
-          v-bind:stars="formStars"
-          v-on:set-stars="setStars"
-        ></StarRating>
-      <b-field message="">
-        <b-input type="textarea" placeholder="Add a note..." size="is-small"
-          v-model="formNotes"
-        ></b-input>
-      </b-field>
-      <b-field grouped position="is-centered">
-        <div class="control">
-          <button class="button is-success is-small" type="submit">
-            <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
-            <span>Save Note</span>
-          </button>
-        </div>
-        <div class="control">
-          <button class="button is-danger is-small" type="button"
-            v-on:click.prevent="cancelReview"
-          >
-            <span class="icon"><font-awesome-icon icon="ban"></font-awesome-icon></span>
-            <span>Cancel</span>
-          </button>
-        </div>
-      </b-field>
-    </form>
-  </b-collapse>
+  <div class="collapse">
+    <transition name="slide-down">
+      <div class="collapse-content" v-show="isOpen">
+        <form v-on:submit.prevent="submitReview" class="box note-box">
+          <h4 class="title">Add a Note and a Star Rating for this location</h4>
+          <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
+            <StarRating
+              v-bind:stars="formStars"
+              v-on:set-stars="setStars"
+            ></StarRating>
+          <b-field message="">
+            <b-input type="textarea" placeholder="Add a note..." size="is-small"
+              v-model="formNotes"
+            ></b-input>
+          </b-field>
+          <b-field grouped position="is-centered">
+            <div class="control">
+              <button class="button is-success is-small" type="submit">
+                <span class="icon"><font-awesome-icon icon="check"></font-awesome-icon></span>
+                <span>Save Note</span>
+              </button>
+            </div>
+            <div class="control">
+              <button class="button is-danger is-small" type="button"
+                v-on:click.prevent="cancelReview"
+              >
+                <span class="icon"><font-awesome-icon icon="ban"></font-awesome-icon></span>
+                <span>Cancel</span>
+              </button>
+            </div>
+          </b-field>
+        </form>
+      </div>
+    </transition>
+  </div>
 </section>
 </template>
 
