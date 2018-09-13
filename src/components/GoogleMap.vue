@@ -240,9 +240,6 @@ export default {
 <style lang="scss" scoped>
   #google-map-container {
     flex-grow:1;
-    *:focus{
-      border:1px solid $blue;
-    }
   }
   #map-search-field{
     width:500px;
