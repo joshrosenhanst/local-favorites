@@ -96,5 +96,9 @@ export default {
   }
   .textarea{
   }
+  .button:focus,.button.is-focused{
+    outline:1px solid $focus-outline-color;
+    outline-offset:1px;
+  }
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="result-display"
+  <div class="result-display" tabindex="0"
     v-bind:class="[ isSelected ? 'selected' : '' ]"
     v-on:click="$emit('select-result',result)"
   >
@@ -140,8 +140,12 @@ export default {
     //border-top: 1px solid $border;
   }
   &:hover{
-    background-color:#ffaafa;
     background-color:$white-ter;
+  }
+  &:focus{
+    background-color:$white-ter;
+    outline:2px solid $focus-outline-color;
+    outline-offset:-2px;
   }
   &.selected{
     //background-color:$white-bis;
@@ -193,6 +197,11 @@ export default {
 }
 .result-external-link{
   font-size:0.8rem;
+  .external-link-icon:focus{
+    outline:1px solid $focus-outline-color;
+    outline-offset: 2px;
+    text-decoration:underline;
+  }
 }
 .result-name{
   font-size: 1rem;
@@ -216,7 +225,8 @@ export default {
   flex-shrink:1;
   display:flex;
   flex-direction:column;
-  border-left:1px solid $border;
+  //border-left:1px solid $border;
+  padding-left:1px;
   .side-button{
     flex-grow:0;
     text-align:center;
@@ -231,6 +241,7 @@ export default {
     color:$link;
     outline:0;
     transition:background-color 500ms ease, color 500ms ease;
+    margin-bottom:1px;
     &::-moz-focus-inner{
       border-style: none;
       padding: 0;
@@ -245,7 +256,10 @@ export default {
       outline:none;
     }
     &.is-focused,&:focus{
-      outline:none;
+      background-color:$grey-lightest;
+      color:$link-hover;
+      outline:1px solid $hover-outline-color;
+      outline-offset: -5px;
     }
     &.is-saved{
       color:$orange;

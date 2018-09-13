@@ -51,7 +51,6 @@ export default {
 <style lang="scss">
 .tab-content {
   position: relative;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   padding: 0;
