@@ -1,6 +1,5 @@
 import Vue from 'vue'
 import App from './App.vue'
-import Buefy from 'buefy'
 import _ from 'lodash'
 import * as VueGoogleMaps from 'vue2-google-maps'
 import { library } from '@fortawesome/fontawesome-svg-core'
@@ -9,11 +8,7 @@ import { faBookmark as farBookmark, faStar as farStar, faStickyNote as farSticky
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import './registerServiceWorker'
 import './scss/app.scss'
-// import 'buefy/lib/buefy.css'
 
-Vue.use(Buefy, {
-  defaultIconPack: 'fas'
-})
 Vue.use(VueGoogleMaps, {
   load: {
     key: process.env.VUE_APP_MAP_API,
