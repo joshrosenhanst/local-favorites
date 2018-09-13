@@ -154,6 +154,7 @@ export default {
   &.selected{
     background-color:$primary;
     border-color:$focus-outline-color;
+    border:0;
     outline:2px solid $focus-outline-color;
     outline-offset:0px;
     cursor:default;
