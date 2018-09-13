@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { findIndex as _findIndex } from 'lodash'
 
 const AppStore = {
   state: {
@@ -41,7 +41,7 @@ const AppStore = {
   */
   setReview: function (placeId, newReview) {
     // look up the review place_id in savedReviews
-    let reviewIndex = _.findIndex(this.state.savedReviews, { place_id: placeId })
+    let reviewIndex = _findIndex(this.state.savedReviews, { place_id: placeId })
 
     // update the entry in savedReview (splice replaces the item in the array, which maintains Vue reactivity), or add the object if it doesn't exist
     if (reviewIndex >= 0) {
@@ -56,7 +56,7 @@ const AppStore = {
   */
   updateResult: function (placeId, newValues) {
     // look up the review place_id in resultsList
-    let resultIndex = _.findIndex(this.state.resultsList, { place_id: placeId })
+    let resultIndex = _findIndex(this.state.resultsList, { place_id: placeId })
 
     // splice the new object into the resultsList array
     if (resultIndex >= 0) {

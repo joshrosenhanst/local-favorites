@@ -41,6 +41,7 @@
 </template>
 
 <script>
+import { findIndex as _findIndex } from 'lodash'
 import AppStore from '../AppStore.js'
 import StarRating from './StarRating.vue'
 
@@ -154,7 +155,7 @@ export default {
         }
       },
       getReviewForPlace: function (place) {
-        let matchedReviewIndex = _.findIndex(this.reviews, { place_id:place.place_id });
+        let matchedReviewIndex = _findIndex(this.reviews, { place_id:place.place_id });
         if (matchedReviewIndex >= 0) {
           // if it exists, combine add the review to the saved place
           place = Object.assign({}, place, {

@@ -31,6 +31,7 @@
 </template>
 
 <script>
+import { findIndex as _findIndex, find as _find } from 'lodash'
 import AppStore from './AppStore.js'
 import AppHeader from './components/AppHeader.vue'
 import AppSidebar from './components/AppSidebar.vue'
@@ -62,10 +63,10 @@ export default {
   methods: {
     isPlaceIDInArray: function (place_id,array){
       // check if a place_id is in an array, return a boolean
-      return !!( place_id && _.find(array, { place_id: place_id }) )
+      return !!( place_id && _find(array, { place_id: place_id }) )
     },
     getIndexByPlaceID: function (place_id, array){
-      return _.findIndex(array, { place_id: place_id })
+      return _findIndex(array, { place_id: place_id })
     },
     changeTab: function (newIndex) {
       AppStore.setActiveTab(newIndex)
