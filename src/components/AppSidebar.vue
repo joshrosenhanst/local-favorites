@@ -18,13 +18,13 @@
     </nav>
     <section class="tab-content">
       <app-tab-item
+        id="nearby-list-tab-item"
         v-bind:active="(AppData.activeTab === 0)"
         v-bind:tab-transition-name="tabTransitionName"
         v-bind:list-id="'nearby-list'"
         v-bind:results="AppData.resultsList"
 
         v-on:set-review="$emit('set-review',$event)"
-        v-on:toggle-save-status="$emit('set-review',$event)"
         v-on:select-result="$emit('select-result',$event)"
         v-on:toggle-note-form="$emit('toggle-note-form')"
         v-on:open-different-note-form="$emit('open-different-note-form',$event)"
@@ -33,13 +33,13 @@
         <template slot="no-results-text">Try searching in another area</template>
       </app-tab-item>
       <app-tab-item
+        id="favorites-list-tab-item"
         v-bind:active="(AppData.activeTab === 1)"
         v-bind:tab-transition-name="tabTransitionName"
         v-bind:list-id="'favorites-list'"
         v-bind:results="favoritesList"
 
         v-on:set-review="$emit('set-review',$event)"
-        v-on:toggle-save-status="$emit('set-review',$event)"
         v-on:select-result="$emit('select-result',$event)"
         v-on:toggle-note-form="$emit('toggle-note-form')"
         v-on:open-different-note-form="$emit('open-different-note-form',$event)"

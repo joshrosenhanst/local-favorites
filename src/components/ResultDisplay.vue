@@ -119,15 +119,6 @@ export default {
     mapLinkURL: function () {
       let query = this.result.geometry?this.getLatLangURL(this.result.geometry.location):this.result.name;
       return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.result.place_id);
-    },
-    formObject: function () {
-      let place = this.isSelected?this.AppData.selectedPlace:this.result;
-      return { 
-        notes: place.notes,
-        stars: place.stars,
-        isOpen: (this.isSelected && place.isNoteFormOpen),
-        saved: place.saved
-      };
     }
   }
 }

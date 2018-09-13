@@ -7,7 +7,6 @@
 
         v-on:change-tab="changeTab($event.value)"
         v-on:set-review="saveReview"
-        v-on:toggle-save-status="saveReview"
         v-on:select-result="selectResult"
         v-on:toggle-note-form="toggleNoteForm"
         v-on:open-different-note-form="openDifferentNoteForm"
@@ -75,6 +74,7 @@ export default {
       // create or update the review in the savedReviews array
       AppStore.setReview(event.place_id, event)
 
+      console.log({ stars:event.stars, notes:event.notes, saved: event.saved })
       // update the resultsList array with the new review values
       AppStore.updateResult(event.place_id, { stars:event.stars, notes:event.notes, saved: event.saved })
 
@@ -139,6 +139,7 @@ export default {
     addMissingSelectedPlace: function () {
       if(this.AppData.activeTab === TAB_NEARBY){
         // if the selectedPlace object is not in the resultList, add it to the front of the array
+        console.log(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList))
         if(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList)){
           AppStore.addFirstResult(this.AppData.selectedPlace)
         }

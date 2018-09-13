@@ -7,7 +7,6 @@
         v-bind:is-tab-active="active"
 
         v-on:set-review="$emit('set-review',$event)"
-        v-on:toggle-save-status="$emit('set-review',$event)"
         v-on:select-result="$emit('select-result',$event)"
         v-on:toggle-note-form="$emit('toggle-note-form')"
         v-on:open-different-note-form="$emit('open-different-note-form',$event)"

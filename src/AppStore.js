@@ -44,7 +44,7 @@ const AppStore = {
     let reviewIndex = _.findIndex(this.state.savedReviews, { place_id: placeId })
 
     // update the entry in savedReview (splice replaces the item in the array, which maintains Vue reactivity), or add the object if it doesn't exist
-    if (reviewIndex) {
+    if (reviewIndex >= 0) {
       this.state.savedReviews.splice(reviewIndex, 1, newReview)
     } else {
       this.state.savedReviews.push(newReview)
@@ -59,7 +59,8 @@ const AppStore = {
     let resultIndex = _.findIndex(this.state.resultsList, { place_id: placeId })
 
     // splice the new object into the resultsList array
-    if (resultIndex) {
+    if (resultIndex >= 0) {
+      console.log(this.state.resultsList[resultIndex].name)
       let newResult = Object.assign({}, this.state.resultsList[resultIndex], newValues)
       this.state.resultsList.splice(resultIndex, 1, newResult)
     }
