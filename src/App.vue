@@ -20,13 +20,15 @@
         v-on:get-local-places="updateResultsList"
         v-on:click-map-point="clickMapPoint"
       ></google-map>
-      <div id="autocomplete-search-container">
-        <gmap-autocomplete-search></gmap-autocomplete-search>
-      </div>
     </main>
     <footer id="app-footer">
       <p>Your Local Notes and star ratings are stored locally in your browser using HTML5 LocalStorage. Map and location data provided by Google.</p>
     </footer>
+    <div id="hidden-controls">
+      <div id="autocomplete-search-container">
+        <gmap-autocomplete-search></gmap-autocomplete-search>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -311,8 +313,10 @@ html{
     }
   }
 }
+#hidden-controls{
+  display:none;
+}
 #autocomplete-search-container{
-  float:left;
   padding:5px 10px;
   background:white;
   box-shadow:rgba(0, 0, 0, 0.3) 0px 1px 4px -1px;
