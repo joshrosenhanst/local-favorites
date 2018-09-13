@@ -2,6 +2,8 @@
   <div class="result-display" tabindex="0"
     v-bind:class="[ isSelected ? 'selected' : '' ]"
     v-on:click="$emit('select-result',result)"
+    v-on:keydown.enter.self.prevent="$emit('select-result',result)"
+    v-on:keydown.space.self.prevent="$emit('select-result',result)"
   >
     <div class="result-main-section">
       <div class="result-info-section">
@@ -31,6 +33,7 @@
           v-bind:class="[ result.saved?'is-saved':'' ]"
           v-bind:title="saveButtonText"
           v-on:click="toggleSaveStatus(result)"
+          v-on:keydown.enter.prevent="toggleSaveStatus(result)"
         >
           <div class="button-icon"><font-awesome-icon v-bind:icon="[result.saved?'fas':'far','bookmark']" ></font-awesome-icon></div>
           <div class="button-text">{{ saveButtonText }}</div>
@@ -39,6 +42,7 @@
           v-bind:class="[ isOpen ? 'is-active' : '', (result.notes || result.stars)?'has-note':'' ]"
           v-bind:title="noteButtonText"
           v-on:click.stop="toggleNoteForm(result)" 
+          v-on:keydown.enter.prevent="toggleNoteForm(result)"
         >
           <div class="button-icon"><font-awesome-icon v-bind:icon="[(result.notes || result.stars)?'fas':'far','edit']"></font-awesome-icon></div>
           <div class="button-text">{{ noteButtonText }}</div>

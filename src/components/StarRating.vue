@@ -17,7 +17,8 @@
         v-bind:key="'star_'+k"
         v-bind:class="[stars >= k ? 'full' : 'empty', (currentHover >= k) ? 'is-hovered':'', 'is-editable']"
         v-on:click="setStars(k)"
-        v-on:keydown.enter.prevent="setStars(k)"
+        v-on:keydown.enter.self.prevent="setStars(k)"
+        v-on:keyup.space.self.prevent="setStars(k)"
         v-on:mouseenter="currentHover = k"
         v-on:mouseleave="currentHover = 0"
         v-on:focus="currentHover = k"
@@ -29,7 +30,8 @@
       <button class="star-rating-icon ban-icon control-button" title="Remove Star Rating"
         v-if="stars"
         v-on:click="setStars(0)"
-        v-on:keydown.enter.prevent="setStars(0)"
+        v-on:keydown.enter.self.prevent="setStars(0)"
+        v-on:keyup.space.self.prevent="setStars(0)"
       >
         <font-awesome-icon icon="ban"></font-awesome-icon>
       </button>
