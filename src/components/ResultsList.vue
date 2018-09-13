@@ -1,11 +1,12 @@
 <template>
-<div class="results-list-container" v-bind:id="listId">
+<div class="results-list-container" v-bind:id="listId" ref="resultsRef">
   <result-display
     v-for="(result,index) in results"
     v-bind:key="result.place_id"
     v-bind:result="result"
     v-bind:index="index"
 
+    v-on:focus-result="focusResult($event)"
     v-on:select-result="$emit('select-result',$event)"
     v-on:set-review="$emit('set-review',$event)"
     v-on:toggle-note-form="$emit('toggle-note-form')"
@@ -48,6 +49,16 @@ export default {
   methods: {
     cancelLoading: function () { 
       AppStore.setIsLoading(false);
+    },
+    focusResult: function (index) {
+      if(index >= 0 && index < this.results.length){
+        // go through the list of .result-display results and focus the index
+        this.$refs.resultsRef.getElementsByClassName('result-display')[index].focus();
+        if(index === 0){
+          // if we get to the top, set the scrollbar to the top because sometimes the browser will focus the element without scrolling enough to show the full element
+          document.getElementById('map-sidebar').scrollTop = 0;
+        }
+      }
     }
   }
 }

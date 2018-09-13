@@ -4,6 +4,8 @@
     v-on:click="$emit('select-result',result)"
     v-on:keydown.enter.self.prevent="$emit('select-result',result)"
     v-on:keydown.space.self.prevent="$emit('select-result',result)"
+    v-on:keydown.up.self.prevent="$emit('focus-result',(index-1))"
+    v-on:keydown.down.self.prevent="$emit('focus-result',(index+1))"
   >
     <div class="result-main-section">
       <div class="result-info-section">
