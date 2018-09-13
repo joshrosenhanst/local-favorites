@@ -2,23 +2,38 @@
   <span class="star-rating"
     v-bind:title="stars?(`Rated ${stars} stars`):null"
   >
-    <span class="star-rating-icon star"
-      v-for="n in 5"
-      v-bind:key="'star_'+n"
-      v-bind:class="[stars >= n ? 'full' : 'empty', (currentHover >= n && !readonly) ? 'is-hovered':'', readonly ? 'readonly' : 'is-editable']"
-      v-on:click="setStars(n)"
-      v-on:mouseenter="currentHover = n"
-      v-on:mouseleave="currentHover = 0"
-      v-bind:title="readonly? null:(`Rate ${n} stars`)"
-    >
-      <font-awesome-icon v-bind:icon="[((stars >= n)||(currentHover >= n && !readonly))?'fas':'far','star']" class="star-icon"></font-awesome-icon>
-    </span>
-    <span class="star-rating-icon ban-icon" title="Remove Star Rating"
-      v-if="stars && !readonly"
-      v-on:click="setStars(0)"
-    >
-      <font-awesome-icon icon="ban"></font-awesome-icon>
-    </span>
+    <template v-if="readonly">
+      <span class="star-rating-icon star" v-if="readonly"
+        v-for="n in 5"
+        v-bind:key="'star_'+n"
+        v-bind:class="[stars >= n ? 'full' : 'empty', 'readonly']"
+      >
+        <font-awesome-icon v-bind:icon="[ (stars >= n) ? 'fas':'far','star' ]" class="star-icon"></font-awesome-icon>
+      </span>
+    </template>
+    <template v-else>
+      <button class="star-rating-icon star control-button"
+        v-for="k in 5"
+        v-bind:key="'star_'+k"
+        v-bind:class="[stars >= k ? 'full' : 'empty', (currentHover >= k) ? 'is-hovered':'', 'is-editable']"
+        v-on:click="setStars(k)"
+        v-on:keydown.enter.prevent="setStars(k)"
+        v-on:mouseenter="currentHover = k"
+        v-on:mouseleave="currentHover = 0"
+        v-on:focus="currentHover = k"
+        v-on:blur="currentHover = 0"
+        v-bind:title="`Rate ${k} stars`"
+      >
+        <font-awesome-icon v-bind:icon="[ (stars >= k||currentHover >= k) ? 'fas':'far','star' ]" class="star-icon"></font-awesome-icon>
+      </button>
+      <button class="star-rating-icon ban-icon control-button" title="Remove Star Rating"
+        v-if="stars"
+        v-on:click="setStars(0)"
+        v-on:keydown.enter.prevent="setStars(0)"
+      >
+        <font-awesome-icon icon="ban"></font-awesome-icon>
+      </button>
+    </template>
   </span>
 </template>
 
@@ -61,16 +76,25 @@ export default {
   .star-rating-icon{
     display:inline-block;
     margin-right:5px;
-    &:hover{
+    &:hover,&.is-hovered,&:focus,&.is-focused{
       color:$red;
     }
     &.is-editable{
       font-size:1.3rem;
-      cursor: pointer;
+      //cursor: pointer;
+    }
+  }
+  .control-button{
+    background-color:transparent;
+    border:0;
+    padding:0;
+    cursor: pointer;
+    &:focus,&.is-focused{
+      outline:1px solid $focus-outline-color;
+      outline-offset:-1px;
     }
   }
   .ban-icon{
-    cursor: pointer;
     font-size:1.2rem;
     margin-left:5px;
     vertical-align: 0;

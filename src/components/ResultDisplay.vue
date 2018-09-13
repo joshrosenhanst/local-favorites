@@ -142,7 +142,7 @@ export default {
   &:hover{
     background-color:$white-ter;
   }
-  &:focus{
+  &:focus,&.is-focused{
     background-color:$white-ter;
     outline:2px solid $focus-outline-color;
     outline-offset:-2px;
@@ -197,10 +197,12 @@ export default {
 }
 .result-external-link{
   font-size:0.8rem;
-  .external-link-icon:focus{
-    outline:1px solid $focus-outline-color;
-    outline-offset: 2px;
-    text-decoration:underline;
+  .external-link-icon{
+    &:focus,&.is-focused{
+      outline:1px solid $focus-outline-color;
+      outline-offset: 2px;
+      text-decoration:underline;
+    }
   }
 }
 .result-name{
