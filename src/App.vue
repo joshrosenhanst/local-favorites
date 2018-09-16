@@ -93,7 +93,7 @@ export default {
       });
 
       // update localStorage
-      localStorage.setItem('local-reviews-savedReviews', JSON.stringify(this.AppData.savedReviews));
+      localStorage.setItem('local-favorites-savedReviews', JSON.stringify(this.AppData.savedReviews));
     },
     setLocationSaveStatus: function (event) {
       this.saveReview(event);
@@ -193,7 +193,7 @@ export default {
   },
   created: function () {
     // get localstorage review data
-    this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-reviews-savedReviews')) || []);
+    this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-favorites-savedReviews')) || []);
 
     // loop through savedReviews array and replace matching (by place_id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
     if(this.AppData.savedReviews.length){
