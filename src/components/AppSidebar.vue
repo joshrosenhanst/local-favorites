@@ -1,6 +1,6 @@
 <template>
   <aside id="map-sidebar">
-    <nav class="tabs is-fullwidth is-toggle">
+    <nav class="tabs is-fullwidth is-toggle" role="navigation">
       <ul>
         <li v-bind:class="{ 'is-active':(AppData.activeTab === 0) }">
           <a tabindex="0"
