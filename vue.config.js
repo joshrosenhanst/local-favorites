@@ -1,5 +1,5 @@
 module.exports = {
-  baseUrl: process.env.NODE_ENV === 'production' ? '/joshrosenhanst.com/local-favorites/' : '/',
+  baseUrl: process.env.NODE_ENV === 'production' ? '/local-favorites/' : '/',
   chainWebpack: (config) => {
     const svgRule = config.module.rule('svg')
 
