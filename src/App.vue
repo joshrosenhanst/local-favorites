@@ -63,7 +63,7 @@ export default {
   methods: {
     isPlaceIDInArray: function (place_id,array){
       // check if a place_id is in an array, return a boolean
-      return !!( place_id && _find(array, { place_id: place_id }) )
+      return ( place_id && _find(array, { place_id: place_id }) )
     },
     getIndexByPlaceID: function (place_id, array){
       return _findIndex(array, { place_id: place_id })
