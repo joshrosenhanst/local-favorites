@@ -1,6 +1,14 @@
 @import url('https://fonts.googleapis.com/css?family=Roboto');
 @import "~bulma/sass/utilities/_all";
 @import "_variables.scss";
+@import "_header.scss";
 @import "_loading.scss";
 @import "_animations.scss";
-@import "~bulma";
+
+// use only the required bulma styles, instead of the all bulma files
+@import "~bulma/sass/base/_all";
+@import "~bulma/sass/elements/form";
+@import "~bulma/sass/elements/icon";
+@import "~bulma/sass/elements/button";
+@import "~bulma/sass/components/tabs";
+//@import "~bulma";

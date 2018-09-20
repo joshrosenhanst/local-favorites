@@ -3,7 +3,7 @@
   <div class="collapse">
     <transition name="slide-down">
       <div class="collapse-content" v-show="isOpen">
-        <form v-on:submit.prevent="submitReview" class="box note-box">
+        <form v-on:submit.prevent="submitReview" class="note-box">
           <h4 class="title">Add a Note and a Star Rating for this location</h4>
           <h5 class="subtitle">Your star ratings and notes are only visible to you.</h5>
             <StarRating
@@ -81,14 +81,17 @@ export default {
 
 <style lang="scss" scoped>
 .note-box{
+  color:#4a4a4a;
+  background-color: #ffffff;
   text-align:center;
   margin:0 auto 5px auto;
-  border-radius:0;
   padding:10px;
+  border-top:1px solid $border;
   .title{
     font-size:0.9rem;
     color:$primary;
     font-weight:500;
+    line-height:1.125;
   }
   .subtitle{
     font-size:0.8rem;

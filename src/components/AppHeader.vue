@@ -2,10 +2,8 @@
     <header id="app-header">
       <section class="hero">
         <div class="hero-body">
-          <div class="container">
             <h1 class="title"><font-awesome-icon class="title-icon" v-bind:icon="['fas','map-marker-alt']"></font-awesome-icon>Local Favorites</h1>
             <h2 class="subtitle">Save and review your favorite local places, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
-          </div>
         </div>
       </section>
     </header>
@@ -43,9 +41,7 @@ export default {
 
 <style lang="scss" scoped>
 #app-header {
-  //@media (min-width: 769px) {
     text-align:center;
-  //}
 }
 #random-predicate {
   background-color:#f5f5f5;
@@ -55,40 +51,5 @@ export default {
   color:$primary;
   -webkit-touch-callout: none;
   user-select: none;
-}
-h1.title{
-  font-size:1.5rem;
-  color:$primary;
-  font-weight:300;
-  margin-bottom:0;
-  @media (min-width: 426px) and (max-width:769px) {
-    font-size:2rem;
-    margin-bottom:1.5rem;
-  }
-  @media (min-width: 769px) {
-    font-size:2.5rem;
-    margin-bottom:1.5rem;
-  }
-  .title-icon{
-    margin-right:5px;
-  }
-}
-h2.subtitle{
-  font-size:1rem;
-  display:none;
-  margin-top:0;
-  @media (min-width: 426px) and (max-width:769px) {
-    display:block;
-  }
-  @media (min-width: 769px) {
-    font-size:1.25rem;
-    display:block;
-  }
-}
-.hero-body{
-  padding:15px;
-  @media (min-width: 769px) {
-    padding:1.5rem;
-  }
 }
 </style>
