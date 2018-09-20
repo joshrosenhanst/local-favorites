@@ -8,7 +8,7 @@
       id="google-map"
     >
       <gmap-info-window
-        v-bind:options="{ pixelOffset: { width: 0, height: -35 }, maxWidth:400 }"
+        v-bind:options="{ pixelOffset: { width: 0, height: -35 }, maxWidth:300 }"
         v-if="AppData.selectedPlace && AppData.selectedPlace.geometry"
         v-bind:position="AppData.selectedPlace.geometry.location"
         v-bind:opened="infoWindow.open"
