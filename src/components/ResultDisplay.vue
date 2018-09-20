@@ -139,9 +139,13 @@ export default {
   display:flex;
   flex-direction: column;
   align-items:stretch;
+  font-size:14px;
   //flex:none;
   cursor:pointer;
   overflow:hidden;
+  @media (min-width: 426px) {
+    font-size:1rem;
+  }
   &:first-child{
     //border-top: 1px solid $border;
   }
@@ -188,12 +192,15 @@ export default {
 }
 .result-info-section {
   flex-grow:1;
-  padding:10px;
+  padding:7px;
+  @media (min-width: 426px) {
+    padding:10px;
+  }
 }
 .bookmark-icon{
   float:right;
   margin-right:6px;
-  font-size:1rem;
+  font-size:1em;
   color:$orange;
 }
 .map-marker-icon{
@@ -202,7 +209,7 @@ export default {
   color:$red;
 }
 .result-external-link{
-  font-size:0.8rem;
+  font-size:0.8em;
   .external-link-icon{
     &:focus,&.is-focused{
       outline:1px solid $focus-outline-color;
@@ -212,16 +219,16 @@ export default {
   }
 }
 .result-name{
-  font-size: 1rem;
+  font-size: 1em;
   color: #4a4a4a;
   font-weight: 500;
   line-height: 1.25;
 }
 .result-address{
-  font-size:0.85rem;
+  font-size:0.85em;
 }
 .result-notes{
-  font-size:0.85rem;
+  font-size:0.85em;
   font-style:italic;
   border-left:2px solid $turquoise;
   color:$turquoise-dark;
@@ -244,12 +251,16 @@ export default {
     border-color:$border;
     background:transparent;
     border-radius:0;
-    padding:10px 6px;
-    width:70px;
+    padding:10px 0px;
+    width:65px;
     color:$link;
     outline:0;
     transition:background-color 500ms ease, color 500ms ease;
     margin-bottom:1px;
+    @media (min-width: 426px) {
+      padding:10px 6px;
+      width:70px;
+    }
     &::-moz-focus-inner{
       border-style: none;
       padding: 0;
@@ -284,7 +295,7 @@ export default {
     }
     .button-icon{
       width:100%;
-      font-size:1rem;
+      font-size:1em;
       margin:0 auto;
     }
     &.result-add-note .fa-edit{

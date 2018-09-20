@@ -110,11 +110,17 @@ nav.tabs{
     li a{
       border:0;
       border-bottom:4px solid transparent;
+      padding:5px;
+      font-size:14px;
       &:hover,&:focus{
         background-color:$grey-lighter;
       }
       &:focus,&.is-focused{
         border-color:$focus-outline-color;
+      }
+      @media (min-width: 426px) {
+        font-size:1rem;
+        padding:0.5em 1em;
       }
     }
     li.is-active a{

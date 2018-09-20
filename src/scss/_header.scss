@@ -20,9 +20,9 @@ section.hero{
     .hero-body{
         flex-grow: 1;
         flex-shrink: 0;
-        padding:15px;
+        padding:10px;
         @media (min-width: 769px) {
-        padding:1.5rem;
+            padding:1.5rem;
         }
     }
     h1.title{
