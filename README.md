@@ -9,19 +9,25 @@ Local Favorites is a Vue.js web app to save and review your favorite local place
 3. Create a `.env.local` file in the root directory and add the following line: `VUE_APP_MAP_API=<your Maps API key>`
 4. `npm run serve`
 
+## Webpack / Babel settings
+
+The app uses the Vue CLI settings to compile Vue, Sass, and JS code. To support IE 10/11 the app uses the `useBuiltIns: entry` option in `babel.config.js` and `import @babel/polyfill` in main.js.
+
+Sass variables, located in `scss/_variables.scss` are available to all Vue component files using the `css` options in `vue.config.js`.
+
 ## Available Scripts
 
-### Compiles and hot-reloads for development
+Compiles and hot-reloads for development
 ```
 npm run serve
 ```
 
-### Compiles and minifies for production
+Compiles and minifies for production
 ```
 npm run build
 ```
 
-### Lints and fixes files
+Lints and fixes files
 ```
 npm run lint
 ```
