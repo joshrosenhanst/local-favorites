@@ -43,7 +43,7 @@
         <button class="side-button result-add-note" type="button"
           v-bind:class="[ isOpen ? 'is-active' : '', (result.notes || result.stars)?'has-note':'' ]"
           v-bind:title="noteButtonText"
-          v-on:click.stop="toggleNoteForm(result)" 
+          v-on:click.stop="toggleNoteForm(result)"
           v-on:keydown.enter.prevent="toggleNoteForm(result)"
         >
           <div class="button-icon"><font-awesome-icon v-bind:icon="[(result.notes || result.stars)?'fas':'far','edit']"></font-awesome-icon></div>
@@ -58,7 +58,7 @@
         v-bind:notes="result.notes"
         v-bind:saved="result.saved"
         v-bind:is-open="isOpen"
-        
+
         v-on:toggle-note-form="toggleNoteForm(result)"
         v-on:close-note-form="$emit('close-note-form')"
         v-on:submit-note="submitReview(result,$event)"
@@ -73,7 +73,7 @@ import StarRating from './StarRating.vue'
 import AddNoteForm from './AddNoteForm.vue'
 
 export default {
-  name:'ResultDisplay',
+  name: 'ResultDisplay',
   components: {
     StarRating,
     AddNoteForm
@@ -88,43 +88,43 @@ export default {
     }
   },
   methods: {
-    submitReview: function (result,event) {
+    submitReview: function (result, event) {
       // this.$emit('set-review', { place_id: result.place_id, stars: event.stars, notes: event.notes, saved: event.saved })
       this.$emit('set-review', Object.assign({}, result, { stars: event.stars, notes: event.notes, saved: event.saved, isNoteFormOpen: false }))
     },
     toggleNoteForm: function (result) {
-      //event.stopPropogation();
-      if(this.AppData.selectedPlace && this.AppData.selectedPlace.place_id === result.place_id) {
-        this.$emit('toggle-note-form');
-      }else{
-        this.$emit('open-different-note-form', result);
+      // event.stopPropogation();
+      if (this.AppData.selectedPlace && this.AppData.selectedPlace.place_id === result.place_id) {
+        this.$emit('toggle-note-form')
+      } else {
+        this.$emit('open-different-note-form', result)
       }
     },
     toggleSaveStatus: function (result) {
       this.submitReview(result, { place_id: result.place_id, stars: result.stars, notes: result.notes, saved: !result.saved })
     },
     getLatLangURL: function (locObject) {
-      let lng = (typeof locObject.lng === 'function'?locObject.lng():locObject.lng);
-      let lat = (typeof locObject.lat === 'function'?locObject.lat():locObject.lat);
-      return lat.toFixed(6)+","+lng.toFixed(6);
+      let lng = (typeof locObject.lng === 'function' ? locObject.lng() : locObject.lng)
+      let lat = (typeof locObject.lat === 'function' ? locObject.lat() : locObject.lat)
+      return lat.toFixed(6) + ',' + lng.toFixed(6)
     }
   },
   computed: {
     isSelected: function () {
-      return this.AppData.selectedPlace && ( this.AppData.selectedPlace.place_id === this.result.place_id )
+      return this.AppData.selectedPlace && (this.AppData.selectedPlace.place_id === this.result.place_id)
     },
     isOpen: function () {
-      return this.isSelected && this.AppData.selectedPlace.hasOwnProperty('isNoteFormOpen') && this.AppData.selectedPlace.isNoteFormOpen;
+      return this.isSelected && this.AppData.selectedPlace.hasOwnProperty('isNoteFormOpen') && this.AppData.selectedPlace.isNoteFormOpen
     },
     noteButtonText: function () {
-      return (this.result.notes || this.result.stars)?"Edit Note":"Add Note";
+      return (this.result.notes || this.result.stars) ? 'Edit Note' : 'Add Note'
     },
     saveButtonText: function () {
-      return this.result.saved?"Unsave":"Save";
+      return this.result.saved ? 'Unsave' : 'Save'
     },
     mapLinkURL: function () {
-      let query = this.result.geometry?this.getLatLangURL(this.result.geometry.location):this.result.name;
-      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.result.place_id);
+      let query = this.result.geometry ? this.getLatLangURL(this.result.geometry.location) : this.result.name
+      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI('query=' + query + '&query_place_id=' + this.result.place_id)
     }
   }
 }

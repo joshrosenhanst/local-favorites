@@ -21,19 +21,19 @@ export default {
     }
   },
   created: function () {
-    this.random_predicate = this.getRandomPredicate();
+    this.random_predicate = this.getRandomPredicate()
   },
   methods: {
     updateRandomPredicate: function () {
-      let last_predicate = this.random_predicate;
-      let new_predicate = this.getRandomPredicate();
-      while(last_predicate === new_predicate){
-        new_predicate = this.getRandomPredicate();
+      let last_predicate = this.random_predicate
+      let new_predicate = this.getRandomPredicate()
+      while (last_predicate === new_predicate) {
+        new_predicate = this.getRandomPredicate()
       }
-      this.random_predicate = new_predicate;
+      this.random_predicate = new_predicate
     },
     getRandomPredicate: function () {
-      return this.predicates[Math.floor(Math.random() * this.predicates.length)];
+      return this.predicates[Math.floor(Math.random() * this.predicates.length)]
     }
   }
 }

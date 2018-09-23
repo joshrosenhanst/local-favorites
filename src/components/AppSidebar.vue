@@ -4,9 +4,9 @@
       <ul>
         <li v-bind:class="{ 'is-active':(AppData.activeTab === 0) }">
           <a tabindex="0"
-            v-on:click="changeTab(0)" 
-            v-on:keydown.enter.prevent="changeTab(0)" 
-            v-on:keydown.space.prevent="changeTab(0)" 
+            v-on:click="changeTab(0)"
+            v-on:keydown.enter.prevent="changeTab(0)"
+            v-on:keydown.space.prevent="changeTab(0)"
           >
             <font-awesome-icon v-bind:icon="['fas','map-marker-alt']" class="tab-icon is-nearby"></font-awesome-icon>
             <span class="tab_nearby-text">Nearby</span>
@@ -15,8 +15,8 @@
         <li v-bind:class="{ 'is-active':(AppData.activeTab === 1) }">
           <a tabindex="0"
             v-on:click="changeTab(1)"
-            v-on:keydown.enter.prevent="changeTab(1)" 
-            v-on:keydown.space.prevent="changeTab(1)" 
+            v-on:keydown.enter.prevent="changeTab(1)"
+            v-on:keydown.space.prevent="changeTab(1)"
           >
             <font-awesome-icon v-bind:icon="['fas','bookmark']" class="tab-icon is-bookmark"></font-awesome-icon>
             <span class="tab_favorites-text">My Favorites</span>
@@ -82,7 +82,7 @@ export default {
     changeTab: function (newIndex) {
       if (this.AppData.activeTab === newIndex) return
 
-      this.tabTransitionName = (newIndex < this.AppData.activeTab ? 'slide-next' : 'slide-prev');
+      this.tabTransitionName = (newIndex < this.AppData.activeTab ? 'slide-next' : 'slide-prev')
       AppStore.setActiveTab(newIndex)
     }
   }

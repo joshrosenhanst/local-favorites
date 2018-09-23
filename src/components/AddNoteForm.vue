@@ -57,23 +57,23 @@ export default {
   },
   methods: {
     submitReview: function () {
-      this.$emit('submit-note', { stars: this.formStars, notes: this.formNotes, saved: this.saved });
+      this.$emit('submit-note', { stars: this.formStars, notes: this.formNotes, saved: this.saved })
     },
     cancelReview: function () {
-      this.formStars = this.stars || 0;
-      this.formNotes = this.notes || null;
-      this.$emit('close-note-form');
+      this.formStars = this.stars || 0
+      this.formNotes = this.notes || null
+      this.$emit('close-note-form')
     },
     setStars: function (event) {
-      this.formStars = event.value;
+      this.formStars = event.value
     }
   },
   watch: {
     stars: function () {
-      this.formStars = this.stars;
+      this.formStars = this.stars
     },
     notes: function () {
-      this.formNotes = this.notes;
+      this.formNotes = this.notes
     }
   }
 }

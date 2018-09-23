@@ -17,7 +17,7 @@
     <h3 class="title">No Results</h3>
     <small class="subtitle"><slot name="no-results-text"></slot></small>
   </div>
-  
+
   <transition name="fade">
     <div class="loading-overlay is-active" v-if="AppData.isLoading">
         <div class="loading-background" @click="cancelLoading"/>
@@ -47,16 +47,16 @@ export default {
     }
   },
   methods: {
-    cancelLoading: function () { 
-      AppStore.setIsLoading(false);
+    cancelLoading: function () {
+      AppStore.setIsLoading(false)
     },
     focusResult: function (index) {
-      if(index >= 0 && index < this.results.length){
+      if (index >= 0 && index < this.results.length) {
         // go through the list of .result-display results and focus the index
-        this.$refs.resultsRef.getElementsByClassName('result-display')[index].focus();
-        if(index === 0){
+        this.$refs.resultsRef.getElementsByClassName('result-display')[index].focus()
+        if (index === 0) {
           // if we get to the top, set the scrollbar to the top because sometimes the browser will focus the element without scrolling enough to show the full element
-          document.getElementById('map-sidebar').scrollTop = 0;
+          document.getElementById('map-sidebar').scrollTop = 0
         }
       }
     }
