@@ -224,6 +224,8 @@ html{
 }
 #app-body {
   flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 100%; // a value is required for IE 11 to properly display the main flexbox as intended
   min-height:0;
   border-top:1px solid $border;
   border-bottom:1px solid $border;
