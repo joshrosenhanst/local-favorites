@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <app-header></app-header>
+    <app-header
+      v-bind:is-storage-error="isStorageError"
+    ></app-header>
     <main id="app-body">
       <app-sidebar
         v-bind:favorites-list="favoritesList"
@@ -52,7 +54,8 @@ export default {
   },
   data: function () {
     return {
-      AppData: AppStore.state
+      AppData: AppStore.state,
+      isStorageError: false
     }
   },
   computed: {
@@ -93,7 +96,12 @@ export default {
       })
 
       // update localStorage
-      localStorage.setItem('local-favorites-savedReviews', JSON.stringify(this.AppData.savedReviews))
+      try {
+        localStorage.setItem('local-favorites-savedReviews', JSON.stringify(this.AppData.savedReviews))
+      }
+      catch (e) {
+
+      }
     },
     setLocationSaveStatus: function (event) {
       this.saveReview(event)
@@ -193,7 +201,13 @@ export default {
   },
   created: function () {
     // get localstorage review data
-    this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-favorites-savedReviews')) || [])
+    try {
+      this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-favorites-savedReviews')) || [])
+    }
+    catch (e){
+      this.isStorageError = true
+      this.AppData.savedReviews = []
+    }
 
     // loop through savedReviews array and replace matching (by place_id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
     if (this.AppData.savedReviews.length) {

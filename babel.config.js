@@ -1,9 +1,11 @@
 module.exports = {
   presets: [
     [
-      '@vue/app',
-      {
-        'useBuiltIns': 'entry'
+      '@vue/app', {
+        polyfills: [
+          'es7.object.entries',
+          'es6.promise'
+        ]
       }
     ]
   ]
