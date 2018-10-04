@@ -4,6 +4,9 @@
         <div class="hero-body">
             <h1 class="title"><font-awesome-icon class="title-icon" v-bind:icon="['fas','map-marker-alt']"></font-awesome-icon>Local Favorites</h1>
             <h2 class="subtitle">Save and review your favorite local places, so you can <span id="random-predicate" v-on:click="updateRandomPredicate">{{ random_predicate }}</span></h2>
+            <div id="storageError" v-if="isStorageError">
+              <strong>Unable to access LocalStorage: </strong>Your favorites for this session will not be saved when you leave the page.<br />Please enable cookies and/or site data for this website in your browser settings. For Internet Explorer, you may need to disable Protected Mode. Refresh the page when cookies/site data are enabled.
+            </div>
         </div>
       </section>
     </header>
@@ -12,6 +15,9 @@
 <script>
 export default {
   name: 'AppHeader',
+  props: {
+    'isStorageError': Boolean
+  },
   data: function () {
     return {
       predicates: [
@@ -21,19 +27,19 @@ export default {
     }
   },
   created: function () {
-    this.random_predicate = this.getRandomPredicate();
+    this.random_predicate = this.getRandomPredicate()
   },
   methods: {
     updateRandomPredicate: function () {
-      let last_predicate = this.random_predicate;
-      let new_predicate = this.getRandomPredicate();
-      while(last_predicate === new_predicate){
-        new_predicate = this.getRandomPredicate();
+      let last_predicate = this.random_predicate
+      let new_predicate = this.getRandomPredicate()
+      while (last_predicate === new_predicate) {
+        new_predicate = this.getRandomPredicate()
       }
-      this.random_predicate = new_predicate;
+      this.random_predicate = new_predicate
     },
     getRandomPredicate: function () {
-      return this.predicates[Math.floor(Math.random() * this.predicates.length)];
+      return this.predicates[Math.floor(Math.random() * this.predicates.length)]
     }
   }
 }
@@ -51,5 +57,14 @@ export default {
   color:$primary;
   -webkit-touch-callout: none;
   user-select: none;
+}
+#storageError {
+  padding: 10px;
+  margin: 10px auto;
+  max-width: 700px;
+  border: 1px dashed $red;
+  border-radius: 4px;
+  font-size: 14px;
+  text-align: left;
 }
 </style>

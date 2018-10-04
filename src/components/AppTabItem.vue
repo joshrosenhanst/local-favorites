@@ -1,9 +1,9 @@
 <template>
   <transition v-bind:name="tabTransitionName">
     <div v-show="active && visible" class="tab-item">
-      <results-list 
+      <results-list
         v-bind:list-id="listId"
-        v-bind:results="results" 
+        v-bind:results="results"
         v-bind:is-tab-active="active"
 
         v-on:set-review="$emit('set-review',$event)"
@@ -35,7 +35,7 @@ export default {
       default: true
     },
 
-    //results list props
+    // results list props
     listId: String,
     results: Array
   },

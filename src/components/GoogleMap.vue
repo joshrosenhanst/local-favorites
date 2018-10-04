@@ -46,194 +46,194 @@ import AppStore from '../AppStore.js'
 import StarRating from './StarRating.vue'
 
 export default {
-    name: 'GoogleMap',
-    props: {
-      reviews: Array
-    },
-    components: {
-      StarRating
-    },
-    data: function () {
-      return {
-        AppData: AppStore.state,
-        center: {lat:40.415932, lng:-74.25753},
-        zoom: 17,
-        markers: [],
-        marker: {},
-        places: [],
-        currentPlace: null,
-        keepSelected: false,
-        mapOptions: {
-          streetViewControl: false,
-          fullscreenControl: false,
-          mapTypeControl: false,
-          gestureHandling: 'greedy'
+  name: 'GoogleMap',
+  props: {
+    reviews: Array
+  },
+  components: {
+    StarRating
+  },
+  data: function () {
+    return {
+      AppData: AppStore.state,
+      center: {lat: 40.415932, lng: -74.25753},
+      zoom: 17,
+      markers: [],
+      marker: {},
+      places: [],
+      currentPlace: null,
+      keepSelected: false,
+      mapOptions: {
+        streetViewControl: false,
+        fullscreenControl: false,
+        mapTypeControl: false,
+        gestureHandling: 'greedy'
+      },
+      markerOptions: {
+        animation: 2,
+        size: {
+          width: 25,
+          height: 25
         },
-        markerOptions: {
-          animation: 2,
-          size: {
-            width:25,
-            height:25
-          },
-          scale: {
-            width:25,
-            height:25
-          }
-        },
-        infoWindow: {
-          open: true
-        },
-        gPlacesService: null,
-        mapObject: null
-      }
+        scale: {
+          width: 25,
+          height: 25
+        }
+      },
+      infoWindow: {
+        open: true
+      },
+      gPlacesService: null,
+      mapObject: null
+    }
+  },
+  mounted: function () {
+    this.$gmapApiPromiseLazy().then(() => {
+      this.initMapObject()
+      this.initInfoWindow()
+      this.initAutoComplete()
+      this.geolocate()
+    })
+  },
+  watch: {
+  },
+  methods: {
+    initMapObject: function () {
+      this.mapObject = this.$refs.mapRef.$mapObject
+      this.gPlacesService = new google.maps.places.PlacesService(this.mapObject)
+
+      let mapControlSearch = document.getElementById('autocomplete-search-container')
+      this.mapObject.controls[google.maps.ControlPosition.TOP_RIGHT].push(mapControlSearch)
+      this.mapObject.addListener('idle', this.idleMapUpdate)
     },
-    mounted: function () {
-      this.$gmapApiPromiseLazy().then(() => {
-        this.initMapObject();
-        this.initInfoWindow();
-        this.initAutoComplete();
-        this.geolocate();
+    initInfoWindow: function () {
+      this.mapObject.addListener('click', (event) => {
+        if (event.placeId) {
+          event.stop()
+          this.getPlaceDetails(event.placeId)
+        }
       })
     },
-    watch: {
-    },
-    methods: {
-      initMapObject: function () {
-        this.mapObject = this.$refs.mapRef.$mapObject;
-        this.gPlacesService = new google.maps.places.PlacesService(this.mapObject);
+    initAutoComplete: function () {
+      let autocomplete_input = document.getElementById('gmap-autocomplete')
+      if (autocomplete_input) {
+        let autocomplete = new google.maps.places.Autocomplete(autocomplete_input)
 
-        let mapControlSearch = document.getElementById("autocomplete-search-container");
-        this.mapObject.controls[google.maps.ControlPosition.TOP_RIGHT].push(mapControlSearch);
-        this.mapObject.addListener('idle', this.idleMapUpdate);
-      },
-      initInfoWindow: function () {
-        this.mapObject.addListener('click', (event) => {
-          if(event.placeId){
-            event.stop();
-            this.getPlaceDetails(event.placeId);
-          }
-        });
-      },
-      initAutoComplete: function () {
-        let autocomplete_input = document.getElementById('gmap-autocomplete');
-        if(autocomplete_input){
-          let autocomplete = new google.maps.places.Autocomplete(autocomplete_input);
-
-          autocomplete.addListener('place_changed', () => {
-            let place = autocomplete.getPlace();
-            if(place.geometry){
-              if(place.types.includes('point_of_interest')){
-                this.getReviewThenEmitPlace(place);
-                this.keepSelected = true;
-              }
-              this.mapObject.panTo(place.geometry.location);
-              this.mapObject.setZoom(17);
-            }else{
-              autocomplete_input.placeholder = 'Find places near...';
+        autocomplete.addListener('place_changed', () => {
+          let place = autocomplete.getPlace()
+          if (place.geometry) {
+            if (place.types.includes('point_of_interest')) {
+              this.getReviewThenEmitPlace(place)
+              this.keepSelected = true
             }
-          });
-        }
-      },
-      toggleInfoWindow: function () {
-        this.infoWindow.open = !this.infoWindow.open;
-      },
-      setInfoWindowVisibility: function (open) {
-        this.infoWindow.open = open;
-      },
-      getReviewThenEmitPlace: function (place){
-        let updatedPlaceOb = this.getReviewForPlace(place);
-        this.$emit('click-map-point',updatedPlaceOb);
-        this.setInfoWindowVisibility(true);
-      },
-      getPlaceDetails: function (place_id) {
-        if(this.gPlacesService){
-          this.gPlacesService.getDetails({placeId: place_id}, (place,status) => {
-            if(status === google.maps.places.PlacesServiceStatus.OK) {
-              this.getReviewThenEmitPlace(place);
-            }
-          });
-        }
-      },
-      getReviewForPlace: function (place) {
-        let matchedReviewIndex = _findIndex(this.reviews, { place_id:place.place_id });
-        if (matchedReviewIndex >= 0) {
-          // if it exists, combine add the review to the saved place
-          place = Object.assign({}, place, {
-            stars: this.reviews[matchedReviewIndex].stars,
-            notes: this.reviews[matchedReviewIndex].notes,
-          });
-        }
-        return place;
-      },
-      geolocate: function () {
-        navigator.geolocation.getCurrentPosition(position => {
-          this.center = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-        });
-      },
-      idleMapUpdate: function (event) {
-        let newCenter = this.mapObject.getCenter();
-        let mapBounds = this.mapObject.getBounds();
-        // check if the AppData.selectedPlace is inside the bounds of the map after the move/zoom.
-        // if it is, keep it as the AppData.selectedPlace when we update the resultsList
-        if(this.AppData.selectedPlace && this.AppData.selectedPlace.geometry){
-          if(mapBounds.contains(this.AppData.selectedPlace.geometry.location)){
-            this.keepSelected = true;
+            this.mapObject.panTo(place.geometry.location)
+            this.mapObject.setZoom(17)
+          } else {
+            autocomplete_input.placeholder = 'Find places near...'
           }
-        }
-        this.getLocalPlaces(newCenter);
-        this.$emit('map-bounds-changed', { bounds: mapBounds })
-      },
-      getLocalPlaces: function (center) {
-        AppStore.setIsLoading((this.AppData.activeTab === 0))
-        let service = new google.maps.places.PlacesService(this.mapObject);
-        service.nearbySearch({
-          bounds: this.mapObject.getBounds(),
-          type: ['point_of_interest']
-        }, this.emitLocalPlaces);
-      },
-      emitLocalPlaces: function (results,status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          this.$emit('get-local-places', { results: results, keepSelected: this.keepSelected });
-          this.keepSelected = false;
-        }
-        if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
-          this.$emit('get-local-places', { results: null, keepSelected: this.keepSelected });
-          this.keepSelected = false;
-        }
-      },
-      addLocalPlacesMarkers: function (results,status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          this.markers = [];
-          for(var i=0;i<results.length;i++){
-            this.markers.push({
-              position:{
-                lat: results[i].geometry.location.lat(),
-                lng: results[i].geometry.location.lng()
-              }
-            });
-          }
-        }
-      },
-      logLocalPlaces: function (results,status) {
-        if (status === google.maps.places.PlacesServiceStatus.OK) {
-          console.log(results);
-        }
-      },
-      getLatLangURL: function (locObject) {
-        let lng = (typeof locObject.lng === 'function'?locObject.lng():locObject.lng);
-        let lat = (typeof locObject.lat === 'function'?locObject.lat():locObject.lat);
-        return lat.toFixed(6)+","+lng.toFixed(6);
+        })
       }
     },
-    computed: {
-      mapLinkURL: function () {
-        let query = this.AppData.selectedPlace.geometry?this.getLatLangURL(this.AppData.selectedPlace.geometry.location):this.AppData.selectedPlace.name;
-        return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI("query=" + query + "&query_place_id=" + this.AppData.selectedPlace.place_id);
+    toggleInfoWindow: function () {
+      this.infoWindow.open = !this.infoWindow.open
+    },
+    setInfoWindowVisibility: function (open) {
+      this.infoWindow.open = open
+    },
+    getReviewThenEmitPlace: function (place) {
+      let updatedPlaceOb = this.getReviewForPlace(place)
+      this.$emit('click-map-point', updatedPlaceOb)
+      this.setInfoWindowVisibility(true)
+    },
+    getPlaceDetails: function (place_id) {
+      if (this.gPlacesService) {
+        this.gPlacesService.getDetails({placeId: place_id}, (place, status) => {
+          if (status === google.maps.places.PlacesServiceStatus.OK) {
+            this.getReviewThenEmitPlace(place)
+          }
+        })
       }
+    },
+    getReviewForPlace: function (place) {
+      let matchedReviewIndex = _findIndex(this.reviews, { place_id: place.place_id })
+      if (matchedReviewIndex >= 0) {
+        // if it exists, combine add the review to the saved place
+        place = Object.assign({}, place, {
+          stars: this.reviews[matchedReviewIndex].stars,
+          notes: this.reviews[matchedReviewIndex].notes
+        })
+      }
+      return place
+    },
+    geolocate: function () {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.center = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+      })
+    },
+    idleMapUpdate: function (event) {
+      let newCenter = this.mapObject.getCenter()
+      let mapBounds = this.mapObject.getBounds()
+      // check if the AppData.selectedPlace is inside the bounds of the map after the move/zoom.
+      // if it is, keep it as the AppData.selectedPlace when we update the resultsList
+      if (this.AppData.selectedPlace && this.AppData.selectedPlace.geometry) {
+        if (mapBounds.contains(this.AppData.selectedPlace.geometry.location)) {
+          this.keepSelected = true
+        }
+      }
+      this.getLocalPlaces(newCenter)
+      this.$emit('map-bounds-changed', { bounds: mapBounds })
+    },
+    getLocalPlaces: function (center) {
+      AppStore.setIsLoading((this.AppData.activeTab === 0))
+      let service = new google.maps.places.PlacesService(this.mapObject)
+      service.nearbySearch({
+        bounds: this.mapObject.getBounds(),
+        type: ['point_of_interest']
+      }, this.emitLocalPlaces)
+    },
+    emitLocalPlaces: function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        this.$emit('get-local-places', { results: results, keepSelected: this.keepSelected })
+        this.keepSelected = false
+      }
+      if (status === google.maps.places.PlacesServiceStatus.ZERO_RESULTS) {
+        this.$emit('get-local-places', { results: null, keepSelected: this.keepSelected })
+        this.keepSelected = false
+      }
+    },
+    addLocalPlacesMarkers: function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        this.markers = []
+        for (var i = 0; i < results.length; i++) {
+          this.markers.push({
+            position: {
+              lat: results[i].geometry.location.lat(),
+              lng: results[i].geometry.location.lng()
+            }
+          })
+        }
+      }
+    },
+    logLocalPlaces: function (results, status) {
+      if (status === google.maps.places.PlacesServiceStatus.OK) {
+        console.log(results)
+      }
+    },
+    getLatLangURL: function (locObject) {
+      let lng = (typeof locObject.lng === 'function' ? locObject.lng() : locObject.lng)
+      let lat = (typeof locObject.lat === 'function' ? locObject.lat() : locObject.lat)
+      return lat.toFixed(6) + ',' + lng.toFixed(6)
     }
+  },
+  computed: {
+    mapLinkURL: function () {
+      let query = this.AppData.selectedPlace.geometry ? this.getLatLangURL(this.AppData.selectedPlace.geometry.location) : this.AppData.selectedPlace.name
+      return process.env.VUE_APP_MAP_SEARCH_URL + encodeURI('query=' + query + '&query_place_id=' + this.AppData.selectedPlace.place_id)
+    }
+  }
 }
 </script>
 
@@ -282,5 +282,3 @@ export default {
     }
   }
 </style>
-
-

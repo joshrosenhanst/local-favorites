@@ -53,14 +53,13 @@ export default {
   },
   methods: {
     setStars: function (value) {
-      if(!this.readonly){
-        this.$emit('set-stars', { value: value });
+      if (!this.readonly) {
+        this.$emit('set-stars', { value: value })
       }
     }
   }
 }
 </script>
-
 
 <style lang="scss" scoped>
   .star{
@@ -113,4 +112,3 @@ export default {
     }
   }
 </style>
-

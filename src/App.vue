@@ -1,6 +1,8 @@
 <template>
   <div id="app">
-    <app-header></app-header>
+    <app-header
+      v-bind:is-storage-error="isStorageError"
+    ></app-header>
     <main id="app-body">
       <app-sidebar
         v-bind:favorites-list="favoritesList"
@@ -11,7 +13,7 @@
         v-on:open-different-note-form="openDifferentNoteForm"
         v-on:close-note-form="closeNoteForm"
       ></app-sidebar>
-      
+
       <google-map
         v-bind:selected-place="AppData.selectedPlace"
         v-bind:reviews="AppData.savedReviews"
@@ -39,7 +41,7 @@ import ResultsList from './components/ResultsList.vue'
 import GoogleMap from './components/GoogleMap.vue'
 import GmapAutocompleteSearch from './components/GmapAutocompleteSearch.vue'
 
-const TAB_NEARBY = 0, TAB_FAVORITES = 1;
+const TAB_NEARBY = 0, TAB_FAVORITES = 1
 
 export default {
   name: 'app',
@@ -52,20 +54,21 @@ export default {
   },
   data: function () {
     return {
-      AppData: AppStore.state
+      AppData: AppStore.state,
+      isStorageError: false
     }
   },
   computed: {
     favoritesList: function () {
-      return this.AppData.savedReviews.filter(review => review.saved);
+      return this.AppData.savedReviews.filter(review => review.saved)
     }
   },
   methods: {
-    isPlaceIDInArray: function (place_id,array){
+    isPlaceIDInArray: function (place_id, array) {
       // check if a place_id is in an array, return a boolean
-      return Boolean( place_id && _find(array, { place_id: place_id }) )
+      return Boolean(place_id && _find(array, { place_id: place_id }))
     },
-    getIndexByPlaceID: function (place_id, array){
+    getIndexByPlaceID: function (place_id, array) {
       return _findIndex(array, { place_id: place_id })
     },
     saveReview: function (event) {
@@ -73,73 +76,78 @@ export default {
       AppStore.setReview(event.place_id, event)
 
       // update the resultsList array with the new review values
-      AppStore.updateResult(event.place_id, { stars:event.stars, notes:event.notes, saved: event.saved })
+      AppStore.updateResult(event.place_id, { stars: event.stars, notes: event.notes, saved: event.saved })
 
       // wait until the DOM has fully updated from changing savedReviews/resultsList, then set the selectedPlace
       this.$nextTick(function () {
         // if we are on the My Favorites tab and we just unsaved something, set a different selectedPlace
-        if(this.AppData.activeTab === TAB_FAVORITES && !event.saved){
-          if(this.favoritesList.length){
+        if (this.AppData.activeTab === TAB_FAVORITES && !event.saved) {
+          if (this.favoritesList.length) {
             // set the selectedPlace to the first item, if we can
             AppStore.setSelectedPlace(Object.assign({}, this.favoritesList[0], {isNoteFormOpen: false}))
-          }else{
+          } else {
             // otherwise, set to empty object
             AppStore.setSelectedPlace({})
           }
-        }else{
+        } else {
           // update the selectedPlace Obj with the new review
-          AppStore.setSelectedPlace(Object.assign({}, this.AppData.selectedPlace, { stars:event.stars, notes:event.notes, saved: event.saved, isNoteFormOpen: false }))
+          AppStore.setSelectedPlace(Object.assign({}, this.AppData.selectedPlace, { stars: event.stars, notes: event.notes, saved: event.saved, isNoteFormOpen: false }))
         }
-      });
+      })
 
       // update localStorage
-      localStorage.setItem('local-favorites-savedReviews', JSON.stringify(this.AppData.savedReviews));
+      try {
+        localStorage.setItem('local-favorites-savedReviews', JSON.stringify(this.AppData.savedReviews))
+      }
+      catch (e) {
+
+      }
     },
     setLocationSaveStatus: function (event) {
-      this.saveReview(event);
+      this.saveReview(event)
     },
     updateResultsList: function (event) {
-      AppStore.setResultsList( event.results?event.results:[] )
-      if(this.AppData.savedReviews.length > 0 && this.AppData.resultsList.length > 0){
+      AppStore.setResultsList(event.results ? event.results : [])
+      if (this.AppData.savedReviews.length > 0 && this.AppData.resultsList.length > 0) {
         this.AppData.savedReviews.forEach(review => {
           AppStore.updateResult(review.place_id, { stars: review.stars, notes: review.notes, saved: review.saved, isNoteFormOpen: false })
         })
       }
-      if(this.AppData.activeTab === TAB_NEARBY) {
+      if (this.AppData.activeTab === TAB_NEARBY) {
         // we only need to update the selectedPlace from getLocalPlaces (i.e map scroll) if we are on the nearby tab
-        if(event.keepSelected) {
+        if (event.keepSelected) {
           // if we are told to keep the current selectedPlace or we're on the My Favorites tab, check if the selectedPlace is in the resultsList
           // if we are on the My Favorites tab, addMisingSelectedPlace will do nothing
-          this.addMissingSelectedPlace();
-        }else{        
+          this.addMissingSelectedPlace()
+        } else {
           // if we dont need to keep the current selectedPlace, grab the first available and then focus the element
-          let currentList = (this.AppData.activeTab === TAB_FAVORITES?this.favoritesList:this.AppData.resultsList);
-          if(currentList.length) {
+          let currentList = (this.AppData.activeTab === TAB_FAVORITES ? this.favoritesList : this.AppData.resultsList)
+          if (currentList.length) {
             // set the selectedPlace to the first item in ResultsList/FavoritesList
             // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
             AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, currentList[0], { isNoteFormOpen: false }))
-          }else{
-            AppStore.setSelectedPlace({});
+          } else {
+            AppStore.setSelectedPlace({})
           }
-          this.focusOnPlaceResult();
+          this.focusOnPlaceResult()
         }
       }
-      AppStore.setIsLoading(false);
+      AppStore.setIsLoading(false)
     },
     selectResult: function (place) {
       // user selects a place from the ResultsList
       // do a sanity check to make sure they arent just clicking the same location
       // update the selectedPlace object
       // stars/notes/saved should default to empty and be overridden by result var, isNoteFormOpen should override result property to false
-      if(place.place_id !== this.AppData.selectedPlace.place_id) {
+      if (place.place_id !== this.AppData.selectedPlace.place_id) {
         AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false }))
       }
-      this.addMissingSelectedPlace();
+      this.addMissingSelectedPlace()
     },
     addMissingSelectedPlace: function () {
-      if(this.AppData.activeTab === TAB_NEARBY){
+      if (this.AppData.activeTab === TAB_NEARBY) {
         // if the selectedPlace object is not in the resultList, add it to the front of the array
-        if(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList)){
+        if (!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.AppData.resultsList)) {
           AppStore.addFirstResult(this.AppData.selectedPlace)
         }
       }
@@ -148,60 +156,66 @@ export default {
       // user selects a point of interest on the GoogleMap
       // update the selectedPlace obj
       // this.selectedPlace = Object.assign({}, { stars: 0, notes: null, saved: false }, place, { isNoteFormOpen: false });
-      this.selectResult(place);
+      this.selectResult(place)
 
-      if(this.AppData.activeTab === TAB_FAVORITES){
+      if (this.AppData.activeTab === TAB_FAVORITES) {
         // check if the place is in the favorites list
         // if it isnt, switch tabs
-        if(!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.favoritesList)){
-          AppStore.setActiveTab(TAB_NEARBY);
+        if (!this.isPlaceIDInArray(this.AppData.selectedPlace.place_id, this.favoritesList)) {
+          AppStore.setActiveTab(TAB_NEARBY)
         }
       }
-      
-      this.focusOnPlaceResult();
+
+      this.focusOnPlaceResult()
     },
     focusOnPlaceResult: function () {
-      let map_sidebar = document.getElementById('map-sidebar');
+      let map_sidebar = document.getElementById('map-sidebar')
       // wait a tick for the DOM to be fully updated
-      this.$nextTick(function() {
-        let element_id = (this.AppData.activeTab === TAB_FAVORITES?'favorites-list':'nearby-list');
-        let parent_element = document.getElementById(element_id);
-        let selected_element = parent_element.getElementsByClassName('result-display selected')[0];
-        if(selected_element){
+      this.$nextTick(function () {
+        let element_id = (this.AppData.activeTab === TAB_FAVORITES ? 'favorites-list' : 'nearby-list')
+        let parent_element = document.getElementById(element_id)
+        let selected_element = parent_element.getElementsByClassName('result-display selected')[0]
+        if (selected_element) {
           // focus the element, which will also appropriately scroll the list
-          selected_element.focus();
+          selected_element.focus()
         }
-      });
+      })
     },
     openNoteForm: function (event) {
       // open the AddNoteForm on the Results List
-      AppStore.setSelectedPlace( Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: true }) )
+      AppStore.setSelectedPlace(Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: true }))
     },
     closeNoteForm: function (event) {
-      AppStore.setSelectedPlace (Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: false }) )
+      AppStore.setSelectedPlace(Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: false }))
     },
     toggleNoteForm: function () {
-      AppStore.setSelectedPlace( Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: !this.AppData.selectedPlace.isNoteFormOpen }) )
+      AppStore.setSelectedPlace(Object.assign({}, this.AppData.selectedPlace, { isNoteFormOpen: !this.AppData.selectedPlace.isNoteFormOpen }))
     },
     openDifferentNoteForm: function (result) {
       // close the old form
-      //this.selectedPlace.isNoteFormOpen = false;
+      // this.selectedPlace.isNoteFormOpen = false;
 
       // open the new form
-      AppStore.setSelectedPlace( Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true } ))
+      AppStore.setSelectedPlace(Object.assign({}, { stars: 0, notes: null, saved: false }, result, { isNoteFormOpen: true }))
     }
   },
   created: function () {
     // get localstorage review data
-    this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-favorites-savedReviews')) || []);
+    try {
+      this.AppData.savedReviews = (JSON.parse(localStorage.getItem('local-favorites-savedReviews')) || [])
+    }
+    catch (e){
+      this.isStorageError = true
+      this.AppData.savedReviews = []
+    }
 
     // loop through savedReviews array and replace matching (by place_id) results from resultsList array with review/stars (dont overwrite any name/address/etc because results list is more recent)
-    if(this.AppData.savedReviews.length){
+    if (this.AppData.savedReviews.length) {
       this.AppData.savedReviews.forEach(review => {
         AppStore.updateResult(review.place_id, { stars: review.stars, notes: review.notes, saved: review.saved })
       })
     }
-    AppStore.setIsLoading(false);
+    AppStore.setIsLoading(false)
   }
 }
 </script>
@@ -224,6 +238,8 @@ html{
 }
 #app-body {
   flex-grow: 1;
+  flex-shrink: 1;
+  flex-basis: 100%; // a value is required for IE 11 to properly display the main flexbox as intended
   min-height:0;
   border-top:1px solid $border;
   border-bottom:1px solid $border;
