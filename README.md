@@ -2,6 +2,8 @@
 
 Local Favorites is a Vue.js web app to save and review your favorite local places, powered by Google Maps Javascript API. Bootstrapped with [Vue CLI tool](https://github.com/vuejs/vue-cli).
 
+<p align="center"><a href="https://joshrosenhanst.com/local-favorites/"><img src="https://joshrosenhanst.com/assets/img/local-favorites/local-favorites-main.png" alt="Local Favorites Preview"></a></p>
+
 ## Local Development
 
 1. `npm install`
